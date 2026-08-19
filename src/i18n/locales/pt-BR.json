@@ -16,5 +16,17 @@
   "chart.title": "Espaço por categoria",
   "category.dev": "Caches de desenvolvimento",
   "category.system": "Sistema",
-  "category.apps": "Aplicativos"
+  "category.apps": "Aplicativos",
+  "scan.progress": "Escaneando… {{percent}}%",
+  "locked.label": "Requer permissão",
+  "locked.retry": "Tentar com senha de administrador",
+  "locked.deniedAfterElevation": "Sem acesso mesmo como administrador — conceda Acesso Total ao Disco em Ajustes do Sistema",
+  "history.title": "Histórico",
+  "history.subtitle": "Limpezas e scans anteriores",
+  "history.totalFreed": "Total liberado",
+  "history.chartTitle": "Espaço liberado por limpeza",
+  "history.empty": "Nenhuma limpeza registrada ainda",
+  "history.entry.cleanup": "Limpeza",
+  "history.entry.scan": "Scan",
+  "history.close": "Fechar"
 }

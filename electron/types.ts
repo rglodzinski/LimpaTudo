@@ -20,12 +20,19 @@ export interface ScanItem {
   risk: Risk;
   path: string;
   sizeBytes: number;
+  /** True when the size couldn't be read due to a permission error. */
+  locked: boolean;
 }
 
 export interface ScanResultChunk {
   category: string;
   items: ScanItem[];
   done: boolean;
+}
+
+export interface ScanProgress {
+  completed: number;
+  total: number;
 }
 
 export interface ScanSummary {
@@ -53,9 +60,20 @@ export interface RemoveReport {
   entries: RemoveReportEntry[];
 }
 
+export interface HistoryEntry {
+  id: string;
+  type: "scan" | "cleanup";
+  timestamp: string;
+  totalBytes: number;
+  itemCount: number;
+  byCategory: Record<string, number>;
+}
+
 export interface Settings {
   projectRoots: string[];
   deadProjectThresholdDays: number;
   permanentDeleteEnabled: boolean;
   advancedModeEnabled: boolean;
+  theme: "light" | "dark";
+  language: "pt-BR" | "en-US" | "es";
 }

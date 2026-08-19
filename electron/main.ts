@@ -1,9 +1,12 @@
 import path from "node:path";
 import { app, BrowserWindow, ipcMain } from "electron";
 import { scanCatalog } from "./scanner/catalogScanner";
+import { calculateSizeElevated } from "./scanner/sizeCalculator";
 import { removeItems } from "./remover";
 import { isAppRunning } from "./processDetector";
-import type { RemoveOptions, ScanItem } from "./types";
+import { loadSettings, updateSettings } from "./settings";
+import { appendHistoryEntry, byCategoryFromItems, loadHistory } from "./history";
+import type { RemoveOptions, ScanItem, Settings } from "./types";
 
 const isDev = !app.isPackaged;
 
@@ -30,21 +33,58 @@ function createWindow() {
 function registerIpcHandlers() {
   ipcMain.handle("scan", async (event) => {
     const items: ScanItem[] = [];
-    await scanCatalog((item) => {
-      items.push(item);
-      event.sender.send("scan:item", item);
+    await scanCatalog(
+      (item) => {
+        items.push(item);
+        event.sender.send("scan:item", item);
+      },
+      (progress) => {
+        event.sender.send("scan:progress", progress);
+      },
+    );
+    const unlocked = items.filter((item) => !item.locked);
+    const totalBytes = unlocked.reduce((sum, item) => sum + item.sizeBytes, 0);
+    event.sender.send("scan:complete", { totalBytes, itemCount: unlocked.length });
+    appendHistoryEntry({
+      type: "scan",
+      totalBytes,
+      itemCount: unlocked.length,
+      byCategory: byCategoryFromItems(unlocked),
     });
-    const totalBytes = items.reduce((sum, item) => sum + item.sizeBytes, 0);
-    event.sender.send("scan:complete", { totalBytes, itemCount: items.length });
     return items;
   });
 
   ipcMain.handle("remove", async (_event, items: ScanItem[], options: RemoveOptions) => {
-    return removeItems(items, options);
+    const report = await removeItems(items, options);
+    const removedIds = new Set(report.entries.filter((e) => e.ok).map((e) => e.itemId));
+    const removedItems = items.filter((item) => removedIds.has(item.id));
+    appendHistoryEntry({
+      type: "cleanup",
+      totalBytes: report.freedBytes,
+      itemCount: removedItems.length,
+      byCategory: byCategoryFromItems(removedItems),
+    });
+    return report;
   });
 
   ipcMain.handle("isAppRunning", async (_event, bundleIdOrProcessName: string) => {
     return isAppRunning(bundleIdOrProcessName);
+  });
+
+  ipcMain.handle("elevateAndMeasure", async (_event, targetPath: string) => {
+    return calculateSizeElevated(targetPath);
+  });
+
+  ipcMain.handle("settings:get", async () => {
+    return loadSettings();
+  });
+
+  ipcMain.handle("settings:update", async (_event, patch: Partial<Settings>) => {
+    return updateSettings(patch);
+  });
+
+  ipcMain.handle("history:list", async () => {
+    return loadHistory();
   });
 }
 

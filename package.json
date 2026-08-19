@@ -1,7 +1,7 @@
 {
   "name": "limpa-tudo",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "main": "dist-electron/main.js",
   "scripts": {
@@ -55,6 +55,7 @@
     "react-dom": "^19.2.8",
     "react-i18next": "^17.0.11",
     "recharts": "^3.10.1",
+    "sudo-prompt": "^9.2.1",
     "tailwind-merge": "^3.6.0"
   },
   "devDependencies": {
@@ -72,5 +73,9 @@
     "typescript": "~6.0.2",
     "vite": "^8.2.0",
     "wait-on": "^9.1.0"
+  },
+  "allowScripts": {
+    "electron-winstaller@5.4.0": true,
+    "fsevents@2.3.3": true
   }
 }

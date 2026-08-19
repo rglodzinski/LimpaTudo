@@ -5,41 +5,78 @@ import { expandHome, currentPlatform } from "../platform";
 import { calculateSize } from "./sizeCalculator";
 import type { ScanItem } from "../types";
 
+export interface ScanProgress {
+  completed: number;
+  total: number;
+}
+
 /**
  * Resolves every catalog entry's glob paths against the real filesystem and
  * measures the ones that exist. Only walks paths declared in the catalog
  * (see docs/01-categorias.md, docs/02-apps-viloes.md) — never an open-ended scan.
+ *
+ * `onProgress` fires after each catalog path is processed (found or not) so
+ * the UI can render a percentage; `onChunk` fires only for items worth
+ * showing the user (existing, non-empty, or permission-denied).
  */
 export async function scanCatalog(
   onChunk: (item: ScanItem) => void,
+  onProgress: (progress: ScanProgress) => void,
   concurrency = 8,
 ): Promise<void> {
   const platform = currentPlatform();
   const entries = loadCatalog();
-  const jobs: Array<() => Promise<void>> = [];
 
+  const paths: Array<{ entry: (typeof entries)[number]; resolved: string }> = [];
   for (const entry of entries) {
     const patterns = entry.paths[platform] ?? [];
     for (const pattern of patterns) {
-      jobs.push(async () => {
-        for (const resolved of resolveGlob(expandHome(pattern))) {
-          const sizeBytes = await calculateSize(resolved);
-          if (sizeBytes === null || sizeBytes === 0) continue;
-          onChunk({
-            id: `${entry.id}:${resolved}`,
-            entryId: entry.id,
-            displayName: entry.displayName,
-            category: entry.category,
-            risk: entry.risk,
-            path: resolved,
-            sizeBytes,
-          });
-        }
-      });
+      for (const resolved of resolveGlob(expandHome(pattern))) {
+        paths.push({ entry, resolved });
+      }
     }
   }
 
-  await runWithConcurrency(jobs, concurrency);
+  let completed = 0;
+  const total = paths.length;
+  onProgress({ completed, total });
+
+  async function processOne({ entry, resolved }: (typeof paths)[number]) {
+    try {
+      const { sizeBytes, permissionDenied } = await calculateSize(resolved);
+      if (sizeBytes !== null && sizeBytes > 0) {
+        onChunk({
+          id: `${entry.id}:${resolved}`,
+          entryId: entry.id,
+          displayName: entry.displayName,
+          category: entry.category,
+          risk: entry.risk,
+          path: resolved,
+          sizeBytes,
+          locked: false,
+        });
+      } else if (permissionDenied) {
+        onChunk({
+          id: `${entry.id}:${resolved}`,
+          entryId: entry.id,
+          displayName: entry.displayName,
+          category: entry.category,
+          risk: entry.risk,
+          path: resolved,
+          sizeBytes: 0,
+          locked: true,
+        });
+      }
+    } finally {
+      completed += 1;
+      onProgress({ completed, total });
+    }
+  }
+
+  await runWithConcurrency(
+    paths.map((p) => () => processOne(p)),
+    concurrency,
+  );
 }
 
 /**
@@ -68,7 +105,7 @@ function resolveGlob(pattern: string): string[] {
 
 async function runWithConcurrency(jobs: Array<() => Promise<void>>, limit: number) {
   const queue = [...jobs];
-  const workers = Array.from({ length: limit }, async () => {
+  const workers = Array.from({ length: Math.min(limit, jobs.length) || 1 }, async () => {
     while (queue.length > 0) {
       const job = queue.shift();
       if (job) await job();

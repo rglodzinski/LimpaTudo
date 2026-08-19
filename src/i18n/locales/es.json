@@ -16,5 +16,17 @@
   "chart.title": "Espacio por categoría",
   "category.dev": "Cachés de desarrollo",
   "category.system": "Sistema",
-  "category.apps": "Aplicaciones"
+  "category.apps": "Aplicaciones",
+  "scan.progress": "Escaneando… {{percent}}%",
+  "locked.label": "Requiere permiso",
+  "locked.retry": "Reintentar con contraseña de administrador",
+  "locked.deniedAfterElevation": "Sin acceso incluso como administrador — otorga Acceso Total al Disco en Ajustes del Sistema",
+  "history.title": "Historial",
+  "history.subtitle": "Limpiezas y escaneos anteriores",
+  "history.totalFreed": "Total liberado",
+  "history.chartTitle": "Espacio liberado por limpieza",
+  "history.empty": "Aún no hay limpiezas registradas",
+  "history.entry.cleanup": "Limpieza",
+  "history.entry.scan": "Escaneo",
+  "history.close": "Cerrar"
 }

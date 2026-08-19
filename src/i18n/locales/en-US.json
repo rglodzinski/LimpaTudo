@@ -16,5 +16,17 @@
   "chart.title": "Space by category",
   "category.dev": "Development caches",
   "category.system": "System",
-  "category.apps": "Applications"
+  "category.apps": "Applications",
+  "scan.progress": "Scanning… {{percent}}%",
+  "locked.label": "Needs permission",
+  "locked.retry": "Retry with administrator password",
+  "locked.deniedAfterElevation": "Still no access as administrator — grant Full Disk Access in System Settings",
+  "history.title": "History",
+  "history.subtitle": "Previous cleanups and scans",
+  "history.totalFreed": "Total freed",
+  "history.chartTitle": "Space freed per cleanup",
+  "history.empty": "No cleanups recorded yet",
+  "history.entry.cleanup": "Cleanup",
+  "history.entry.scan": "Scan",
+  "history.close": "Close"
 }
