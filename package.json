@@ -69,9 +69,7 @@
         "tar.gz"
       ],
       "category": "Utility",
-      "maintainer": "Ricardo Glodzinski <rglodzinski@gmail.com>",
-      "desktopName": "limpa-tudo.desktop",
-      "synopsis": "Libera espaço em disco no Linux com segurança"
+      "maintainer": "Ricardo Glodzinski <rglodzinski@gmail.com>"
     }
   },
   "dependencies": {
