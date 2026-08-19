@@ -8,6 +8,7 @@ import type {
   ScanSummary,
   Settings,
 } from "./types";
+import type { RemoveProgress } from "./remover";
 import type { SizeResult } from "./scanner/sizeCalculator";
 
 const limpaTudoAPI = {
@@ -28,6 +29,15 @@ const limpaTudoAPI = {
   },
   remove: (items: ScanItem[], options: RemoveOptions): Promise<RemoveReport> =>
     ipcRenderer.invoke("remove", items, options),
+  onRemoveProgress: (cb: (progress: RemoveProgress) => void) => {
+    ipcRenderer.on("remove:progress", (_event, progress) => cb(progress));
+  },
+  removeRemoveProgressListeners: () => {
+    ipcRenderer.removeAllListeners("remove:progress");
+  },
+  cancelRemove: () => {
+    ipcRenderer.send("remove:cancel");
+  },
   isAppRunning: (bundleIdOrProcessName: string): Promise<boolean> =>
     ipcRenderer.invoke("isAppRunning", bundleIdOrProcessName),
   elevateAndMeasure: (targetPath: string): Promise<SizeResult> =>

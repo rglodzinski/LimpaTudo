@@ -388,6 +388,36 @@
     }
   },
   {
+    "id": "app.firefox",
+    "displayName": "Firefox",
+    "category": "apps",
+    "risk": "low",
+    "requiresAppClosed": true,
+    "bundleId": "org.mozilla.firefox",
+    "paths": {
+      "darwin": [
+        "~/Library/Caches/Firefox",
+        "~/Library/Application Support/Firefox/Profiles/*/cache2"
+      ],
+      "linux": [
+        "~/.cache/mozilla/firefox"
+      ]
+    }
+  },
+  {
+    "id": "app.safari",
+    "displayName": "Safari",
+    "category": "apps",
+    "risk": "low",
+    "requiresAppClosed": true,
+    "bundleId": "com.apple.Safari",
+    "paths": {
+      "darwin": [
+        "~/Library/Caches/com.apple.Safari"
+      ]
+    }
+  },
+  {
     "id": "app.edge",
     "displayName": "Microsoft Edge",
     "category": "apps",

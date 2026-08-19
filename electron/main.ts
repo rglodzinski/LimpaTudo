@@ -24,6 +24,7 @@ const isDev = !app.isPackaged;
 app.setName("Limpa Tudo");
 
 let mainWindow: BrowserWindow | null = null;
+let removeCancelled = false;
 
 // In a packaged app, build.icon (package.json) already produces the
 // .icns/.ico bundle icon. In dev, `electron .` shows Electron's own icon
@@ -103,8 +104,14 @@ function registerIpcHandlers() {
     return items;
   });
 
-  ipcMain.handle("remove", async (_event, items: ScanItem[], options: RemoveOptions) => {
-    const report = await removeItems(items, options);
+  ipcMain.handle("remove", async (event, items: ScanItem[], options: RemoveOptions) => {
+    removeCancelled = false;
+    const report = await removeItems(
+      items,
+      options,
+      (progress) => event.sender.send("remove:progress", progress),
+      () => removeCancelled,
+    );
     const removedIds = new Set(report.entries.filter((e) => e.ok).map((e) => e.itemId));
     const removedItems = items.filter((item) => removedIds.has(item.id));
     appendHistoryEntry({
@@ -114,6 +121,10 @@ function registerIpcHandlers() {
       byCategory: byCategoryFromItems(removedItems),
     });
     return report;
+  });
+
+  ipcMain.on("remove:cancel", () => {
+    removeCancelled = true;
   });
 
   ipcMain.handle("isAppRunning", async (_event, bundleIdOrProcessName: string) => {

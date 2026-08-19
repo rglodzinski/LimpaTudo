@@ -5,7 +5,6 @@ import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 import {
   ArrowLeft,
   Clock,
-  Loader2,
   Lock,
   Moon,
   Settings as SettingsIcon,
@@ -22,6 +21,9 @@ import { SettingsPanel } from "./components/SettingsPanel";
 import { AboutModal } from "./components/AboutModal";
 import { Dashboard } from "./components/Dashboard";
 import { formatBytes } from "./lib/format";
+import { dirname } from "./lib/path";
+
+type GroupBy = "category" | "app" | "directory";
 
 type View = "dashboard" | "scan";
 
@@ -46,6 +48,9 @@ function App() {
   const [elevating, setElevating] = useState<Set<string>>(new Set());
   const [historyOpen, setHistoryOpen] = useState(false);
   const [removing, setRemoving] = useState(false);
+  const [cancelling, setCancelling] = useState(false);
+  const [removeProgress, setRemoveProgress] = useState<ScanProgress>({ completed: 0, total: 0 });
+  const [groupBy, setGroupBy] = useState<GroupBy>("category");
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [view, setView] = useState<View>("dashboard");
   const [history, setHistory] = useState<HistoryEntry[]>([]);
@@ -173,7 +178,7 @@ function App() {
     return selectable.length > 0 && selectable.every((i) => selected.has(i.id));
   }, [visibleItems, selected]);
 
-  const grouped = useMemo(() => {
+  const categoryGrouped = useMemo(() => {
     const map = new Map<string, ScanItem[]>();
     for (const item of visibleItems) {
       const list = map.get(item.category) ?? [];
@@ -183,13 +188,37 @@ function App() {
     return map;
   }, [visibleItems]);
 
+  function groupKey(item: ScanItem): string {
+    if (groupBy === "app") return item.entryId;
+    if (groupBy === "directory") return dirname(item.path);
+    return item.category;
+  }
+
+  function groupLabel(key: string, sample: ScanItem): string {
+    if (groupBy === "app") return sample.displayName;
+    if (groupBy === "directory") return key;
+    return t(`category.${key}`, key);
+  }
+
+  const listGrouped = useMemo(() => {
+    const map = new Map<string, ScanItem[]>();
+    for (const item of visibleItems) {
+      const key = groupKey(item);
+      const list = map.get(key) ?? [];
+      list.push(item);
+      map.set(key, list);
+    }
+    return map;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [visibleItems, groupBy]);
+
   const chartData = useMemo(
     () =>
-      [...grouped.entries()].map(([category, categoryItems]) => ({
+      [...categoryGrouped.entries()].map(([category, categoryItems]) => ({
         name: t(`category.${category}`, category),
         value: categoryItems.reduce((sum, i) => sum + i.sizeBytes, 0),
       })),
-    [grouped, t],
+    [categoryGrouped, t],
   );
 
   async function removeSelected() {
@@ -205,8 +234,15 @@ function App() {
     if (!confirmed) return;
 
     setRemoving(true);
+    setCancelling(false);
+    setRemoveProgress({ completed: 0, total: toRemove.length });
+    window.limpaTudo.onRemoveProgress((p) => setRemoveProgress(p));
+
     const report = await window.limpaTudo.remove(toRemove, { permanent });
+
+    window.limpaTudo.removeRemoveProgressListeners();
     setRemoving(false);
+    setCancelling(false);
     setSelected(new Set());
     refreshHistory();
     alert(t("selection.freed", { size: formatBytes(report.freedBytes) }));
@@ -216,7 +252,14 @@ function App() {
     await runScan();
   }
 
+  function cancelRemoving() {
+    setCancelling(true);
+    window.limpaTudo.cancelRemove();
+  }
+
   const progressPercent = progress.total > 0 ? (progress.completed / progress.total) * 100 : 0;
+  const removePercent =
+    removeProgress.total > 0 ? (removeProgress.completed / removeProgress.total) * 100 : 0;
 
   return (
     <div className="min-h-full bg-bg text-text pb-24">
@@ -372,14 +415,29 @@ function App() {
           </div>
         )}
 
-        {[...grouped.entries()].map(([category, categoryItems]) => (
-          <section key={category} className="mb-6">
-            <h2 className="mb-2 text-xs font-bold uppercase tracking-wide text-text-muted">
-              {t(`category.${category}`, category)}
+        {visibleItems.length > 0 && (
+          <div className="mb-4 flex items-center justify-end gap-2">
+            <label className="text-xs font-medium text-text-muted">{t("groupBy.label")}</label>
+            <select
+              value={groupBy}
+              onChange={(e) => setGroupBy(e.target.value as GroupBy)}
+              className="rounded-lg border border-border bg-surface-2 px-2 py-1.5 text-sm"
+            >
+              <option value="category">{t("groupBy.category")}</option>
+              <option value="app">{t("groupBy.app")}</option>
+              <option value="directory">{t("groupBy.directory")}</option>
+            </select>
+          </div>
+        )}
+
+        {[...listGrouped.entries()].map(([key, groupItems]) => (
+          <section key={key} className="mb-6">
+            <h2 className="mb-2 truncate text-xs font-bold uppercase tracking-wide text-text-muted">
+              {groupLabel(key, groupItems[0])}
             </h2>
             <div className="overflow-hidden rounded-xl border border-border bg-surface">
               <AnimatePresence initial={false}>
-                {categoryItems
+                {groupItems
                   .sort((a, b) => b.sizeBytes - a.sizeBytes)
                   .map((item) =>
                     item.locked ? (
@@ -439,7 +497,7 @@ function App() {
       )}
 
       <AnimatePresence>
-        {view === "scan" && selected.size > 0 && (
+        {view === "scan" && selected.size > 0 && !removing && (
           <motion.footer
             initial={{ y: 80, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -452,15 +510,41 @@ function App() {
             <motion.button
               whileTap={{ scale: 0.96 }}
               onClick={removeSelected}
-              disabled={removing}
-              className="flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-white hover:bg-accent-hover disabled:opacity-70"
+              className="flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-white hover:bg-accent-hover"
             >
-              {removing && (
-                <Loader2 size={14} className="animate-spin" />
-              )}
-              {removing ? t("selection.cleaning") : t("selection.clean")}
+              {t("selection.clean")}
             </motion.button>
           </motion.footer>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {removing && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-4 bg-bg/95 backdrop-blur-sm"
+          >
+            <CircularProgress percent={removePercent} />
+            <div className="text-center">
+              <p className="text-base font-semibold">{t("selection.cleaning")}</p>
+              <p className="text-sm text-text-muted">
+                {t("selection.cleaningProgress", {
+                  completed: Math.min(removeProgress.completed + 1, removeProgress.total),
+                  total: removeProgress.total,
+                })}
+              </p>
+            </div>
+            <motion.button
+              whileTap={{ scale: 0.96 }}
+              onClick={cancelRemoving}
+              disabled={cancelling}
+              className="rounded-lg border border-border bg-surface px-4 py-2 text-sm font-semibold hover:border-risk-high disabled:opacity-60"
+            >
+              {cancelling ? t("selection.interrupting") : t("selection.interrupt")}
+            </motion.button>
+          </motion.div>
         )}
       </AnimatePresence>
 
