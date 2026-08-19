@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <!-- Mac App Store builds MUST use the App Sandbox. This is a template —
+       see docs/06-distribuicao.md: sandboxing is fundamentally at odds with
+       scanning arbitrary paths under ~/Library, other apps' containers, etc.
+       Shipping on the Mac App Store means re-scoping the app to only ever
+       touch paths the user explicitly picked via NSOpenPanel
+       (security-scoped bookmarks), which is a different app than what
+       Limpa Tudo does today outside the sandbox. -->
+  <key>com.apple.security.app-sandbox</key>
+  <true/>
+  <key>com.apple.security.files.user-selected.read-write</key>
+  <true/>
+  <key>com.apple.security.cs.allow-jit</key>
+  <true/>
+</dict>
+</plist>

@@ -1,0 +1,39 @@
+# Starting point for a Flathub submission — UNVERIFIED, see docs/06-distribuicao.md.
+# Electron apps on Flathub build on org.electronjs.Electron2.BaseApp, which
+# bundles "zypak" so Electron's own sandbox works inside Flatpak's sandbox.
+#
+# This manifest expects a built .deb (from `npm run dist:linux`) to extract the
+# app files from — adjust `sources` to point at a real release asset URL + sha256
+# before actually submitting. Test locally with:
+#   flatpak-builder --user --install --force-clean build-dir flatpak/com.rglodzinski.limpatudo.yml
+app-id: com.rglodzinski.limpatudo
+runtime: org.freedesktop.Platform
+runtime-version: "23.08"
+sdk: org.freedesktop.Sdk
+base: org.electronjs.Electron2.BaseApp
+base-version: "23.08"
+command: limpa-tudo
+
+finish-args:
+  - --socket=wayland
+  - --socket=fallback-x11
+  - --share=ipc
+  - --device=dri
+  - --share=network
+  - --filesystem=home
+  - --talk-name=org.freedesktop.Notifications
+
+modules:
+  - name: limpa-tudo
+    buildsystem: simple
+    build-commands:
+      - mkdir -p /app/limpa-tudo
+      - cp -a . /app/limpa-tudo
+      - mkdir -p /app/bin
+      - ln -s /app/limpa-tudo/limpa-tudo /app/bin/limpa-tudo
+      - install -Dm644 build/icon.png /app/share/icons/hicolor/512x512/apps/com.rglodzinski.limpatudo.png
+    sources:
+      # Replace with the real release artifact once published:
+      - type: archive
+        url: https://github.com/rglodzinski/LimpaTudo/releases/download/vX.Y.Z/limpa-tudo-X.Y.Z-linux-x64.tar.gz
+        sha256: REPLACE_ME
