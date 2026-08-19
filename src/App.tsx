@@ -144,6 +144,10 @@ function App() {
     setSelected(new Set(visibleItems.filter((i) => !i.locked).map((i) => i.id)));
   }
 
+  function deselectAll() {
+    setSelected(new Set());
+  }
+
   const selectedBytes = useMemo(
     () => items.filter((i) => selected.has(i.id)).reduce((sum, i) => sum + i.sizeBytes, 0),
     [items, selected],
@@ -153,6 +157,11 @@ function App() {
     () => items.filter((i) => settings?.advancedModeEnabled || i.risk !== "high"),
     [items, settings?.advancedModeEnabled],
   );
+
+  const allSelected = useMemo(() => {
+    const selectable = visibleItems.filter((i) => !i.locked);
+    return selectable.length > 0 && selectable.every((i) => selected.has(i.id));
+  }, [visibleItems, selected]);
 
   const grouped = useMemo(() => {
     const map = new Map<string, ScanItem[]>();
@@ -321,12 +330,21 @@ function App() {
                 >
                   {t("selection.selectAllSafe")}
                 </button>
-                <button
-                  onClick={selectAll}
-                  className="text-sm font-medium text-accent hover:text-accent-hover"
-                >
-                  {t("selection.selectAll")}
-                </button>
+                {allSelected ? (
+                  <button
+                    onClick={deselectAll}
+                    className="text-sm font-medium text-accent hover:text-accent-hover"
+                  >
+                    {t("selection.deselectAll")}
+                  </button>
+                ) : (
+                  <button
+                    onClick={selectAll}
+                    className="text-sm font-medium text-accent hover:text-accent-hover"
+                  >
+                    {t("selection.selectAll")}
+                  </button>
+                )}
               </div>
             </div>
           </div>

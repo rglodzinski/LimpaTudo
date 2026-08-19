@@ -6,6 +6,7 @@
   "selection.bar": "{{count}} items selected · {{size}}",
   "selection.selectAllSafe": "Select all safe",
   "selection.selectAll": "Select all",
+  "selection.deselectAll": "Deselect all",
   "selection.clean": "Clean selected",
   "selection.confirm": "Move {{count}} items ({{size}}) to Trash?",
   "selection.confirmPermanent": "⚠️ Permanently delete {{count}} items ({{size}})? This cannot be undone — items will NOT go to Trash.",
