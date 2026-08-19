@@ -1,0 +1,20 @@
+{
+  "app.title": "Limpa Tudo",
+  "scan.button": "Escanear",
+  "scan.scanning": "Escaneando…",
+  "scan.summary": "{{count}} elementos encontrados · {{size}} en total",
+  "selection.bar": "{{count}} elementos seleccionados · {{size}}",
+  "selection.selectAllSafe": "Seleccionar todo lo seguro",
+  "selection.clean": "Limpiar seleccionados",
+  "selection.confirm": "¿Mover {{count}} elementos ({{size}}) a la Papelera?",
+  "selection.freed": "Liberado: {{size}}",
+  "empty.title": "Aún no hay escaneo",
+  "empty.subtitle": "Haz clic en Escanear para encontrar espacio para liberar",
+  "theme.light": "Claro",
+  "theme.dark": "Oscuro",
+  "language.label": "Idioma",
+  "chart.title": "Espacio por categoría",
+  "category.dev": "Cachés de desarrollo",
+  "category.system": "Sistema",
+  "category.apps": "Aplicaciones"
+}

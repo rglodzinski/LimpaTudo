@@ -1,0 +1,20 @@
+{
+  "app.title": "Limpa Tudo",
+  "scan.button": "Scan",
+  "scan.scanning": "Scanning…",
+  "scan.summary": "{{count}} items found · {{size}} total",
+  "selection.bar": "{{count}} items selected · {{size}}",
+  "selection.selectAllSafe": "Select all safe",
+  "selection.clean": "Clean selected",
+  "selection.confirm": "Move {{count}} items ({{size}}) to Trash?",
+  "selection.freed": "Freed: {{size}}",
+  "empty.title": "No scan yet",
+  "empty.subtitle": "Click Scan to find space you can free up",
+  "theme.light": "Light",
+  "theme.dark": "Dark",
+  "language.label": "Language",
+  "chart.title": "Space by category",
+  "category.dev": "Development caches",
+  "category.system": "System",
+  "category.apps": "Applications"
+}

@@ -1,76 +1,69 @@
+@import "tailwindcss";
+
 :root {
-  color-scheme: light dark;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --accent: #0d9488;
+  --accent-hover: #0f766e;
+  --accent-soft: #ccfbf1;
+  --bg: #ffffff;
+  --surface: #f8fafc;
+  --surface-2: #f1f5f9;
+  --border: #e2e8f0;
+  --text: #0f172a;
+  --text-muted: #64748b;
+
+  --risk-low: #16a34a;
+  --risk-medium: #d97706;
+  --risk-high: #dc2626;
+}
+
+:root[data-theme="dark"] {
+  --accent: #2dd4bf;
+  --accent-hover: #5eead4;
+  --accent-soft: #134e4a;
+  --bg: #0b1120;
+  --surface: #131b2c;
+  --surface-2: #1b2436;
+  --border: #232e45;
+  --text: #f1f5f9;
+  --text-muted: #94a3b8;
+
+  --risk-low: #22c55e;
+  --risk-medium: #f59e0b;
+  --risk-high: #ef4444;
+}
+
+@theme inline {
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-soft: var(--accent-soft);
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
+  --color-text: var(--text);
+  --color-text-muted: var(--text-muted);
+  --color-risk-low: var(--risk-low);
+  --color-risk-medium: var(--risk-medium);
+  --color-risk-high: var(--risk-high);
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif;
+}
+
+html,
+body,
+#root {
+  height: 100%;
 }
 
 body {
   margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
 }
 
-.app {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 1.5rem;
-  padding-bottom: 5rem;
-}
-
-.app-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.summary {
-  opacity: 0.7;
-}
-
-.category h2 {
-  font-size: 1rem;
-  text-transform: uppercase;
-  opacity: 0.6;
-  margin-top: 2rem;
-}
-
-.category ul {
-  list-style: none;
-  padding: 0;
-}
-
-.category li {
-  padding: 0.4rem 0;
-  border-bottom: 1px solid rgba(128, 128, 128, 0.2);
-}
-
-.category label {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  cursor: pointer;
-}
-
-.path {
-  flex: 1;
-  opacity: 0.5;
-  font-size: 0.8rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.size {
-  font-variant-numeric: tabular-nums;
-  opacity: 0.8;
-}
-
-.selection-bar {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: canvas;
-  border-top: 1px solid rgba(128, 128, 128, 0.3);
-  padding: 1rem 1.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+* {
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
 }
