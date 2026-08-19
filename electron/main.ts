@@ -6,7 +6,13 @@ import { calculateSizeElevated } from "./scanner/sizeCalculator";
 import { removeItems } from "./remover";
 import { isAppRunning } from "./processDetector";
 import { loadSettings, updateSettings } from "./settings";
-import { appendHistoryEntry, byCategoryFromItems, deleteHistoryEntry, loadHistory } from "./history";
+import {
+  appendHistoryEntry,
+  byCategoryFromItems,
+  clearHistory,
+  deleteHistoryEntry,
+  loadHistory,
+} from "./history";
 import type { RemoveOptions, ScanItem, Settings } from "./types";
 
 const isDev = !app.isPackaged;
@@ -119,6 +125,10 @@ function registerIpcHandlers() {
 
   ipcMain.handle("history:delete", async (_event, id: string) => {
     return deleteHistoryEntry(id);
+  });
+
+  ipcMain.handle("history:clear", async () => {
+    return clearHistory();
   });
 }
 

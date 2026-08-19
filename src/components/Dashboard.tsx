@@ -11,6 +11,7 @@ interface DashboardProps {
   onStartScan: () => void;
   onOpenHistory: () => void;
   onDeleteEntry: (id: string) => void;
+  onClearHistory: () => void;
 }
 
 function StatCard({
@@ -36,7 +37,13 @@ function StatCard({
   );
 }
 
-export function Dashboard({ history, onStartScan, onOpenHistory, onDeleteEntry }: DashboardProps) {
+export function Dashboard({
+  history,
+  onStartScan,
+  onOpenHistory,
+  onDeleteEntry,
+  onClearHistory,
+}: DashboardProps) {
   const { t, i18n } = useTranslation();
 
   const cleanups = useMemo(
@@ -145,9 +152,19 @@ export function Dashboard({ history, onStartScan, onOpenHistory, onDeleteEntry }
       )}
 
       <div className="rounded-2xl border border-border bg-surface p-5">
-        <p className="mb-3 text-xs font-semibold uppercase tracking-wide text-text-muted">
-          {t("dashboard.recent.title")}
-        </p>
+        <div className="mb-3 flex items-center justify-between">
+          <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">
+            {t("dashboard.recent.title")}
+          </p>
+          {history.length > 0 && (
+            <button
+              onClick={onClearHistory}
+              className="text-xs font-medium text-text-muted hover:text-risk-high"
+            >
+              {t("history.deleteAll")}
+            </button>
+          )}
+        </div>
         {recent.length === 0 ? (
           <p className="py-8 text-center text-sm text-text-muted">{t("dashboard.recent.empty")}</p>
         ) : (

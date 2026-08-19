@@ -38,6 +38,7 @@ const limpaTudoAPI = {
   getHistory: (): Promise<HistoryEntry[]> => ipcRenderer.invoke("history:list"),
   deleteHistoryEntry: (id: string): Promise<HistoryEntry[]> =>
     ipcRenderer.invoke("history:delete", id),
+  clearHistory: (): Promise<HistoryEntry[]> => ipcRenderer.invoke("history:clear"),
 };
 
 contextBridge.exposeInMainWorld("limpaTudo", limpaTudoAPI);

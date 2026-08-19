@@ -33,6 +33,8 @@
   "history.close": "Cerrar",
   "history.delete": "Eliminar",
   "history.deleteConfirm": "¿Eliminar este registro del historial?",
+  "history.deleteAll": "Eliminar todo",
+  "history.deleteAllConfirm": "¿Eliminar todo el historial de escaneos y limpiezas? Esta acción no se puede deshacer.",
   "dashboard.title": "Panel",
   "dashboard.subtitle": "Resumen del espacio en disco de tu Mac/Linux",
   "dashboard.card.totalFreed": "Total liberado",

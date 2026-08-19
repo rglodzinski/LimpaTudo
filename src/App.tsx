@@ -59,6 +59,12 @@ function App() {
     setHistory(updated);
   }
 
+  async function clearHistory() {
+    if (!window.confirm(t("history.deleteAllConfirm"))) return;
+    const updated = await window.limpaTudo.clearHistory();
+    setHistory(updated);
+  }
+
   function goToScan() {
     setView("scan");
     runScan();
@@ -260,6 +266,7 @@ function App() {
           onStartScan={goToScan}
           onOpenHistory={() => setHistoryOpen(true)}
           onDeleteEntry={deleteHistoryEntry}
+          onClearHistory={clearHistory}
         />
       )}
 

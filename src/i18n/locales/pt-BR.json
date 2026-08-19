@@ -33,6 +33,8 @@
   "history.close": "Fechar",
   "history.delete": "Apagar",
   "history.deleteConfirm": "Apagar este registro do histórico?",
+  "history.deleteAll": "Apagar tudo",
+  "history.deleteAllConfirm": "Apagar todo o histórico de scans e limpezas? Esta ação não pode ser desfeita.",
   "dashboard.title": "Painel",
   "dashboard.subtitle": "Visão geral do espaço em disco do seu Mac/Linux",
   "dashboard.card.totalFreed": "Total liberado",

@@ -36,6 +36,12 @@ export function deleteHistoryEntry(id: string): HistoryEntry[] {
   return history;
 }
 
+export function clearHistory(): HistoryEntry[] {
+  fs.mkdirSync(HISTORY_DIR, { recursive: true });
+  fs.writeFileSync(HISTORY_PATH, JSON.stringify([], null, 2));
+  return [];
+}
+
 export function byCategoryFromItems(items: { category: string; sizeBytes: number }[]) {
   const byCategory: Record<string, number> = {};
   for (const item of items) {

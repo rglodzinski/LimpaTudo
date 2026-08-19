@@ -33,6 +33,8 @@
   "history.close": "Close",
   "history.delete": "Delete",
   "history.deleteConfirm": "Delete this history record?",
+  "history.deleteAll": "Delete all",
+  "history.deleteAllConfirm": "Delete the entire scan/cleanup history? This cannot be undone.",
   "dashboard.title": "Dashboard",
   "dashboard.subtitle": "Overview of your Mac/Linux disk space",
   "dashboard.card.totalFreed": "Total freed",

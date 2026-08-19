@@ -38,6 +38,12 @@ export function HistoryPanel({ open, onClose }: HistoryPanelProps) {
     setEntries(updated);
   }
 
+  async function handleClearAll() {
+    if (!window.confirm(t("history.deleteAllConfirm"))) return;
+    const updated = await window.limpaTudo.clearHistory();
+    setEntries(updated);
+  }
+
   const cleanups = useMemo(
     () => entries.filter((e) => e.type === "cleanup").sort((a, b) => a.timestamp.localeCompare(b.timestamp)),
     [entries],
@@ -93,6 +99,15 @@ export function HistoryPanel({ open, onClose }: HistoryPanelProps) {
               <p className="py-12 text-center text-sm text-text-muted">{t("history.empty")}</p>
             ) : (
               <>
+                <div className="mb-4 flex justify-end">
+                  <button
+                    onClick={handleClearAll}
+                    className="text-xs font-medium text-text-muted hover:text-risk-high"
+                  >
+                    {t("history.deleteAll")}
+                  </button>
+                </div>
+
                 <div className="mb-6 rounded-xl border border-border bg-surface-2 p-4">
                   <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">
                     {t("history.totalFreed")}
