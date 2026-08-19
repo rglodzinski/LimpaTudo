@@ -2,7 +2,16 @@ import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { AnimatePresence, motion } from "framer-motion";
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
-import { ArrowLeft, Clock, Lock, Moon, Settings as SettingsIcon, Sparkles, Sun } from "lucide-react";
+import {
+  ArrowLeft,
+  Clock,
+  Loader2,
+  Lock,
+  Moon,
+  Settings as SettingsIcon,
+  Sparkles,
+  Sun,
+} from "lucide-react";
 import type { HistoryEntry, ScanItem, ScanProgress, ScanSummary, Settings } from "../electron/types";
 import { SUPPORTED_LANGUAGES, type SupportedLanguage } from "./i18n";
 import { useTheme } from "./hooks/useTheme";
@@ -36,6 +45,7 @@ function App() {
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [elevating, setElevating] = useState<Set<string>>(new Set());
   const [historyOpen, setHistoryOpen] = useState(false);
+  const [removing, setRemoving] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [view, setView] = useState<View>("dashboard");
   const [history, setHistory] = useState<HistoryEntry[]>([]);
@@ -194,12 +204,16 @@ function App() {
     );
     if (!confirmed) return;
 
+    setRemoving(true);
     const report = await window.limpaTudo.remove(toRemove, { permanent });
-    const removedIds = new Set(report.entries.filter((e) => e.ok).map((e) => e.itemId));
-    setItems((prev) => prev.filter((i) => !removedIds.has(i.id)));
+    setRemoving(false);
     setSelected(new Set());
     refreshHistory();
     alert(t("selection.freed", { size: formatBytes(report.freedBytes) }));
+
+    // Re-scan instead of just filtering removed items locally, so sizes and
+    // any newly-unlocked/changed items reflect the disk's real state.
+    await runScan();
   }
 
   const progressPercent = progress.total > 0 ? (progress.completed / progress.total) * 100 : 0;
@@ -438,9 +452,13 @@ function App() {
             <motion.button
               whileTap={{ scale: 0.96 }}
               onClick={removeSelected}
-              className="rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-white hover:bg-accent-hover"
+              disabled={removing}
+              className="flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-white hover:bg-accent-hover disabled:opacity-70"
             >
-              {t("selection.clean")}
+              {removing && (
+                <Loader2 size={14} className="animate-spin" />
+              )}
+              {removing ? t("selection.cleaning") : t("selection.clean")}
             </motion.button>
           </motion.footer>
         )}

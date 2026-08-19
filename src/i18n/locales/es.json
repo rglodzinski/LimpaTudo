@@ -8,6 +8,7 @@
   "selection.selectAll": "Seleccionar Todo",
   "selection.deselectAll": "Deseleccionar Todo",
   "selection.clean": "Limpiar Seleccionados",
+  "selection.cleaning": "Limpiando…",
   "selection.confirm": "¿Mover {{count}} elementos ({{size}}) a la Papelera?",
   "selection.confirmPermanent": "⚠️ ¿Eliminar permanentemente {{count}} elementos ({{size}})? Esta acción no se puede deshacer — los elementos NO irán a la Papelera.",
   "selection.freed": "Liberado: {{size}}",

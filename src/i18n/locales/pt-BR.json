@@ -8,6 +8,7 @@
   "selection.selectAll": "Selecionar Todos",
   "selection.deselectAll": "Desselecionar Todos",
   "selection.clean": "Limpar Selecionados",
+  "selection.cleaning": "Limpando…",
   "selection.confirm": "Mover {{count}} itens ({{size}}) para a Lixeira?",
   "selection.confirmPermanent": "⚠️ Excluir permanentemente {{count}} itens ({{size}})? Esta ação não pode ser desfeita — os itens NÃO irão para a Lixeira.",
   "selection.freed": "Liberado: {{size}}",
