@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { AnimatePresence, motion } from "framer-motion";
 import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import { X } from "lucide-react";
+import { Trash2, X } from "lucide-react";
 import type { HistoryEntry } from "../../electron/types";
 
 function formatBytes(bytes: number): string {
@@ -31,6 +31,12 @@ export function HistoryPanel({ open, onClose }: HistoryPanelProps) {
       window.limpaTudo.getHistory().then(setEntries);
     }
   }, [open]);
+
+  async function handleDelete(id: string) {
+    if (!window.confirm(t("history.deleteConfirm"))) return;
+    const updated = await window.limpaTudo.deleteHistoryEntry(id);
+    setEntries(updated);
+  }
 
   const cleanups = useMemo(
     () => entries.filter((e) => e.type === "cleanup").sort((a, b) => a.timestamp.localeCompare(b.timestamp)),
@@ -129,9 +135,18 @@ export function HistoryPanel({ open, onClose }: HistoryPanelProps) {
                           {new Date(entry.timestamp).toLocaleString(i18n.language)}
                         </p>
                       </div>
-                      <span className="tabular-nums font-semibold text-accent">
-                        {formatBytes(entry.totalBytes)}
-                      </span>
+                      <div className="flex items-center gap-3">
+                        <span className="tabular-nums font-semibold text-accent">
+                          {formatBytes(entry.totalBytes)}
+                        </span>
+                        <button
+                          onClick={() => handleDelete(entry.id)}
+                          aria-label={t("history.delete")}
+                          className="text-text-muted hover:text-risk-high"
+                        >
+                          <Trash2 size={14} />
+                        </button>
+                      </div>
                     </li>
                   ))}
                 </ul>

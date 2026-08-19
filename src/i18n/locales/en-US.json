@@ -31,6 +31,8 @@
   "history.entry.cleanup": "Cleanup",
   "history.entry.scan": "Scan",
   "history.close": "Close",
+  "history.delete": "Delete",
+  "history.deleteConfirm": "Delete this history record?",
   "dashboard.title": "Dashboard",
   "dashboard.subtitle": "Overview of your Mac/Linux disk space",
   "dashboard.card.totalFreed": "Total freed",

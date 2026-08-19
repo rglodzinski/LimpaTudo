@@ -29,6 +29,13 @@ export function appendHistoryEntry(entry: Omit<HistoryEntry, "id" | "timestamp">
   return full;
 }
 
+export function deleteHistoryEntry(id: string): HistoryEntry[] {
+  const history = loadHistory().filter((entry) => entry.id !== id);
+  fs.mkdirSync(HISTORY_DIR, { recursive: true });
+  fs.writeFileSync(HISTORY_PATH, JSON.stringify(history, null, 2));
+  return history;
+}
+
 export function byCategoryFromItems(items: { category: string; sizeBytes: number }[]) {
   const byCategory: Record<string, number> = {};
   for (const item of items) {

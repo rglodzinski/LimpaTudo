@@ -36,6 +36,8 @@ const limpaTudoAPI = {
   updateSettings: (patch: Partial<Settings>): Promise<Settings> =>
     ipcRenderer.invoke("settings:update", patch),
   getHistory: (): Promise<HistoryEntry[]> => ipcRenderer.invoke("history:list"),
+  deleteHistoryEntry: (id: string): Promise<HistoryEntry[]> =>
+    ipcRenderer.invoke("history:delete", id),
 };
 
 contextBridge.exposeInMainWorld("limpaTudo", limpaTudoAPI);

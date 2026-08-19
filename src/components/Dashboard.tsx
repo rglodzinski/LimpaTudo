@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import { ArrowRight, Clock, HardDrive, History, Sparkles, Trash2 } from "lucide-react";
+import { ArrowRight, Clock, HardDrive, History, Sparkles, Trash2, X } from "lucide-react";
 import type { HistoryEntry } from "../../electron/types";
 import { formatBytes } from "../lib/format";
 
@@ -10,6 +10,7 @@ interface DashboardProps {
   history: HistoryEntry[];
   onStartScan: () => void;
   onOpenHistory: () => void;
+  onDeleteEntry: (id: string) => void;
 }
 
 function StatCard({
@@ -35,7 +36,7 @@ function StatCard({
   );
 }
 
-export function Dashboard({ history, onStartScan, onOpenHistory }: DashboardProps) {
+export function Dashboard({ history, onStartScan, onOpenHistory, onDeleteEntry }: DashboardProps) {
   const { t, i18n } = useTranslation();
 
   const cleanups = useMemo(
@@ -171,9 +172,18 @@ export function Dashboard({ history, onStartScan, onOpenHistory }: DashboardProp
                     </p>
                   </div>
                 </div>
-                <span className="tabular-nums font-semibold text-accent">
-                  {formatBytes(entry.totalBytes)}
-                </span>
+                <div className="flex items-center gap-3">
+                  <span className="tabular-nums font-semibold text-accent">
+                    {formatBytes(entry.totalBytes)}
+                  </span>
+                  <button
+                    onClick={() => onDeleteEntry(entry.id)}
+                    aria-label={t("history.delete")}
+                    className="text-text-muted hover:text-risk-high"
+                  >
+                    <X size={14} />
+                  </button>
+                </div>
               </li>
             ))}
           </ul>

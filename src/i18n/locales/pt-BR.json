@@ -31,6 +31,8 @@
   "history.entry.cleanup": "Limpeza",
   "history.entry.scan": "Scan",
   "history.close": "Fechar",
+  "history.delete": "Apagar",
+  "history.deleteConfirm": "Apagar este registro do histórico?",
   "dashboard.title": "Painel",
   "dashboard.subtitle": "Visão geral do espaço em disco do seu Mac/Linux",
   "dashboard.card.totalFreed": "Total liberado",
