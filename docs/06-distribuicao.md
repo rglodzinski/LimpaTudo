@@ -1,5 +1,15 @@
 # Distribuição — CI/CD e lojas de apps
 
+## Status atual (2026-08-19)
+
+✅ **Assinatura + notarização de macOS configuradas e funcionando de ponta a
+ponta.** A tag `v1.0.0` foi publicada com sucesso — build assinado,
+notarizado pela Apple, e [release público no
+GitHub](https://github.com/rglodzinski/LimpaTudo/releases/tag/v1.0.0) com
+9 instaladores (`.dmg`/`.zip` x64+arm64 para macOS; `.deb`, `.rpm`, `.snap`,
+`.AppImage`, `.tar.gz` para Linux). Quem baixar o `.dmg` do GitHub Releases
+não vê nenhum aviso do Gatekeeper.
+
 ## O que já está pronto
 
 ### CI/CD (`.github/workflows/build.yml`)
@@ -50,22 +60,44 @@
 
 ## Pendências que só você pode resolver
 
-### 1. Secrets do GitHub Actions (para assinar/notarizar o macOS)
+### 1. ✅ Secrets do GitHub Actions (assinatura/notarização do macOS) — feito
 
-Sem isso, o pipeline continua funcionando, só que gera **dmg/zip não
-assinados** (o usuário final vê aviso do Gatekeeper ao abrir). Necessário
-`repo Settings → Secrets and variables → Actions`:
+Configurados em `repo Settings → Secrets and variables → Actions`:
+`MAC_CERTIFICATE_P12_BASE64`, `MAC_CERTIFICATE_PASSWORD`, `APPLE_ID`,
+`APPLE_APP_SPECIFIC_PASSWORD`, `APPLE_TEAM_ID`. Certificado "Developer ID
+Application" gerado via CSR local (`openssl`) + upload manual no portal da
+Apple (conta Apple Developer Program já existente).
 
-| Secret | Como obter |
-|---|---|
-| `MAC_CERTIFICATE_P12_BASE64` | Exportar do Keychain Access um certificado **"Developer ID Application"** como `.p12`, depois `base64 -i cert.p12 \| pbcopy` |
-| `MAC_CERTIFICATE_PASSWORD` | Senha que você definiu ao exportar o `.p12` |
-| `APPLE_ID` | Seu Apple ID (e-mail) |
-| `APPLE_APP_SPECIFIC_PASSWORD` | Gerada em [appleid.apple.com](https://appleid.apple.com) → Segurança → Senhas de app |
-| `APPLE_TEAM_ID` | Visível em [developer.apple.com/account](https://developer.apple.com/account) → Membership |
+**Armadilha real encontrada e documentada aqui para o futuro** (ex.: quando
+o certificado expirar e precisar gerar um novo `.p12`): o OpenSSL 3.x usa
+por padrão criptografia AES-256/PBKDF2 com MAC em SHA-256 no PKCS#12. A
+ferramenta `security` do macOS (usada internamente pelo electron-builder
+via `/usr/bin/security import`) **não entende esse formato** e falha com
+`MAC verification failed during PKCS12 import (wrong password?)` — mesmo
+com a senha certa. A correção é exportar com a flag `-legacy`:
 
-Exige **Apple Developer Program** (US$ 99/ano) — sem isso não há certificado
-"Developer ID Application" para gerar.
+```bash
+openssl pkcs12 -export -legacy \
+  -inkey developerID_application.key \
+  -in developerID_application.pem \
+  -out developerID_application.p12 \
+  -passout pass:"$SENHA"
+```
+
+Antes de subir um `.p12` novo como secret, valide localmente com a mesma
+ferramenta que o CI usa (não só `openssl pkcs12 -info`, que aceita o
+formato novo sem reclamar):
+
+```bash
+security create-keychain -p testpass /tmp/test.keychain
+security import developerID_application.p12 -k /tmp/test.keychain \
+  -T /usr/bin/codesign -T /usr/bin/productbuild -P "$SENHA"
+security delete-keychain /tmp/test.keychain
+```
+
+Chave privada, `.p12` e `.cer` ficam guardados localmente em
+`~/.secrets/limpatudo/` (fora do repositório) como backup — perder a chave
+privada exigiria gerar um certificado novo do zero.
 
 ### 2. Mac App Store — limitação importante, não é só configuração
 
@@ -139,11 +171,29 @@ não existem ainda). Sem ação necessária por enquanto.
 
 ## Resumo do que falta, por prioridade
 
-1. 🔴 Decidir se o Limpa Tudo terá uma variante sandboxed para a Mac App
-   Store ou se a distribuição fica só fora dela.
-2. 🟡 Criar conta Apple Developer Program + configurar os 5 secrets de
-   assinatura/notarização no GitHub, para builds de macOS saírem assinados.
-3. 🟡 Criar conta no Snapcraft e adicionar o step de publish ao workflow.
+1. ✅ ~~Criar conta Apple Developer Program + configurar os 5 secrets~~ — feito, `v1.0.0` publicado assinado/notarizado.
+2. 🔴 Decidir se o Limpa Tudo terá uma variante sandboxed para a Mac App
+   Store (usando security-scoped bookmarks — usuário concede acesso à pasta
+   Home uma vez, ver conversa/decisão registrada abaixo) ou se a
+   distribuição fica só fora dela. **Decisão até agora: não implementar
+   ainda** — distribuição via site/GitHub Releases (já funciona 100%) é o
+   caminho atual.
+3. 🟡 Criar conta no Snapcraft e adicionar o step de publish ao workflow
+   (o `.snap` já é gerado, só falta publicar na loja).
 4. 🟢 Testar e depois submeter o manifesto Flatpak ao Flathub.
 5. 🟢 (Opcional) Homebrew cask / tap para instalação fácil no macOS fora da
    App Store.
+
+## Nota sobre a Mac App Store (contexto da decisão)
+
+Perguntado se seria possível pedir permissão ao usuário para diretórios
+específicos em vez de reformular todo o app: sim, tecnicamente — macOS
+*security-scoped bookmarks* concedem acesso a toda a subárvore de uma pasta
+escolhida via diálogo nativo (ex.: conceder acesso à pasta Home uma única
+vez cobre `~/Library/Caches`, `~/.npm`, `~/Developer`, projetos, etc., sem
+pedir de novo). Paths fora da Home (`/private/var/log`, `/Library/Caches`
+de sistema) ficariam de fora. O trabalho real: Electron não tem API nativa
+para persistir esses bookmarks — exigiria um pequeno módulo nativo/helper
+Swift. Decisão tomada: **não seguir por esse caminho agora** — distribuir
+fora da App Store via site próprio (assinado + notarizado, sem aviso de
+Gatekeeper) resolve o objetivo prático sem essa reformulação.
