@@ -3,8 +3,8 @@ export function LogoMark({ className }: { className?: string }) {
     <svg viewBox="0 0 64 64" fill="none" className={className} xmlns="http://www.w3.org/2000/svg">
       <defs>
         <linearGradient id="lt-grad" x1="4" y1="8" x2="60" y2="56" gradientUnits="userSpaceOnUse">
-          <stop offset="0" stopColor="#2DD4BF" />
-          <stop offset="1" stopColor="#0D9488" />
+          <stop offset="0" stopColor="#60A5FA" />
+          <stop offset="1" stopColor="#2563EB" />
         </linearGradient>
       </defs>
       <rect x="2" y="2" width="60" height="60" rx="16" fill="url(#lt-grad)" />

@@ -21,7 +21,9 @@ const RISK_DOT: Record<ScanItem["risk"], string> = {
   high: "bg-risk-high",
 };
 
-const CHART_COLORS = ["#1d4ed8", "#3b82f6", "#60a5fa", "#93c5fd"];
+// Deliberately varied hues (not brand blue) so categories in the donut
+// chart stay visually distinct from each other and from the accent color.
+const CHART_COLORS = ["#f59e0b", "#8b5cf6", "#ec4899", "#10b981", "#3b82f6", "#f43f5e"];
 
 function App() {
   const { t, i18n } = useTranslation();

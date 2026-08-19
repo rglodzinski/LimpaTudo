@@ -1,11 +1,19 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { nativeTheme } from "electron";
+import { app, nativeTheme } from "electron";
 import type { Settings } from "./types";
 
 const SETTINGS_DIR = path.join(os.homedir(), ".config", "limpatudo");
 const SETTINGS_PATH = path.join(SETTINGS_DIR, "settings.json");
+
+/** Maps the OS locale (e.g. "pt-BR", "pt", "es-AR") to a language we ship. */
+function detectSystemLanguage(): Settings["language"] {
+  const locale = app.getLocale(); // BCP 47, e.g. "pt-BR", "es", "en-GB"
+  if (locale.startsWith("pt")) return "pt-BR";
+  if (locale.startsWith("es")) return "es";
+  return "en-US";
+}
 
 function defaultSettings(): Settings {
   return {
@@ -14,7 +22,7 @@ function defaultSettings(): Settings {
     permanentDeleteEnabled: false,
     advancedModeEnabled: false,
     theme: nativeTheme.shouldUseDarkColors ? "dark" : "light",
-    language: "en-US",
+    language: detectSystemLanguage(),
   };
 }
 

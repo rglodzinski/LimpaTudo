@@ -8,14 +8,14 @@ Linear, Vercel), não um "utilitário de limpeza" genérico datado. Suporta tema
 
 ## Cor de marca
 
-Acento principal: **teal/menta** — remete a "limpo/fresco" sem cair no azul
-genérico de utilitário de sistema nem no verde "botão de ação" batido.
+Acento principal: **azul** — remete a confiabilidade/tecnologia sem competir
+com as cores semânticas de risco (verde/âmbar/vermelho).
 
 | Token | Light | Dark | Uso |
 |---|---|---|---|
-| `--accent` | `#0D9488` (teal-600) | `#2DD4BF` (teal-400) | ações primárias, marca, gráficos |
-| `--accent-hover` | `#0F766E` | `#5EEAD4` | hover/active |
-| `--accent-soft` | `#CCFBF1` | `#134E4A` | fundos suaves (badges, chips) |
+| `--accent` | `#2563EB` (blue-600) | `#60A5FA` (blue-400) | ações primárias, marca |
+| `--accent-hover` | `#1D4ED8` | `#93C5FD` | hover/active |
+| `--accent-soft` | `#DBEAFE` | `#1E3A8A` | fundos suaves (badges, chips) |
 | `--bg` | `#FFFFFF` | `#0B1120` | fundo da app |
 | `--surface` | `#F8FAFC` | `#131B2C` | cards, headers, footer fixo |
 | `--surface-2` | `#F1F5F9` | `#1B2436` | hover de linha, inputs |
@@ -30,6 +30,12 @@ Cores semânticas de risco (constantes nos dois temas, ver `docs/01-categorias.m
 | 🟢 baixo | verde | `#22C55E` |
 | 🟡 médio | âmbar | `#F59E0B` |
 | 🔴 alto | vermelho | `#EF4444` |
+
+**Exceção deliberada — gráfico de categorias**: o donut de composição por
+categoria no resumo do scan usa uma paleta variada e não-azul (âmbar, violeta,
+rosa, verde, azul, vermelho — ver `CHART_COLORS` em `src/App.tsx`), porque aqui
+o objetivo é distinguir categorias entre si, não reforçar a marca — usar só
+tons de azul tornaria fatias adjacentes difíceis de diferenciar.
 
 ## Tipografia
 

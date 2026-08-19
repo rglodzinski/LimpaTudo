@@ -1,9 +1,9 @@
 @import "tailwindcss";
 
 :root {
-  --accent: #0d9488;
-  --accent-hover: #0f766e;
-  --accent-soft: #ccfbf1;
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --accent-soft: #dbeafe;
   --bg: #ffffff;
   --surface: #f8fafc;
   --surface-2: #f1f5f9;
@@ -17,9 +17,9 @@
 }
 
 :root[data-theme="dark"] {
-  --accent: #2dd4bf;
-  --accent-hover: #5eead4;
-  --accent-soft: #134e4a;
+  --accent: #60a5fa;
+  --accent-hover: #93c5fd;
+  --accent-soft: #1e3a8a;
   --bg: #0b1120;
   --surface: #131b2c;
   --surface-2: #1b2436;
