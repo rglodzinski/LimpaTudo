@@ -81,6 +81,30 @@
     }
   },
   {
+    "id": "dev.xcode-archives",
+    "displayName": "Xcode Archives (builds arquivadas)",
+    "category": "dev",
+    "risk": "medium",
+    "requiresAppClosed": true,
+    "paths": {
+      "darwin": [
+        "~/Library/Developer/Xcode/Archives"
+      ]
+    }
+  },
+  {
+    "id": "dev.coresimulator-devices",
+    "displayName": "Dispositivos de Simulator iOS não usados",
+    "category": "dev",
+    "risk": "medium",
+    "requiresAppClosed": true,
+    "paths": {
+      "darwin": [
+        "~/Library/Developer/CoreSimulator/Devices"
+      ]
+    }
+  },
+  {
     "id": "dev.cocoapods-cache",
     "displayName": "Cache do CocoaPods",
     "category": "dev",
@@ -165,14 +189,124 @@
     }
   },
   {
-    "id": "dev.docker-desktop-vm",
-    "displayName": "Docker Desktop (imagens/containers não usados)",
+    "id": "dev.vscode-shipit",
+    "displayName": "Instaladores de atualização do VS Code",
     "category": "dev",
-    "risk": "medium",
-    "requiresAppClosed": false,
+    "risk": "low",
     "paths": {
-      "darwin": [],
-      "linux": []
+      "darwin": [
+        "~/Library/Caches/com.microsoft.VSCode.ShipIt"
+      ]
+    }
+  },
+  {
+    "id": "dev.pnpm-store",
+    "displayName": "Store global do pnpm",
+    "category": "dev",
+    "risk": "low",
+    "paths": {
+      "darwin": [
+        "~/Library/pnpm/store"
+      ],
+      "linux": [
+        "~/.local/share/pnpm/store"
+      ]
+    }
+  },
+  {
+    "id": "dev.pnpm-cache",
+    "displayName": "Cache do pnpm",
+    "category": "dev",
+    "risk": "low",
+    "paths": {
+      "darwin": [
+        "~/Library/Caches/pnpm"
+      ],
+      "linux": [
+        "~/.cache/pnpm"
+      ]
+    }
+  },
+  {
+    "id": "dev.ccache",
+    "displayName": "Cache do ccache (compilação C/C++)",
+    "category": "dev",
+    "risk": "low",
+    "paths": {
+      "darwin": [
+        "~/Library/Caches/ccache"
+      ],
+      "linux": [
+        "~/.cache/ccache"
+      ]
+    }
+  },
+  {
+    "id": "dev.electron-cache",
+    "displayName": "Cache de binários do Electron",
+    "category": "dev",
+    "risk": "low",
+    "paths": {
+      "darwin": [
+        "~/Library/Caches/electron",
+        "~/Library/Caches/electron-builder"
+      ],
+      "linux": [
+        "~/.cache/electron",
+        "~/.cache/electron-builder"
+      ]
+    }
+  },
+  {
+    "id": "dev.node-gyp-cache",
+    "displayName": "Cache do node-gyp",
+    "category": "dev",
+    "risk": "low",
+    "paths": {
+      "darwin": [
+        "~/Library/Caches/node-gyp"
+      ],
+      "linux": [
+        "~/.cache/node-gyp"
+      ]
+    }
+  },
+  {
+    "id": "dev.typescript-cache",
+    "displayName": "Cache do TypeScript (tsserver)",
+    "category": "dev",
+    "risk": "low",
+    "paths": {
+      "darwin": [
+        "~/Library/Caches/typescript"
+      ],
+      "linux": [
+        "~/.cache/typescript"
+      ]
+    }
+  },
+  {
+    "id": "app.docker-desktop-installer-leftover",
+    "displayName": "Instalador do Docker Desktop (download incompleto/antigo)",
+    "category": "apps",
+    "risk": "low",
+    "paths": {
+      "darwin": [
+        "~/Library/Application Support/com.docker.install"
+      ]
+    }
+  },
+  {
+    "id": "dev.docker-desktop-vm",
+    "displayName": "Docker Desktop (dados da VM — imagens, containers, volumes)",
+    "category": "dev",
+    "risk": "high",
+    "requiresAppClosed": true,
+    "bundleId": "com.docker.docker",
+    "paths": {
+      "darwin": [
+        "~/Library/Containers/com.docker.docker/Data/vms"
+      ]
     }
   },
   {

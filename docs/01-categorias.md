@@ -26,14 +26,22 @@ Itens que podem ser 100% recriados rodando `npm install`, `pod install`, `./grad
 | iOS builds antigas / CoreSimulator caches | `~/Library/Developer/CoreSimulator/Caches` | 🟢 |
 | iOS Simulators não usados (devices) | `~/Library/Developer/CoreSimulator/Devices` | 🟡 (apaga simuladores, dados de apps neles) |
 | CocoaPods cache | `~/Library/Caches/CocoaPods` | 🟢 |
-| Cache Docker (imagens/containers não usados) | via `docker system df` / `docker system prune` | 🟡 (pode remover imagens em uso ocasional) |
+| Dados da VM do Docker Desktop (imagens/containers/volumes) | `~/Library/Containers/com.docker.docker/Data/vms` | 🔴 (apaga TUDO do Docker de uma vez; preferir `docker system prune` quando possível — só no modo avançado) |
+| Instalador incompleto/antigo do Docker Desktop | `~/Library/Application Support/com.docker.install` | 🟢 (é só o pacote de instalação/atualização, não os dados do Docker) |
 | Cache do Homebrew | `$(brew --cache)` (mac) | 🟢 |
 | Cache do Cargo (Rust) | `~/.cargo/registry`, `~/.cargo/git` | 🟢 |
 | Cache do Go modules | `~/go/pkg/mod`, `$(go env GOCACHE)` | 🟢 |
 | Cache do Maven | `~/.m2/repository` | 🟢 |
 | Cache do Composer (PHP) | `~/.composer/cache` | 🟢 |
 | Cache do VS Code | `~/Library/Application Support/Code/Cache*`, `CachedData`, `CachedExtensionVSIXs` | 🟢 |
+| Instaladores de atualização do VS Code (ShipIt) | `~/Library/Caches/com.microsoft.VSCode.ShipIt` | 🟢 |
 | Cache do JetBrains IDEs (IntelliJ, Android Studio, PyCharm) | `~/Library/Caches/JetBrains/*` | 🟢 |
+| Store global do pnpm | `~/Library/pnpm/store` (mac) / `~/.local/share/pnpm/store` (linux) | 🟢 |
+| Cache do pnpm | `~/Library/Caches/pnpm` (mac) / `~/.cache/pnpm` (linux) | 🟢 |
+| Cache do ccache (compilação C/C++) | `~/Library/Caches/ccache` / `~/.cache/ccache` | 🟢 |
+| Cache de binários do Electron / electron-builder | `~/Library/Caches/electron*` / `~/.cache/electron*` | 🟢 |
+| Cache do node-gyp | `~/Library/Caches/node-gyp` / `~/.cache/node-gyp` | 🟢 |
+| Cache do TypeScript (tsserver) | `~/Library/Caches/typescript` / `~/.cache/typescript` | 🟢 |
 | Build outputs genéricos (`dist/`, `build/`, `out/`, `target/`) | dentro dos projetos | 🟡 (confirmar se não é artefato de release) |
 
 ## 2. Dados/logs do sistema macOS
