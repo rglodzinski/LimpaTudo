@@ -326,21 +326,21 @@ function App() {
               <div className="mt-3 flex gap-4">
                 <button
                   onClick={selectAllSafe}
-                  className="text-sm font-medium text-accent hover:text-accent-hover"
+                  className="cursor-pointer text-sm font-medium text-accent hover:text-accent-hover"
                 >
                   {t("selection.selectAllSafe")}
                 </button>
                 {allSelected ? (
                   <button
                     onClick={deselectAll}
-                    className="text-sm font-medium text-accent hover:text-accent-hover"
+                    className="cursor-pointer text-sm font-medium text-accent hover:text-accent-hover"
                   >
                     {t("selection.deselectAll")}
                   </button>
                 ) : (
                   <button
                     onClick={selectAll}
-                    className="text-sm font-medium text-accent hover:text-accent-hover"
+                    className="cursor-pointer text-sm font-medium text-accent hover:text-accent-hover"
                   >
                     {t("selection.selectAll")}
                   </button>
