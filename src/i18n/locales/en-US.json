@@ -28,5 +28,20 @@
   "history.empty": "No cleanups recorded yet",
   "history.entry.cleanup": "Cleanup",
   "history.entry.scan": "Scan",
-  "history.close": "Close"
+  "history.close": "Close",
+  "dashboard.title": "Dashboard",
+  "dashboard.subtitle": "Overview of your Mac/Linux disk space",
+  "dashboard.card.totalFreed": "Total freed",
+  "dashboard.card.cleanups": "Cleanups performed",
+  "dashboard.card.lastScan": "Last scan",
+  "dashboard.card.lastScan.none": "No scan yet",
+  "dashboard.card.lastScan.found": "{{size}} found",
+  "dashboard.trend.title": "Space freed (recent cleanups)",
+  "dashboard.recent.title": "Recent activity",
+  "dashboard.recent.empty": "No activity yet — run your first scan",
+  "dashboard.action.scan.title": "New scan",
+  "dashboard.action.scan.subtitle": "Find caches and files safe to remove",
+  "dashboard.action.history.title": "View full history",
+  "dashboard.action.history.subtitle": "All recorded scans and cleanups",
+  "dashboard.backToDashboard": "Dashboard"
 }

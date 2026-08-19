@@ -28,5 +28,20 @@
   "history.empty": "Aún no hay limpiezas registradas",
   "history.entry.cleanup": "Limpieza",
   "history.entry.scan": "Escaneo",
-  "history.close": "Cerrar"
+  "history.close": "Cerrar",
+  "dashboard.title": "Panel",
+  "dashboard.subtitle": "Resumen del espacio en disco de tu Mac/Linux",
+  "dashboard.card.totalFreed": "Total liberado",
+  "dashboard.card.cleanups": "Limpiezas realizadas",
+  "dashboard.card.lastScan": "Último escaneo",
+  "dashboard.card.lastScan.none": "Aún no hay escaneo",
+  "dashboard.card.lastScan.found": "{{size}} encontrados",
+  "dashboard.trend.title": "Espacio liberado (limpiezas recientes)",
+  "dashboard.recent.title": "Actividad reciente",
+  "dashboard.recent.empty": "Aún no hay actividad — haz tu primer escaneo",
+  "dashboard.action.scan.title": "Nuevo escaneo",
+  "dashboard.action.scan.subtitle": "Buscar cachés y archivos seguros para eliminar",
+  "dashboard.action.history.title": "Ver historial completo",
+  "dashboard.action.history.subtitle": "Todos los escaneos y limpiezas registrados",
+  "dashboard.backToDashboard": "Panel"
 }

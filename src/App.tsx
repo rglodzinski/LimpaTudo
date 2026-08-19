@@ -2,25 +2,17 @@ import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { AnimatePresence, motion } from "framer-motion";
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
-import { Clock, Lock, Moon, Sparkles, Sun } from "lucide-react";
-import type { ScanItem, ScanProgress, ScanSummary } from "../electron/types";
+import { ArrowLeft, Clock, Lock, Moon, Sparkles, Sun } from "lucide-react";
+import type { HistoryEntry, ScanItem, ScanProgress, ScanSummary } from "../electron/types";
 import { SUPPORTED_LANGUAGES, type SupportedLanguage } from "./i18n";
 import { useTheme } from "./hooks/useTheme";
 import { LogoMark } from "./components/LogoMark";
 import { CircularProgress } from "./components/CircularProgress";
 import { HistoryPanel } from "./components/HistoryPanel";
+import { Dashboard } from "./components/Dashboard";
+import { formatBytes } from "./lib/format";
 
-function formatBytes(bytes: number): string {
-  if (bytes < 1024) return `${bytes} B`;
-  const units = ["KB", "MB", "GB", "TB"];
-  let value = bytes / 1024;
-  let unitIndex = 0;
-  while (value >= 1024 && unitIndex < units.length - 1) {
-    value /= 1024;
-    unitIndex += 1;
-  }
-  return `${value.toFixed(1)} ${units[unitIndex]}`;
-}
+type View = "dashboard" | "scan";
 
 const RISK_DOT: Record<ScanItem["risk"], string> = {
   low: "bg-risk-low",
@@ -28,7 +20,7 @@ const RISK_DOT: Record<ScanItem["risk"], string> = {
   high: "bg-risk-high",
 };
 
-const CHART_COLORS = ["#0d9488", "#2dd4bf", "#5eead4", "#99f6e4"];
+const CHART_COLORS = ["#1d4ed8", "#3b82f6", "#60a5fa", "#93c5fd"];
 
 function App() {
   const { t, i18n } = useTranslation();
@@ -40,13 +32,25 @@ function App() {
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [elevating, setElevating] = useState<Set<string>>(new Set());
   const [historyOpen, setHistoryOpen] = useState(false);
+  const [view, setView] = useState<View>("dashboard");
+  const [history, setHistory] = useState<HistoryEntry[]>([]);
 
   useEffect(() => {
     window.limpaTudo.getSettings().then((settings) => {
       i18n.changeLanguage(settings.language);
     });
+    refreshHistory();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  function refreshHistory() {
+    window.limpaTudo.getHistory().then(setHistory);
+  }
+
+  function goToScan() {
+    setView("scan");
+    runScan();
+  }
 
   function changeLanguage(lng: SupportedLanguage) {
     i18n.changeLanguage(lng);
@@ -71,6 +75,7 @@ function App() {
     window.limpaTudo.onScanComplete((s) => {
       setSummary(s);
       setScanning(false);
+      refreshHistory();
     });
 
     await window.limpaTudo.scan();
@@ -150,6 +155,7 @@ function App() {
     const removedIds = new Set(report.entries.filter((e) => e.ok).map((e) => e.itemId));
     setItems((prev) => prev.filter((i) => !removedIds.has(i.id)));
     setSelected(new Set());
+    refreshHistory();
     alert(t("selection.freed", { size: formatBytes(report.freedBytes) }));
   }
 
@@ -159,7 +165,17 @@ function App() {
     <div className="min-h-full bg-bg text-text pb-24">
       <header className="sticky top-0 z-10 flex items-center justify-between border-b border-border bg-surface/90 px-6 py-4 backdrop-blur">
         <div className="flex items-center gap-3">
-          <LogoMark className="h-8 w-8" />
+          {view === "scan" ? (
+            <button
+              onClick={() => setView("dashboard")}
+              aria-label={t("dashboard.backToDashboard")}
+              className="rounded-lg border border-border bg-surface-2 p-2 hover:border-accent"
+            >
+              <ArrowLeft size={16} />
+            </button>
+          ) : (
+            <LogoMark className="h-8 w-8" />
+          )}
           <h1 className="text-lg font-bold">{t("app.title")}</h1>
         </div>
 
@@ -195,7 +211,7 @@ function App() {
 
           <motion.button
             whileTap={{ scale: 0.96 }}
-            onClick={runScan}
+            onClick={view === "scan" ? runScan : goToScan}
             disabled={scanning}
             className="flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-accent-hover disabled:opacity-60"
           >
@@ -205,6 +221,11 @@ function App() {
         </div>
       </header>
 
+      {view === "dashboard" && (
+        <Dashboard history={history} onStartScan={goToScan} onOpenHistory={() => setHistoryOpen(true)} />
+      )}
+
+      {view === "scan" && (
       <main className="mx-auto max-w-4xl px-6 py-8">
         {scanning && (
           <div className="mb-8 flex flex-col items-center gap-3 rounded-2xl border border-border bg-surface p-8">
@@ -322,9 +343,10 @@ function App() {
           </section>
         ))}
       </main>
+      )}
 
       <AnimatePresence>
-        {selected.size > 0 && (
+        {view === "scan" && selected.size > 0 && (
           <motion.footer
             initial={{ y: 80, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -345,7 +367,13 @@ function App() {
         )}
       </AnimatePresence>
 
-      <HistoryPanel open={historyOpen} onClose={() => setHistoryOpen(false)} />
+      <HistoryPanel
+        open={historyOpen}
+        onClose={() => {
+          setHistoryOpen(false);
+          refreshHistory();
+        }}
+      />
     </div>
   );
 }
