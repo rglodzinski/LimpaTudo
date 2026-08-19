@@ -5,6 +5,7 @@
   "scan.summary": "{{count}} itens encontrados · {{size}} no total",
   "selection.bar": "{{count}} itens selecionados · {{size}}",
   "selection.selectAllSafe": "Marcar tudo seguro",
+  "selection.selectAll": "Selecionar todos",
   "selection.clean": "Limpar selecionados",
   "selection.confirm": "Mover {{count}} itens ({{size}}) para a Lixeira?",
   "selection.freed": "Liberado: {{size}}",

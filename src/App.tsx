@@ -125,6 +125,10 @@ function App() {
     setSelected(new Set(items.filter((i) => i.risk === "low" && !i.locked).map((i) => i.id)));
   }
 
+  function selectAll() {
+    setSelected(new Set(visibleItems.filter((i) => !i.locked).map((i) => i.id)));
+  }
+
   const selectedBytes = useMemo(
     () => items.filter((i) => selected.has(i.id)).reduce((sum, i) => sum + i.sizeBytes, 0),
     [items, selected],
@@ -287,12 +291,20 @@ function App() {
               <p className="text-sm text-text-muted">
                 {t("scan.summary", { count: summary.itemCount, size: formatBytes(summary.totalBytes) })}
               </p>
-              <button
-                onClick={selectAllSafe}
-                className="mt-3 text-sm font-medium text-accent hover:text-accent-hover"
-              >
-                {t("selection.selectAllSafe")}
-              </button>
+              <div className="mt-3 flex gap-4">
+                <button
+                  onClick={selectAllSafe}
+                  className="text-sm font-medium text-accent hover:text-accent-hover"
+                >
+                  {t("selection.selectAllSafe")}
+                </button>
+                <button
+                  onClick={selectAll}
+                  className="text-sm font-medium text-accent hover:text-accent-hover"
+                >
+                  {t("selection.selectAll")}
+                </button>
+              </div>
             </div>
           </div>
         )}
