@@ -43,5 +43,18 @@
   "dashboard.action.scan.subtitle": "Buscar cachés y archivos seguros para eliminar",
   "dashboard.action.history.title": "Ver historial completo",
   "dashboard.action.history.subtitle": "Todos los escaneos y limpiezas registrados",
-  "dashboard.backToDashboard": "Panel"
+  "dashboard.backToDashboard": "Panel",
+  "settings.title": "Configuración",
+  "settings.subtitle": "Personaliza cómo Limpa Tudo escanea y elimina archivos",
+  "settings.projectRoots.label": "Raíces de búsqueda de proyectos",
+  "settings.projectRoots.add": "Agregar carpeta",
+  "settings.projectRoots.placeholder": "~/apps",
+  "settings.projectRoots.remove": "Eliminar",
+  "settings.deadProjectThreshold.label": "Considerar proyecto sin uso después de (días)",
+  "settings.permanentDelete.label": "Eliminar permanentemente en lugar de mover a la Papelera",
+  "settings.permanentDelete.hint": "No recomendado — los elementos eliminados permanentemente no se pueden recuperar",
+  "settings.advancedMode.label": "Modo avanzado (muestra elementos de alto riesgo 🔴)",
+  "settings.advancedMode.hint": "Solo activa si entiendes exactamente qué hace cada elemento",
+  "settings.saved": "Configuración guardada",
+  "stale.label": "Sin uso hace más de {{days}} días"
 }

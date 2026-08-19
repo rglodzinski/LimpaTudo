@@ -2,13 +2,14 @@ import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { AnimatePresence, motion } from "framer-motion";
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
-import { ArrowLeft, Clock, Lock, Moon, Sparkles, Sun } from "lucide-react";
-import type { HistoryEntry, ScanItem, ScanProgress, ScanSummary } from "../electron/types";
+import { ArrowLeft, Clock, Lock, Moon, Settings as SettingsIcon, Sparkles, Sun } from "lucide-react";
+import type { HistoryEntry, ScanItem, ScanProgress, ScanSummary, Settings } from "../electron/types";
 import { SUPPORTED_LANGUAGES, type SupportedLanguage } from "./i18n";
 import { useTheme } from "./hooks/useTheme";
 import { LogoMark } from "./components/LogoMark";
 import { CircularProgress } from "./components/CircularProgress";
 import { HistoryPanel } from "./components/HistoryPanel";
+import { SettingsPanel } from "./components/SettingsPanel";
 import { Dashboard } from "./components/Dashboard";
 import { formatBytes } from "./lib/format";
 
@@ -32,12 +33,15 @@ function App() {
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [elevating, setElevating] = useState<Set<string>>(new Set());
   const [historyOpen, setHistoryOpen] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
   const [view, setView] = useState<View>("dashboard");
   const [history, setHistory] = useState<HistoryEntry[]>([]);
+  const [settings, setSettings] = useState<Settings | null>(null);
 
   useEffect(() => {
-    window.limpaTudo.getSettings().then((settings) => {
-      i18n.changeLanguage(settings.language);
+    window.limpaTudo.getSettings().then((s) => {
+      i18n.changeLanguage(s.language);
+      setSettings(s);
     });
     refreshHistory();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -124,15 +128,20 @@ function App() {
     [items, selected],
   );
 
+  const visibleItems = useMemo(
+    () => items.filter((i) => settings?.advancedModeEnabled || i.risk !== "high"),
+    [items, settings?.advancedModeEnabled],
+  );
+
   const grouped = useMemo(() => {
     const map = new Map<string, ScanItem[]>();
-    for (const item of items) {
+    for (const item of visibleItems) {
       const list = map.get(item.category) ?? [];
       list.push(item);
       map.set(item.category, list);
     }
     return map;
-  }, [items]);
+  }, [visibleItems]);
 
   const chartData = useMemo(
     () =>
@@ -151,7 +160,9 @@ function App() {
     );
     if (!confirmed) return;
 
-    const report = await window.limpaTudo.remove(toRemove, { permanent: false });
+    const report = await window.limpaTudo.remove(toRemove, {
+      permanent: settings?.permanentDeleteEnabled ?? false,
+    });
     const removedIds = new Set(report.entries.filter((e) => e.ok).map((e) => e.itemId));
     setItems((prev) => prev.filter((i) => !removedIds.has(i.id)));
     setSelected(new Set());
@@ -207,6 +218,14 @@ function App() {
             className="rounded-lg border border-border bg-surface-2 p-2 hover:border-accent"
           >
             <Clock size={16} />
+          </button>
+
+          <button
+            onClick={() => setSettingsOpen(true)}
+            aria-label={t("settings.title")}
+            className="rounded-lg border border-border bg-surface-2 p-2 hover:border-accent"
+          >
+            <SettingsIcon size={16} />
           </button>
 
           <motion.button
@@ -276,7 +295,7 @@ function App() {
           </div>
         )}
 
-        {items.length === 0 && !scanning && (
+        {visibleItems.length === 0 && !scanning && (
           <div className="flex flex-col items-center justify-center gap-2 py-24 text-center text-text-muted">
             <Sparkles size={28} />
             <p className="text-base font-medium text-text">{t("empty.title")}</p>
@@ -331,6 +350,11 @@ function App() {
                         />
                         <span className={`h-2 w-2 shrink-0 rounded-full ${RISK_DOT[item.risk]}`} />
                         <span className="font-medium">{item.displayName}</span>
+                        {item.stale && (
+                          <span className="rounded-full bg-accent-soft px-2 py-0.5 text-[10px] font-medium text-accent">
+                            {t("stale.label", { days: settings?.deadProjectThresholdDays ?? 90 })}
+                          </span>
+                        )}
                         <span className="flex-1 truncate text-xs text-text-muted">{item.path}</span>
                         <span className="tabular-nums text-text-muted">
                           {formatBytes(item.sizeBytes)}
@@ -372,6 +396,14 @@ function App() {
         onClose={() => {
           setHistoryOpen(false);
           refreshHistory();
+        }}
+      />
+
+      <SettingsPanel
+        open={settingsOpen}
+        onClose={() => {
+          setSettingsOpen(false);
+          window.limpaTudo.getSettings().then(setSettings);
         }}
       />
     </div>

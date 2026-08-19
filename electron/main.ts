@@ -1,6 +1,7 @@
 import path from "node:path";
 import { app, BrowserWindow, ipcMain } from "electron";
 import { scanCatalog } from "./scanner/catalogScanner";
+import { scanProjects } from "./scanner/projectScanner";
 import { calculateSizeElevated } from "./scanner/sizeCalculator";
 import { removeItems } from "./remover";
 import { isAppRunning } from "./processDetector";
@@ -33,15 +34,37 @@ function createWindow() {
 function registerIpcHandlers() {
   ipcMain.handle("scan", async (event) => {
     const items: ScanItem[] = [];
+    const CATALOG_WEIGHT = 0.4;
+    const PROJECT_WEIGHT = 0.6;
+
     await scanCatalog(
       (item) => {
         items.push(item);
         event.sender.send("scan:item", item);
       },
       (progress) => {
-        event.sender.send("scan:progress", progress);
+        const percent = progress.total > 0 ? (progress.completed / progress.total) * 100 : 100;
+        event.sender.send("scan:progress", { completed: percent * CATALOG_WEIGHT, total: 100 });
       },
     );
+
+    const settings = loadSettings();
+    await scanProjects(
+      settings.projectRoots,
+      (item) => {
+        items.push(item);
+        event.sender.send("scan:item", item);
+      },
+      (progress) => {
+        const percent = progress.total > 0 ? (progress.completed / progress.total) * 100 : 100;
+        event.sender.send("scan:progress", {
+          completed: CATALOG_WEIGHT * 100 + percent * PROJECT_WEIGHT,
+          total: 100,
+        });
+      },
+      settings.deadProjectThresholdDays,
+    );
+
     const unlocked = items.filter((item) => !item.locked);
     const totalBytes = unlocked.reduce((sum, item) => sum + item.sizeBytes, 0);
     event.sender.send("scan:complete", { totalBytes, itemCount: unlocked.length });

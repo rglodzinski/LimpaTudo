@@ -43,5 +43,18 @@
   "dashboard.action.scan.subtitle": "Buscar caches e arquivos seguros para remover",
   "dashboard.action.history.title": "Ver histórico completo",
   "dashboard.action.history.subtitle": "Todos os scans e limpezas registrados",
-  "dashboard.backToDashboard": "Painel"
+  "dashboard.backToDashboard": "Painel",
+  "settings.title": "Configurações",
+  "settings.subtitle": "Personalize como o Limpa Tudo escaneia e remove arquivos",
+  "settings.projectRoots.label": "Raízes de busca de projetos",
+  "settings.projectRoots.add": "Adicionar pasta",
+  "settings.projectRoots.placeholder": "~/apps",
+  "settings.projectRoots.remove": "Remover",
+  "settings.deadProjectThreshold.label": "Considerar projeto sem uso após (dias)",
+  "settings.permanentDelete.label": "Excluir permanentemente em vez de mover para a Lixeira",
+  "settings.permanentDelete.hint": "Não recomendado — itens excluídos permanentemente não podem ser recuperados",
+  "settings.advancedMode.label": "Modo avançado (mostra itens de alto risco 🔴)",
+  "settings.advancedMode.hint": "Só ative se você entende exatamente o que cada item faz",
+  "settings.saved": "Configurações salvas",
+  "stale.label": "Sem uso há mais de {{days}} dias"
 }

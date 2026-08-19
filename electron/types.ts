@@ -22,6 +22,8 @@ export interface ScanItem {
   sizeBytes: number;
   /** True when the size couldn't be read due to a permission error. */
   locked: boolean;
+  /** True when the item hasn't been touched in longer than the configured threshold. */
+  stale?: boolean;
 }
 
 export interface ScanResultChunk {

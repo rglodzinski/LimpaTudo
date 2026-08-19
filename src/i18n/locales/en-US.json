@@ -43,5 +43,18 @@
   "dashboard.action.scan.subtitle": "Find caches and files safe to remove",
   "dashboard.action.history.title": "View full history",
   "dashboard.action.history.subtitle": "All recorded scans and cleanups",
-  "dashboard.backToDashboard": "Dashboard"
+  "dashboard.backToDashboard": "Dashboard",
+  "settings.title": "Settings",
+  "settings.subtitle": "Customize how Limpa Tudo scans and removes files",
+  "settings.projectRoots.label": "Project search roots",
+  "settings.projectRoots.add": "Add folder",
+  "settings.projectRoots.placeholder": "~/apps",
+  "settings.projectRoots.remove": "Remove",
+  "settings.deadProjectThreshold.label": "Consider a project unused after (days)",
+  "settings.permanentDelete.label": "Permanently delete instead of moving to Trash",
+  "settings.permanentDelete.hint": "Not recommended — permanently deleted items can't be recovered",
+  "settings.advancedMode.label": "Advanced mode (show high-risk 🔴 items)",
+  "settings.advancedMode.hint": "Only enable if you understand exactly what each item does",
+  "settings.saved": "Settings saved",
+  "stale.label": "Unused for over {{days}} days"
 }
