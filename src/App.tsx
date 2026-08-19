@@ -161,14 +161,16 @@ function App() {
   async function removeSelected() {
     const toRemove = items.filter((i) => selected.has(i.id));
     if (toRemove.length === 0) return;
+    const permanent = settings?.permanentDeleteEnabled ?? false;
     const confirmed = window.confirm(
-      t("selection.confirm", { count: toRemove.length, size: formatBytes(selectedBytes) }),
+      t(permanent ? "selection.confirmPermanent" : "selection.confirm", {
+        count: toRemove.length,
+        size: formatBytes(selectedBytes),
+      }),
     );
     if (!confirmed) return;
 
-    const report = await window.limpaTudo.remove(toRemove, {
-      permanent: settings?.permanentDeleteEnabled ?? false,
-    });
+    const report = await window.limpaTudo.remove(toRemove, { permanent });
     const removedIds = new Set(report.entries.filter((e) => e.ok).map((e) => e.itemId));
     setItems((prev) => prev.filter((i) => !removedIds.has(i.id)));
     setSelected(new Set());
