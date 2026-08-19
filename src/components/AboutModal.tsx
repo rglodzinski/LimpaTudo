@@ -7,11 +7,14 @@ import { LogoMark } from "./LogoMark";
 import { CHANGELOG } from "../lib/changelog";
 import { buildPixPayload } from "../lib/pix";
 
-const APP_WEBSITE = "https://limpatudo.app.br";
-const CONTACT_EMAIL = "rglodzinski@gmail.com";
-const PIX_KEY = "04765662900"; // CPF
-const PIX_MERCHANT_NAME = "Ricardo Glodzinski";
-const PIX_MERCHANT_CITY = "Florianopolis";
+// All sourced from .env (gitignored, see .env.example) — never hardcoded,
+// since this is a public repo. Any of these being unset just hides the
+// corresponding section below instead of breaking the screen.
+const APP_WEBSITE = import.meta.env.VITE_APP_WEBSITE;
+const CONTACT_EMAIL = import.meta.env.VITE_CONTACT_EMAIL;
+const PIX_KEY = import.meta.env.VITE_PIX_KEY;
+const PIX_MERCHANT_NAME = import.meta.env.VITE_PIX_MERCHANT_NAME;
+const PIX_MERCHANT_CITY = import.meta.env.VITE_PIX_MERCHANT_CITY;
 
 interface AboutModalProps {
   open: boolean;
@@ -23,17 +26,21 @@ export function AboutModal({ open, onClose }: AboutModalProps) {
   const [version, setVersion] = useState("");
   const [qrDataUrl, setQrDataUrl] = useState<string | null>(null);
 
+  const donationEnabled = Boolean(PIX_KEY && PIX_MERCHANT_NAME && PIX_MERCHANT_CITY);
+
   useEffect(() => {
     if (!open) return;
     window.limpaTudo.getAppVersion().then(setVersion);
 
-    const payload = buildPixPayload({
-      key: PIX_KEY,
-      merchantName: PIX_MERCHANT_NAME,
-      merchantCity: PIX_MERCHANT_CITY,
-    });
-    QRCode.toDataURL(payload, { width: 180, margin: 1 }).then(setQrDataUrl);
-  }, [open]);
+    if (donationEnabled) {
+      const payload = buildPixPayload({
+        key: PIX_KEY!,
+        merchantName: PIX_MERCHANT_NAME!,
+        merchantCity: PIX_MERCHANT_CITY!,
+      });
+      QRCode.toDataURL(payload, { width: 180, margin: 1 }).then(setQrDataUrl);
+    }
+  }, [open, donationEnabled]);
 
   function openExternal(url: string) {
     window.limpaTudo.openExternal(url);
@@ -77,36 +84,46 @@ export function AboutModal({ open, onClose }: AboutModalProps) {
               <p className="text-xs text-text-muted">{t("about.author")}</p>
             </div>
 
-            <div className="mt-5 space-y-2 text-sm">
-              <button
-                onClick={() => openExternal(APP_WEBSITE)}
-                className="flex w-full items-center gap-2 rounded-lg border border-border px-3 py-2 text-left hover:border-accent"
-              >
-                <Globe size={14} className="text-accent" />
-                <span className="flex-1 truncate">{t("about.website")}</span>
-                <span className="text-xs text-text-muted">limpatudo.app.br</span>
-              </button>
-              <button
-                onClick={() => openExternal(`mailto:${CONTACT_EMAIL}`)}
-                className="flex w-full items-center gap-2 rounded-lg border border-border px-3 py-2 text-left hover:border-accent"
-              >
-                <Mail size={14} className="text-accent" />
-                <span className="flex-1 truncate">{t("about.email")}</span>
-                <span className="text-xs text-text-muted">{CONTACT_EMAIL}</span>
-              </button>
-            </div>
+            {(APP_WEBSITE || CONTACT_EMAIL) && (
+              <div className="mt-5 space-y-2 text-sm">
+                {APP_WEBSITE && (
+                  <button
+                    onClick={() => openExternal(APP_WEBSITE)}
+                    className="flex w-full items-center gap-2 rounded-lg border border-border px-3 py-2 text-left hover:border-accent"
+                  >
+                    <Globe size={14} className="text-accent" />
+                    <span className="flex-1 truncate">{t("about.website")}</span>
+                    <span className="text-xs text-text-muted">
+                      {APP_WEBSITE.replace(/^https?:\/\//, "")}
+                    </span>
+                  </button>
+                )}
+                {CONTACT_EMAIL && (
+                  <button
+                    onClick={() => openExternal(`mailto:${CONTACT_EMAIL}`)}
+                    className="flex w-full items-center gap-2 rounded-lg border border-border px-3 py-2 text-left hover:border-accent"
+                  >
+                    <Mail size={14} className="text-accent" />
+                    <span className="flex-1 truncate">{t("about.email")}</span>
+                    <span className="text-xs text-text-muted">{CONTACT_EMAIL}</span>
+                  </button>
+                )}
+              </div>
+            )}
 
-            <div className="mt-5 rounded-xl border border-border bg-surface-2 p-4 text-center">
-              <p className="text-sm font-semibold">{t("about.donate.title")}</p>
-              <p className="mt-1 text-xs text-text-muted">{t("about.donate.subtitle")}</p>
-              {qrDataUrl && (
-                <img
-                  src={qrDataUrl}
-                  alt={t("about.donate.title")}
-                  className="mx-auto mt-3 h-40 w-40 rounded-lg bg-white p-2"
-                />
-              )}
-            </div>
+            {donationEnabled && (
+              <div className="mt-5 rounded-xl border border-border bg-surface-2 p-4 text-center">
+                <p className="text-sm font-semibold">{t("about.donate.title")}</p>
+                <p className="mt-1 text-xs text-text-muted">{t("about.donate.subtitle")}</p>
+                {qrDataUrl && (
+                  <img
+                    src={qrDataUrl}
+                    alt={t("about.donate.title")}
+                    className="mx-auto mt-3 h-40 w-40 rounded-lg bg-white p-2"
+                  />
+                )}
+              </div>
+            )}
 
             <div className="mt-5">
               <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-text-muted">
