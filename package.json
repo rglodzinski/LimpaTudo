@@ -1,5 +1,7 @@
 {
   "name": "limpa-tudo",
+  "description": "Ajuda a liberar espaço em disco no macOS e Linux com segurança",
+  "author": "Ricardo Glodzinski",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -35,7 +37,8 @@
       "target": [
         "dmg"
       ],
-      "category": "public.app-category.utilities"
+      "category": "public.app-category.utilities",
+      "identity": null
     },
     "linux": {
       "target": [
