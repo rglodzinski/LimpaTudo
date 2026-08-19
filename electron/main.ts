@@ -1,5 +1,5 @@
 import path from "node:path";
-import { app, BrowserWindow, ipcMain } from "electron";
+import { app, BrowserWindow, ipcMain, nativeImage } from "electron";
 import { scanCatalog } from "./scanner/catalogScanner";
 import { scanProjects } from "./scanner/projectScanner";
 import { calculateSizeElevated } from "./scanner/sizeCalculator";
@@ -11,11 +11,18 @@ import type { RemoveOptions, ScanItem, Settings } from "./types";
 
 const isDev = !app.isPackaged;
 
+// In a packaged app, build.icon (package.json) already produces the
+// .icns/.ico bundle icon. In dev, `electron .` shows Electron's own icon
+// unless we set one explicitly — the app icon lives at build/icon.png at
+// the repo root next to dist-electron/ (see docs/05-identidade-visual.md).
+const devIconPath = path.join(__dirname, "../build/icon.png");
+
 function createWindow() {
   const win = new BrowserWindow({
     width: 1100,
     height: 720,
     title: "Limpa Tudo",
+    ...(isDev ? { icon: devIconPath } : {}),
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
       contextIsolation: true,
@@ -112,6 +119,10 @@ function registerIpcHandlers() {
 }
 
 app.whenReady().then(() => {
+  if (isDev && process.platform === "darwin" && app.dock) {
+    app.dock.setIcon(nativeImage.createFromPath(devIconPath));
+  }
+
   registerIpcHandlers();
   createWindow();
 
