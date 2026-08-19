@@ -62,5 +62,16 @@
   "settings.advancedMode.label": "Advanced mode (show high-risk 🔴 items)",
   "settings.advancedMode.hint": "Only enable if you understand exactly what each item does",
   "settings.saved": "Settings saved",
-  "stale.label": "Unused for over {{days}} days"
+  "stale.label": "Unused for over {{days}} days",
+  "about.title": "About Limpa Tudo",
+  "about.tagline": "Helps you safely free up disk space on macOS and Linux",
+  "about.version": "Version {{version}}",
+  "about.author": "Created by Ricardo Glodzinski",
+  "about.repo": "Source code on GitHub",
+  "about.website": "App website",
+  "about.email": "Contact email",
+  "about.donate.title": "Support the project",
+  "about.donate.subtitle": "Scan with your bank app to donate via Pix (Brazil)",
+  "about.changelog.title": "Version history",
+  "about.close": "Close"
 }

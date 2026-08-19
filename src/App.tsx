@@ -10,6 +10,7 @@ import { LogoMark } from "./components/LogoMark";
 import { CircularProgress } from "./components/CircularProgress";
 import { HistoryPanel } from "./components/HistoryPanel";
 import { SettingsPanel } from "./components/SettingsPanel";
+import { AboutModal } from "./components/AboutModal";
 import { Dashboard } from "./components/Dashboard";
 import { formatBytes } from "./lib/format";
 
@@ -39,6 +40,7 @@ function App() {
   const [view, setView] = useState<View>("dashboard");
   const [history, setHistory] = useState<HistoryEntry[]>([]);
   const [settings, setSettings] = useState<Settings | null>(null);
+  const [aboutOpen, setAboutOpen] = useState(false);
 
   useEffect(() => {
     window.limpaTudo.getSettings().then((s) => {
@@ -46,6 +48,7 @@ function App() {
       setSettings(s);
     });
     refreshHistory();
+    window.limpaTudo.onShowAbout(() => setAboutOpen(true));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -440,6 +443,8 @@ function App() {
           window.limpaTudo.getSettings().then(setSettings);
         }}
       />
+
+      <AboutModal open={aboutOpen} onClose={() => setAboutOpen(false)} />
     </div>
   );
 }

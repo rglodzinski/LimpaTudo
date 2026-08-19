@@ -1,10 +1,11 @@
 import path from "node:path";
-import { app, BrowserWindow, ipcMain, nativeImage } from "electron";
+import { app, BrowserWindow, ipcMain, nativeImage, shell } from "electron";
 import { scanCatalog } from "./scanner/catalogScanner";
 import { scanProjects } from "./scanner/projectScanner";
 import { calculateSizeElevated } from "./scanner/sizeCalculator";
 import { removeItems } from "./remover";
 import { isAppRunning } from "./processDetector";
+import { buildMenu } from "./menu";
 import { loadSettings, updateSettings } from "./settings";
 import {
   appendHistoryEntry,
@@ -16,6 +17,13 @@ import {
 import type { RemoveOptions, ScanItem, Settings } from "./types";
 
 const isDev = !app.isPackaged;
+
+// Electron falls back to "Electron" as the app-menu label when it can't
+// resolve the app name early enough (notably in dev). Setting it explicitly
+// guarantees "Limpa Tudo" shows up regardless of how it's launched.
+app.setName("Limpa Tudo");
+
+let mainWindow: BrowserWindow | null = null;
 
 // In a packaged app, build.icon (package.json) already produces the
 // .icns/.ico bundle icon. In dev, `electron .` shows Electron's own icon
@@ -34,6 +42,11 @@ function createWindow() {
       contextIsolation: true,
       nodeIntegration: false,
     },
+  });
+
+  mainWindow = win;
+  win.on("closed", () => {
+    if (mainWindow === win) mainWindow = null;
   });
 
   if (isDev) {
@@ -116,7 +129,21 @@ function registerIpcHandlers() {
   });
 
   ipcMain.handle("settings:update", async (_event, patch: Partial<Settings>) => {
-    return updateSettings(patch);
+    const settings = updateSettings(patch);
+    if (patch.language) {
+      buildMenu(settings.language, () => mainWindow);
+    }
+    return settings;
+  });
+
+  ipcMain.handle("app:getVersion", async () => {
+    return app.getVersion();
+  });
+
+  ipcMain.handle("openExternal", async (_event, url: string) => {
+    if (url.startsWith("https://") || url.startsWith("mailto:")) {
+      await shell.openExternal(url);
+    }
   });
 
   ipcMain.handle("history:list", async () => {
@@ -138,6 +165,7 @@ app.whenReady().then(() => {
   }
 
   registerIpcHandlers();
+  buildMenu(loadSettings().language, () => mainWindow);
   createWindow();
 
   app.on("activate", () => {

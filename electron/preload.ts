@@ -39,6 +39,11 @@ const limpaTudoAPI = {
   deleteHistoryEntry: (id: string): Promise<HistoryEntry[]> =>
     ipcRenderer.invoke("history:delete", id),
   clearHistory: (): Promise<HistoryEntry[]> => ipcRenderer.invoke("history:clear"),
+  getAppVersion: (): Promise<string> => ipcRenderer.invoke("app:getVersion"),
+  onShowAbout: (cb: () => void) => {
+    ipcRenderer.on("show-about", () => cb());
+  },
+  openExternal: (url: string): Promise<void> => ipcRenderer.invoke("openExternal", url),
 };
 
 contextBridge.exposeInMainWorld("limpaTudo", limpaTudoAPI);

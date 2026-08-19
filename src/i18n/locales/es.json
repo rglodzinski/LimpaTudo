@@ -62,5 +62,16 @@
   "settings.advancedMode.label": "Modo avanzado (muestra elementos de alto riesgo 🔴)",
   "settings.advancedMode.hint": "Solo activa si entiendes exactamente qué hace cada elemento",
   "settings.saved": "Configuración guardada",
-  "stale.label": "Sin uso hace más de {{days}} días"
+  "stale.label": "Sin uso hace más de {{days}} días",
+  "about.title": "Acerca de Limpa Tudo",
+  "about.tagline": "Ayuda a liberar espacio en disco en macOS y Linux de forma segura",
+  "about.version": "Versión {{version}}",
+  "about.author": "Creado por Ricardo Glodzinski",
+  "about.repo": "Código fuente en GitHub",
+  "about.website": "Sitio web de la app",
+  "about.email": "Correo de contacto",
+  "about.donate.title": "Apoya el proyecto",
+  "about.donate.subtitle": "Escanea con tu app del banco para donar vía Pix (Brasil)",
+  "about.changelog.title": "Historial de versiones",
+  "about.close": "Cerrar"
 }
