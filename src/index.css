@@ -1,0 +1,76 @@
+:root {
+  color-scheme: light dark;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+body {
+  margin: 0;
+}
+
+.app {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1.5rem;
+  padding-bottom: 5rem;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.summary {
+  opacity: 0.7;
+}
+
+.category h2 {
+  font-size: 1rem;
+  text-transform: uppercase;
+  opacity: 0.6;
+  margin-top: 2rem;
+}
+
+.category ul {
+  list-style: none;
+  padding: 0;
+}
+
+.category li {
+  padding: 0.4rem 0;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.2);
+}
+
+.category label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.path {
+  flex: 1;
+  opacity: 0.5;
+  font-size: 0.8rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.size {
+  font-variant-numeric: tabular-nums;
+  opacity: 0.8;
+}
+
+.selection-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: canvas;
+  border-top: 1px solid rgba(128, 128, 128, 0.3);
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

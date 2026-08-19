@@ -1,0 +1,263 @@
+[
+  {
+    "id": "dev.npm-cache",
+    "displayName": "Cache do npm",
+    "category": "Caches de desenvolvimento",
+    "risk": "low",
+    "paths": {
+      "darwin": ["~/.npm"],
+      "linux": ["~/.npm"]
+    }
+  },
+  {
+    "id": "dev.yarn-cache",
+    "displayName": "Cache do Yarn",
+    "category": "Caches de desenvolvimento",
+    "risk": "low",
+    "paths": {
+      "darwin": ["~/Library/Caches/yarn", "~/.cache/yarn"],
+      "linux": ["~/.cache/yarn"]
+    }
+  },
+  {
+    "id": "dev.pip-cache",
+    "displayName": "Cache do pip",
+    "category": "Caches de desenvolvimento",
+    "risk": "low",
+    "paths": {
+      "darwin": ["~/Library/Caches/pip"],
+      "linux": ["~/.cache/pip"]
+    }
+  },
+  {
+    "id": "dev.gradle-cache",
+    "displayName": "Cache do Gradle",
+    "category": "Caches de desenvolvimento",
+    "risk": "low",
+    "paths": {
+      "darwin": ["~/.gradle/caches", "~/.gradle/wrapper"],
+      "linux": ["~/.gradle/caches", "~/.gradle/wrapper"]
+    }
+  },
+  {
+    "id": "dev.xcode-derived-data",
+    "displayName": "Xcode DerivedData",
+    "category": "Caches de desenvolvimento",
+    "risk": "low",
+    "paths": {
+      "darwin": ["~/Library/Developer/Xcode/DerivedData"]
+    }
+  },
+  {
+    "id": "dev.xcode-simulator-caches",
+    "displayName": "Cache de Simulators iOS",
+    "category": "Caches de desenvolvimento",
+    "risk": "low",
+    "paths": {
+      "darwin": ["~/Library/Developer/CoreSimulator/Caches"]
+    }
+  },
+  {
+    "id": "dev.cocoapods-cache",
+    "displayName": "Cache do CocoaPods",
+    "category": "Caches de desenvolvimento",
+    "risk": "low",
+    "paths": {
+      "darwin": ["~/Library/Caches/CocoaPods"]
+    }
+  },
+  {
+    "id": "dev.homebrew-cache",
+    "displayName": "Cache do Homebrew",
+    "category": "Caches de desenvolvimento",
+    "risk": "low",
+    "paths": {
+      "darwin": ["~/Library/Caches/Homebrew"]
+    }
+  },
+  {
+    "id": "dev.cargo-cache",
+    "displayName": "Cache do Cargo (Rust)",
+    "category": "Caches de desenvolvimento",
+    "risk": "low",
+    "paths": {
+      "darwin": ["~/.cargo/registry", "~/.cargo/git"],
+      "linux": ["~/.cargo/registry", "~/.cargo/git"]
+    }
+  },
+  {
+    "id": "dev.go-mod-cache",
+    "displayName": "Cache do Go modules",
+    "category": "Caches de desenvolvimento",
+    "risk": "low",
+    "paths": {
+      "darwin": ["~/go/pkg/mod"],
+      "linux": ["~/go/pkg/mod"]
+    }
+  },
+  {
+    "id": "dev.maven-cache",
+    "displayName": "Cache do Maven",
+    "category": "Caches de desenvolvimento",
+    "risk": "low",
+    "paths": {
+      "darwin": ["~/.m2/repository"],
+      "linux": ["~/.m2/repository"]
+    }
+  },
+  {
+    "id": "dev.vscode-cache",
+    "displayName": "Cache do VS Code",
+    "category": "Caches de desenvolvimento",
+    "risk": "low",
+    "requiresAppClosed": true,
+    "paths": {
+      "darwin": [
+        "~/Library/Application Support/Code/Cache",
+        "~/Library/Application Support/Code/CachedData",
+        "~/Library/Application Support/Code/CachedExtensionVSIXs"
+      ],
+      "linux": ["~/.config/Code/Cache", "~/.config/Code/CachedData"]
+    }
+  },
+  {
+    "id": "dev.docker-desktop-vm",
+    "displayName": "Docker Desktop (imagens/containers não usados)",
+    "category": "Caches de desenvolvimento",
+    "risk": "medium",
+    "requiresAppClosed": false,
+    "paths": {
+      "darwin": [],
+      "linux": []
+    }
+  },
+  {
+    "id": "system.trash",
+    "displayName": "Lixeira",
+    "category": "Sistema",
+    "risk": "low",
+    "paths": {
+      "darwin": ["~/.Trash"],
+      "linux": ["~/.local/share/Trash"]
+    }
+  },
+  {
+    "id": "system.diagnostic-reports",
+    "displayName": "Relatórios de erro (Crash Reports)",
+    "category": "Sistema",
+    "risk": "low",
+    "paths": {
+      "darwin": ["~/Library/Logs/DiagnosticReports"]
+    }
+  },
+  {
+    "id": "system.user-logs",
+    "displayName": "Logs de usuário",
+    "category": "Sistema",
+    "risk": "low",
+    "paths": {
+      "darwin": ["~/Library/Logs"],
+      "linux": []
+    }
+  },
+  {
+    "id": "system.tmp",
+    "displayName": "Arquivos temporários",
+    "category": "Sistema",
+    "risk": "low",
+    "paths": {
+      "darwin": ["/private/tmp"],
+      "linux": ["/tmp"]
+    }
+  },
+  {
+    "id": "system.thumbnail-cache-linux",
+    "displayName": "Cache de thumbnails",
+    "category": "Sistema",
+    "risk": "low",
+    "paths": {
+      "linux": ["~/.cache/thumbnails"]
+    }
+  },
+  {
+    "id": "app.chrome",
+    "displayName": "Google Chrome",
+    "category": "Apps",
+    "risk": "low",
+    "requiresAppClosed": true,
+    "bundleId": "com.google.Chrome",
+    "paths": {
+      "darwin": ["~/Library/Application Support/Google/Chrome/*/Cache"],
+      "linux": ["~/.cache/google-chrome"]
+    }
+  },
+  {
+    "id": "app.edge",
+    "displayName": "Microsoft Edge",
+    "category": "Apps",
+    "risk": "low",
+    "requiresAppClosed": true,
+    "bundleId": "com.microsoft.edgemac",
+    "paths": {
+      "darwin": ["~/Library/Application Support/Microsoft Edge/*/Cache"],
+      "linux": ["~/.cache/microsoft-edge"]
+    }
+  },
+  {
+    "id": "app.slack",
+    "displayName": "Slack",
+    "category": "Apps",
+    "risk": "low",
+    "requiresAppClosed": true,
+    "bundleId": "com.tinyspeck.slackmacgap",
+    "paths": {
+      "darwin": ["~/Library/Application Support/Slack/Cache"],
+      "linux": ["~/.config/Slack/Cache"]
+    }
+  },
+  {
+    "id": "app.teams",
+    "displayName": "Microsoft Teams",
+    "category": "Apps",
+    "risk": "low",
+    "requiresAppClosed": true,
+    "bundleId": "com.microsoft.teams2",
+    "paths": {
+      "darwin": ["~/Library/Application Support/Microsoft/Teams/Cache"]
+    }
+  },
+  {
+    "id": "app.whatsapp",
+    "displayName": "WhatsApp Desktop",
+    "category": "Apps",
+    "risk": "low",
+    "requiresAppClosed": true,
+    "bundleId": "desktop.WhatsApp",
+    "paths": {
+      "darwin": ["~/Library/Application Support/WhatsApp/Cache"]
+    }
+  },
+  {
+    "id": "app.outlook",
+    "displayName": "Outlook",
+    "category": "Apps",
+    "risk": "low",
+    "requiresAppClosed": true,
+    "bundleId": "com.microsoft.Outlook",
+    "paths": {
+      "darwin": ["~/Library/Containers/com.microsoft.Outlook/Data/Library/Caches"]
+    }
+  },
+  {
+    "id": "app.discord",
+    "displayName": "Discord",
+    "category": "Apps",
+    "risk": "low",
+    "requiresAppClosed": true,
+    "bundleId": "com.hnc.Discord",
+    "paths": {
+      "darwin": ["~/Library/Application Support/discord/Cache"],
+      "linux": ["~/.config/discord/Cache"]
+    }
+  }
+]
