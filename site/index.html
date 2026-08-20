@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Limpa Tudo — libere espaço em disco com segurança</title>
+<meta name="description" content="App desktop para macOS e Linux que encontra caches de desenvolvimento, dados de sistema e cache de apps — e remove só o que você escolher, direto para a Lixeira." />
+<link rel="icon" href="./logo-mark.svg" />
+<meta property="og:title" content="Limpa Tudo" />
+<meta property="og:description" content="Libere espaço em disco no macOS e Linux com segurança." />
+<meta property="og:type" content="website" />
+<style>
+  :root {
+    --accent: #2563EB;
+    --accent-hover: #1D4ED8;
+    --accent-soft: #DBEAFE;
+    --bg: #FFFFFF;
+    --surface: #F8FAFC;
+    --surface-2: #F1F5F9;
+    --border: #E2E8F0;
+    --text: #0F172A;
+    --text-muted: #64748B;
+    --green: #22C55E;
+    --amber: #F59E0B;
+    --red: #EF4444;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --accent: #60A5FA;
+      --accent-hover: #93C5FD;
+      --accent-soft: #1E3A8A;
+      --bg: #0B1120;
+      --surface: #131B2C;
+      --surface-2: #1B2436;
+      --border: #232E45;
+      --text: #F1F5F9;
+      --text-muted: #94A3B8;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: var(--accent); }
+  .wrap { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+  header {
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+  header .wrap {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px; padding-top: 16px; padding-bottom: 16px;
+  }
+  .brand { display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 18px; }
+  .brand img { width: 32px; height: 32px; }
+  .ghlink { color: var(--text-muted); text-decoration: none; font-size: 14px; }
+  .ghlink:hover { color: var(--text); }
+
+  .hero { padding: 72px 0 56px; text-align: center; }
+  .hero h1 { font-size: clamp(32px, 6vw, 52px); line-height: 1.15; margin: 0 0 16px; letter-spacing: -0.02em; }
+  .hero p.lead { font-size: clamp(17px, 2.4vw, 20px); color: var(--text-muted); max-width: 640px; margin: 0 auto 32px; }
+  .badge {
+    display: inline-block; background: var(--accent-soft); color: var(--accent);
+    border-radius: 999px; padding: 4px 14px; font-size: 13px; font-weight: 600;
+    margin-bottom: 20px;
+  }
+  @media (prefers-color-scheme: dark) { .badge { color: #DBEAFE; } }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--accent); color: #fff; text-decoration: none;
+    padding: 12px 22px; border-radius: 10px; font-weight: 600; font-size: 15px;
+    border: 1px solid transparent;
+  }
+  @media (prefers-color-scheme: dark) { .btn { color: #0B1120; } }
+  .btn:hover { background: var(--accent-hover); }
+  .btn.secondary { background: transparent; color: var(--text); border-color: var(--border); }
+  .btn.secondary:hover { background: var(--surface-2); }
+  .cta-row { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+  section { padding: 48px 0; }
+  h2 { font-size: 26px; margin: 0 0 8px; letter-spacing: -0.01em; }
+  .section-sub { color: var(--text-muted); margin: 0 0 28px; }
+
+  .grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+  .card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 14px; padding: 20px;
+  }
+  .card h3 { margin: 0 0 6px; font-size: 16px; }
+  .card p { margin: 0; color: var(--text-muted); font-size: 14px; }
+
+  .dl { display: grid; gap: 20px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+  .dl-col { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 20px; }
+  .dl-col h3 { margin: 0 0 4px; font-size: 17px; }
+  .dl-col .os-note { color: var(--text-muted); font-size: 13px; margin: 0 0 16px; }
+  .assets { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .assets a {
+    display: flex; justify-content: space-between; align-items: center; gap: 12px;
+    background: var(--bg); border: 1px solid var(--border); border-radius: 10px;
+    padding: 10px 14px; text-decoration: none; color: var(--text); font-size: 14px;
+  }
+  .assets a:hover { border-color: var(--accent); }
+  .assets .size { color: var(--text-muted); font-size: 13px; font-variant-numeric: tabular-nums; }
+  .assets .empty { color: var(--text-muted); font-size: 14px; }
+
+  .risk { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 8px; }
+  .risk span { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--text-muted); }
+  .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+
+  ol.steps { counter-reset: s; list-style: none; padding: 0; margin: 0; display: grid; gap: 12px; }
+  ol.steps li {
+    counter-increment: s; position: relative; padding-left: 44px;
+    color: var(--text-muted); font-size: 15px;
+  }
+  ol.steps li strong { color: var(--text); display: block; font-size: 15px; }
+  ol.steps li::before {
+    content: counter(s); position: absolute; left: 0; top: 0;
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--accent-soft); color: var(--accent);
+    display: grid; place-items: center; font-weight: 700; font-size: 13px;
+  }
+  @media (prefers-color-scheme: dark) { ol.steps li::before { color: #DBEAFE; } }
+
+  footer {
+    border-top: 1px solid var(--border); background: var(--surface);
+    margin-top: 32px; padding: 28px 0; color: var(--text-muted); font-size: 14px;
+  }
+  footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  code {
+    background: var(--surface-2); border: 1px solid var(--border);
+    border-radius: 6px; padding: 1px 6px; font-size: 13px;
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="brand"><img src="./logo-mark.svg" alt="" /> Limpa Tudo</div>
+    <a class="ghlink" href="https://github.com/rglodzinski/LimpaTudo">Código no GitHub ↗</a>
+  </div>
+</header>
+
+<main>
+  <div class="wrap hero">
+    <span class="badge" id="version-badge">macOS e Linux · código aberto</span>
+    <h1>Libere espaço em disco sem medo de apagar o que importa</h1>
+    <p class="lead">
+      O Limpa Tudo encontra caches de desenvolvimento, dados de sistema e cache
+      dos apps que mais ocupam espaço — e remove <strong>só o que você marcar</strong>,
+      movendo para a Lixeira.
+    </p>
+    <div class="cta-row">
+      <a class="btn" href="#download">Baixar</a>
+      <a class="btn secondary" href="https://github.com/rglodzinski/LimpaTudo">Ver no GitHub</a>
+    </div>
+  </div>
+
+  <section class="wrap">
+    <h2>Segurança em primeiro lugar</h2>
+    <p class="section-sub">Nada é removido sem você confirmar. Estes são princípios de projeto, não opções.</p>
+    <div class="grid">
+      <div class="card">
+        <h3>Nunca remove sozinho</h3>
+        <p>Escanear e remover são passos separados. A exclusão só acontece depois da sua seleção explícita e de uma confirmação.</p>
+      </div>
+      <div class="card">
+        <h3>Vai para a Lixeira</h3>
+        <p>A remoção padrão move os arquivos para a Lixeira do sistema, então dá para desfazer. Exclusão permanente é opt-in avançado.</p>
+      </div>
+      <div class="card">
+        <h3>Só caminhos conhecidos</h3>
+        <p>O scanner percorre apenas um catálogo curado de diretórios de cache. Nunca faz varredura aberta do seu disco.</p>
+      </div>
+      <div class="card">
+        <h3>Checa apps abertos</h3>
+        <p>Antes de mexer no cache de um app, verifica se ele está em execução e avisa para fechar.</p>
+      </div>
+      <div class="card">
+        <h3>Tamanho e caminho à vista</h3>
+        <p>Cada item aparece com o tamanho já calculado e o caminho completo antes de poder ser selecionado.</p>
+      </div>
+      <div class="card">
+        <h3>Seus dados ficam fora</h3>
+        <p>Credenciais, Keychain, Documentos, Desktop e Fotos estão fora de escopo por design — nunca aparecem como removíveis.</p>
+      </div>
+    </div>
+    <div class="risk">
+      <span><i class="dot" style="background:#22C55E"></i> Baixo risco — pode vir pré-selecionado</span>
+      <span><i class="dot" style="background:#F59E0B"></i> Médio — exige confirmação extra</span>
+      <span><i class="dot" style="background:#EF4444"></i> Alto — só no modo avançado</span>
+    </div>
+  </section>
+
+  <section class="wrap">
+    <h2>O que ele encontra</h2>
+    <p class="section-sub">Um catálogo curado de onde o espaço costuma sumir.</p>
+    <div class="grid">
+      <div class="card">
+        <h3>Caches de desenvolvimento</h3>
+        <p><code>node_modules</code>, venvs Python, cache do Gradle, <code>.next</code>, Xcode DerivedData, Docker, simuladores iOS.</p>
+      </div>
+      <div class="card">
+        <h3>Dados de sistema</h3>
+        <p>Logs, relatórios de falha, arquivos temporários e caches do macOS e de distribuições Linux.</p>
+      </div>
+      <div class="card">
+        <h3>Apps que ocupam muito</h3>
+        <p>Chrome, Firefox, Safari, Slack, Teams, WhatsApp, Docker e outros — cache e dados por plataforma.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap">
+    <h2>Como funciona</h2>
+    <p class="section-sub">Quatro passos, você no controle em todos eles.</p>
+    <ol class="steps">
+      <li><strong>Scan</strong> O app percorre o catálogo e calcula o tamanho real de cada item.</li>
+      <li><strong>Seleção</strong> Você marca o que quer remover, com risco, tamanho e caminho visíveis.</li>
+      <li><strong>Confirmação</strong> Um resumo do que será movido para a Lixeira, antes de qualquer alteração.</li>
+      <li><strong>Relatório</strong> O que foi removido, quanto espaço voltou e o que foi pulado.</li>
+    </ol>
+  </section>
+
+  <section class="wrap" id="download">
+    <h2>Baixar</h2>
+    <p class="section-sub" id="release-line">Carregando a versão mais recente…</p>
+    <div class="dl">
+      <div class="dl-col">
+        <h3>macOS</h3>
+        <p class="os-note">Apple Silicon (arm64) ou Intel (x64). App assinado e notarizado pela Apple.</p>
+        <ul class="assets" id="assets-mac"><li class="empty">Carregando…</li></ul>
+      </div>
+      <div class="dl-col">
+        <h3>Linux</h3>
+        <p class="os-note">AppImage roda em qualquer distro; <code>.deb</code>, <code>.rpm</code> e <code>.snap</code> para instalar pelo gerenciador.</p>
+        <ul class="assets" id="assets-linux"><li class="empty">Carregando…</li></ul>
+      </div>
+    </div>
+    <p style="color:var(--text-muted);font-size:14px;margin-top:20px">
+      Todas as versões e notas de release estão em
+      <a href="https://github.com/rglodzinski/LimpaTudo/releases">github.com/rglodzinski/LimpaTudo/releases</a>.
+    </p>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Limpa Tudo — feito por Ricardo Glodzinski</span>
+    <span><a href="https://github.com/rglodzinski/LimpaTudo">GitHub</a> · <a href="https://github.com/rglodzinski/LimpaTudo/issues">Reportar problema</a></span>
+  </div>
+</footer>
+
+<script>
+  const REPO = "rglodzinski/LimpaTudo";
+  const RELEASES = "https://github.com/" + REPO + "/releases";
+
+  function fmtSize(bytes) {
+    const mb = bytes / (1024 * 1024);
+    return mb >= 1024 ? (mb / 1024).toFixed(1) + " GB" : Math.round(mb) + " MB";
+  }
+
+  function label(name) {
+    const n = name.toLowerCase();
+    if (n.endsWith(".dmg")) return n.includes("arm64") ? "DMG · Apple Silicon" : "DMG · Intel";
+    if (n.endsWith(".zip")) return n.includes("arm64") ? "ZIP · Apple Silicon" : "ZIP · Intel";
+    if (n.endsWith(".appimage")) return "AppImage · x86_64";
+    if (n.endsWith(".deb")) return "DEB · Debian/Ubuntu";
+    if (n.endsWith(".rpm")) return "RPM · Fedora/RHEL";
+    if (n.endsWith(".snap")) return "Snap";
+    if (n.endsWith(".tar.gz")) return "tar.gz · x64";
+    return name;
+  }
+
+  function render(listId, assets) {
+    const el = document.getElementById(listId);
+    el.innerHTML = "";
+    if (!assets.length) {
+      el.innerHTML = '<li class="empty">Nenhum arquivo publicado ainda — veja <a href="' + RELEASES + '">as releases</a>.</li>';
+      return;
+    }
+    for (const a of assets) {
+      const li = document.createElement("li");
+      const link = document.createElement("a");
+      link.href = a.browser_download_url;
+      link.innerHTML = '<span>' + label(a.name) + '</span><span class="size">' + fmtSize(a.size) + '</span>';
+      li.appendChild(link);
+      el.appendChild(li);
+    }
+  }
+
+  function fallback() {
+    document.getElementById("release-line").innerHTML =
+      'Não foi possível carregar a lista automaticamente. Baixe direto em <a href="' + RELEASES + '/latest">' + RELEASES + '/latest</a>.';
+    for (const id of ["assets-mac", "assets-linux"]) {
+      document.getElementById(id).innerHTML =
+        '<li class="empty"><a href="' + RELEASES + '/latest">Abrir a última release</a></li>';
+    }
+  }
+
+  fetch("https://api.github.com/repos/" + REPO + "/releases/latest")
+    .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+    .then(function (rel) {
+      const date = new Date(rel.published_at).toLocaleDateString("pt-BR");
+      document.getElementById("release-line").innerHTML =
+        'Versão <strong>' + rel.tag_name + '</strong>, publicada em ' + date + '. ' +
+        '<a href="' + rel.html_url + '">Ver notas da release</a>.';
+      document.getElementById("version-badge").textContent =
+        "macOS e Linux · " + rel.tag_name + " · código aberto";
+      const assets = rel.assets || [];
+      const isMac = function (n) { return /\.(dmg|zip)$/i.test(n); };
+      render("assets-mac", assets.filter(function (a) { return isMac(a.name); }));
+      render("assets-linux", assets.filter(function (a) { return !isMac(a.name); }));
+    })
+    .catch(fallback);
+</script>
+</body>
+</html>
