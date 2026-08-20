@@ -3,7 +3,7 @@
   "description": "Ajuda a liberar espaço em disco no macOS e Linux com segurança",
   "author": "Ricardo Glodzinski",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "main": "dist-electron/main.js",
   "scripts": {
