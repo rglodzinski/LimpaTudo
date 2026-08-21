@@ -7,6 +7,16 @@ export interface ChangelogEntry {
 /** Kept by hand alongside package.json's version — see docs/sessions/. */
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.2.0",
+    date: "2026-08-21",
+    highlights: [
+      "Agrupamento por projeto (ex.: ~/apps/RhNumbers/rhnumbers-api)",
+      "Agrupamento por pasta de projetos (ex.: ~/apps/RhNumbers, ~/apps/LuxB)",
+      "Ordenação por tamanho (maior primeiro) ou por nome, que também ordena os grupos pelo total de cada um",
+      "Busca por palavra-chave, casando com o nome exibido e com o caminho",
+    ],
+  },
+  {
     version: "1.1.0",
     date: "2026-08-20",
     highlights: [
