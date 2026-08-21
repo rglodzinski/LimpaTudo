@@ -7,9 +7,11 @@ import {
   Clock,
   Lock,
   Moon,
+  Search,
   Settings as SettingsIcon,
   Sparkles,
   Sun,
+  X,
 } from "lucide-react";
 import type {
   HistoryEntry,
@@ -29,9 +31,14 @@ import { AboutModal } from "./components/AboutModal";
 import { OnboardingModal } from "./components/OnboardingModal";
 import { Dashboard } from "./components/Dashboard";
 import { formatBytes } from "./lib/format";
-import { dirname } from "./lib/path";
+import { dirname, shortenHome } from "./lib/path";
 
-type GroupBy = "category" | "app" | "directory";
+type GroupBy = "category" | "app" | "directory" | "project" | "workspace";
+
+type SortBy = "size" | "name";
+
+/** Bucket for items that belong to no project (catalog/system entries). */
+const NO_PROJECT_KEY = "__no_project__";
 
 type View = "dashboard" | "scan";
 
@@ -59,6 +66,8 @@ function App() {
   const [cancelling, setCancelling] = useState(false);
   const [removeProgress, setRemoveProgress] = useState<ScanProgress>({ completed: 0, total: 0 });
   const [groupBy, setGroupBy] = useState<GroupBy>("category");
+  const [sortBy, setSortBy] = useState<SortBy>("size");
+  const [query, setQuery] = useState("");
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [view, setView] = useState<View>("dashboard");
   const [history, setHistory] = useState<HistoryEntry[]>([]);
@@ -197,10 +206,16 @@ function App() {
     [items, selected],
   );
 
-  const visibleItems = useMemo(
-    () => items.filter((i) => settings?.advancedModeEnabled || i.risk !== "high"),
-    [items, settings?.advancedModeEnabled],
-  );
+  const visibleItems = useMemo(() => {
+    const allowed = items.filter((i) => settings?.advancedModeEnabled || i.risk !== "high");
+    const term = query.trim().toLowerCase();
+    if (!term) return allowed;
+    // Matching the path too is what makes searching for a project or client
+    // name ("rhnumbers", "LuxB") work, since only the path carries it.
+    return allowed.filter((item) =>
+      `${item.displayName} ${item.path}`.toLowerCase().includes(term),
+    );
+  }, [items, settings?.advancedModeEnabled, query]);
 
   const allSelected = useMemo(() => {
     const selectable = visibleItems.filter((i) => !i.locked);
@@ -220,12 +235,18 @@ function App() {
   function groupKey(item: ScanItem): string {
     if (groupBy === "app") return item.entryId;
     if (groupBy === "directory") return dirname(item.path);
+    // Only project-scanner items carry these; catalog items fall in one bucket.
+    if (groupBy === "project") return item.projectDir ?? NO_PROJECT_KEY;
+    if (groupBy === "workspace") return item.workspaceDir ?? NO_PROJECT_KEY;
     return item.category;
   }
 
   function groupLabel(key: string, sample: ScanItem): string {
     if (groupBy === "app") return sample.displayName;
-    if (groupBy === "directory") return key;
+    if (groupBy === "directory") return shortenHome(key);
+    if (groupBy === "project" || groupBy === "workspace") {
+      return key === NO_PROJECT_KEY ? t("groupBy.noProject") : shortenHome(key);
+    }
     return t(`category.${key}`, key);
   }
 
@@ -237,9 +258,34 @@ function App() {
       list.push(item);
       map.set(key, list);
     }
-    return map;
+
+    for (const [key, list] of map) {
+      map.set(key, sortItems(list));
+    }
+
+    // Sorting by size ranks the groups themselves by what they hold, so the
+    // heaviest project/workspace comes first — that's the whole point of
+    // grouping by project.
+    const entries = [...map.entries()].sort(([keyA, a], [keyB, b]) =>
+      sortBy === "size"
+        ? totalBytesOf(b) - totalBytesOf(a)
+        : groupLabel(keyA, a[0]).localeCompare(groupLabel(keyB, b[0])),
+    );
+    return new Map(entries);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [visibleItems, groupBy]);
+  }, [visibleItems, groupBy, sortBy, t]);
+
+  function totalBytesOf(list: ScanItem[]): number {
+    return list.reduce((sum, item) => sum + item.sizeBytes, 0);
+  }
+
+  function sortItems(list: ScanItem[]): ScanItem[] {
+    return [...list].sort((a, b) =>
+      sortBy === "size"
+        ? b.sizeBytes - a.sizeBytes
+        : a.displayName.localeCompare(b.displayName),
+    );
+  }
 
   const chartData = useMemo(
     () =>
@@ -436,7 +482,14 @@ function App() {
           </div>
         )}
 
-        {visibleItems.length === 0 && !scanning && (
+        {visibleItems.length === 0 && items.length > 0 && query.trim() !== "" && (
+          <div className="flex flex-col items-center justify-center gap-2 py-16 text-center text-text-muted">
+            <Search size={24} />
+            <p className="text-sm">{t("search.noResults", { query })}</p>
+          </div>
+        )}
+
+        {items.length === 0 && !scanning && (
           <div className="flex flex-col items-center justify-center gap-2 py-24 text-center text-text-muted">
             <Sparkles size={28} />
             <p className="text-base font-medium text-text">{t("empty.title")}</p>
@@ -444,8 +497,31 @@ function App() {
           </div>
         )}
 
-        {visibleItems.length > 0 && (
-          <div className="mb-4 flex items-center justify-end gap-2">
+        {items.length > 0 && (
+          <div className="mb-4 flex flex-wrap items-center justify-end gap-2">
+            <div className="relative mr-auto">
+              <Search
+                size={14}
+                className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-text-muted"
+              />
+              <input
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder={t("search.placeholder")}
+                aria-label={t("search.placeholder")}
+                className="w-56 rounded-lg border border-border bg-surface-2 py-1.5 pl-8 pr-7 text-sm"
+              />
+              {query && (
+                <button
+                  onClick={() => setQuery("")}
+                  aria-label={t("search.clear")}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-text-muted hover:text-text"
+                >
+                  <X size={13} />
+                </button>
+              )}
+            </div>
+
             <label className="text-xs font-medium text-text-muted">{t("groupBy.label")}</label>
             <select
               value={groupBy}
@@ -454,7 +530,19 @@ function App() {
             >
               <option value="category">{t("groupBy.category")}</option>
               <option value="app">{t("groupBy.app")}</option>
+              <option value="project">{t("groupBy.project")}</option>
+              <option value="workspace">{t("groupBy.workspace")}</option>
               <option value="directory">{t("groupBy.directory")}</option>
+            </select>
+
+            <label className="ml-2 text-xs font-medium text-text-muted">{t("sortBy.label")}</label>
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value as SortBy)}
+              className="rounded-lg border border-border bg-surface-2 px-2 py-1.5 text-sm"
+            >
+              <option value="size">{t("sortBy.size")}</option>
+              <option value="name">{t("sortBy.name")}</option>
             </select>
           </div>
         )}
@@ -467,7 +555,6 @@ function App() {
             <div className="overflow-hidden rounded-xl border border-border bg-surface">
               <AnimatePresence initial={false}>
                 {groupItems
-                  .sort((a, b) => b.sizeBytes - a.sizeBytes)
                   .map((item) =>
                     item.locked ? (
                       <motion.div

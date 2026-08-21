@@ -30,8 +30,38 @@
    "avançado" (toggle explícito nas Settings), nunca no scan padrão.
 4. Usuário pode expandir cada item para ver o path completo e, para pastas de
    projeto, a data do último uso (mtime) — ajuda a decidir em "projetos mortos".
-5. Busca/filtro por nome de app ou categoria.
+5. Busca/filtro por palavra-chave: casa com o nome exibido **e com o caminho**,
+   porque é o caminho que carrega o nome do projeto ou do cliente
+   ("rhnumbers", "LuxB") — buscar só pelo nome exibido não encontraria nada
+   disso.
 6. Botão "marcar tudo seguro" (apenas 🟢) como atalho.
+7. Ordenação por **tamanho** (maior primeiro, padrão) ou por **nome**. Ordenar
+   por tamanho também reordena os grupos pelo total que cada um contém — é o
+   que faz o agrupamento por projeto responder "onde está meu espaço?".
+
+### Modos de agrupamento
+
+| Modo | Chave | Exemplo |
+|---|---|---|
+| Categoria | `category` | dev, sistema, apps |
+| App | `entryId` | Chrome, Docker |
+| Projeto | `projectDir` | `~/apps/RhNumbers/rhnumbers-api` |
+| Pasta de projetos | `workspaceDir` | `~/apps/RhNumbers`, `~/apps/LuxB` |
+| Diretório | pai do item | `~/apps/RhNumbers/rhnumbers-api` |
+
+`projectDir` e `workspaceDir` são preenchidos pelo `projectScanner` (o
+scanner sabe qual raiz configurada casou); `workspaceDir` é o **primeiro nível
+abaixo da raiz configurada** — em `~/apps`, isso dá `~/apps/RhNumbers`,
+`~/apps/Rookau`, `~/apps/LuxB`. Um projeto direto na raiz é a própria
+workspace, já que não há nível intermediário para agrupar.
+
+Itens do catálogo (caches de sistema e de apps) não pertencem a projeto nenhum
+e caem num grupo "Fora de projetos" nesses dois modos.
+
+Projetos aninhados que têm marcador próprio (ex.: `LuxBApp` e
+`LuxBApp/android/app`, ambos com `build.gradle`) aparecem como projetos
+separados. É o comportamento correto: cada um tem o seu `node_modules`/`build`
+e some ou fica de forma independente.
 
 ## 4. Confirmação
 

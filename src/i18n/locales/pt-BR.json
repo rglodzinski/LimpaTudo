@@ -107,5 +107,14 @@
   "frequency.daily": "1× por dia",
   "frequency.weekly": "1× por semana",
   "frequency.biweekly": "1× por quinzena",
-  "frequency.monthly": "1× por mês"
+  "frequency.monthly": "1× por mês",
+  "groupBy.project": "Projeto",
+  "groupBy.workspace": "Pasta de projetos",
+  "groupBy.noProject": "Fora de projetos",
+  "sortBy.label": "Ordenar por",
+  "sortBy.size": "Tamanho (maior primeiro)",
+  "sortBy.name": "Nome",
+  "search.placeholder": "Buscar por nome ou caminho",
+  "search.clear": "Limpar busca",
+  "search.noResults": "Nada encontrado para “{{query}}”"
 }

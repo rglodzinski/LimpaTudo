@@ -24,6 +24,14 @@ export interface ScanItem {
   locked: boolean;
   /** True when the item hasn't been touched in longer than the configured threshold. */
   stale?: boolean;
+  /** Project this item belongs to (the dir holding package.json, Cargo.toml…). */
+  projectDir?: string;
+  /**
+   * The directory that groups sibling projects — the first level under the
+   * configured project root (e.g. ~/apps/RhNumbers for
+   * ~/apps/RhNumbers/rhnumbers-api). Absent for catalog items.
+   */
+  workspaceDir?: string;
 }
 
 export interface ScanResultChunk {

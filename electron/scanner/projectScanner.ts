@@ -51,6 +51,8 @@ const SKIP_DIR_NAMES = new Set([
 
 interface ProjectJob {
   projectDir: string;
+  /** First directory level under the configured root — groups sibling projects. */
+  workspaceDir: string;
   depName: string;
   depPath: string;
   risk: Risk;
@@ -71,7 +73,7 @@ export async function scanProjects(
 ): Promise<void> {
   const jobs: ProjectJob[] = [];
   for (const root of roots) {
-    collectJobs(root, 0, jobs);
+    collectJobs(root, 0, jobs, root);
   }
 
   let completed = 0;
@@ -101,6 +103,8 @@ export async function scanProjects(
           sizeBytes,
           locked: false,
           stale,
+          projectDir: job.projectDir,
+          workspaceDir: job.workspaceDir,
         });
       } else if (permissionDenied) {
         onChunk({
@@ -112,6 +116,8 @@ export async function scanProjects(
           path: job.depPath,
           sizeBytes: 0,
           locked: true,
+          projectDir: job.projectDir,
+          workspaceDir: job.workspaceDir,
         });
       }
     } finally {
@@ -130,7 +136,13 @@ export async function scanProjects(
   await Promise.all(workers);
 }
 
-function collectJobs(dir: string, depth: number, jobs: ProjectJob[], maxDepth = 6) {
+function collectJobs(
+  dir: string,
+  depth: number,
+  jobs: ProjectJob[],
+  root: string,
+  maxDepth = 6,
+) {
   if (depth > maxDepth) return;
 
   let entries: fs.Dirent[];
@@ -145,7 +157,13 @@ function collectJobs(dir: string, depth: number, jobs: ProjectJob[], maxDepth = 
     for (const dep of DEPENDENCY_DIRS) {
       const depPath = path.join(dir, dep.name);
       if (fs.existsSync(depPath)) {
-        jobs.push({ projectDir: dir, depName: dep.name, depPath, risk: dep.risk });
+        jobs.push({
+          projectDir: dir,
+          workspaceDir: workspaceOf(dir, root),
+          depName: dep.name,
+          depPath,
+          risk: dep.risk,
+        });
       }
     }
   }
@@ -154,6 +172,19 @@ function collectJobs(dir: string, depth: number, jobs: ProjectJob[], maxDepth = 
     if (!entry.isDirectory() || entry.isSymbolicLink()) continue;
     if (entry.name.startsWith(".") && entry.name !== ".venv") continue;
     if (SKIP_DIR_NAMES.has(entry.name)) continue;
-    collectJobs(path.join(dir, entry.name), depth + 1, jobs, maxDepth);
+    collectJobs(path.join(dir, entry.name), depth + 1, jobs, root, maxDepth);
   }
+}
+
+/**
+ * The directory one level under `root` that contains this project — the level
+ * users think of as "the client/company folder" (~/apps/RhNumbers), grouping
+ * several projects. A project sitting directly in the root is its own
+ * workspace, since there is no intermediate level to group by.
+ */
+function workspaceOf(projectDir: string, root: string): string {
+  const relative = path.relative(root, projectDir);
+  if (!relative || relative.startsWith("..") || path.isAbsolute(relative)) return projectDir;
+  const [first] = relative.split(path.sep);
+  return path.join(root, first);
 }

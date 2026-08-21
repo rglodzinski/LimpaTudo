@@ -107,5 +107,14 @@
   "frequency.daily": "Once a day",
   "frequency.weekly": "Once a week",
   "frequency.biweekly": "Every two weeks",
-  "frequency.monthly": "Once a month"
+  "frequency.monthly": "Once a month",
+  "groupBy.project": "Project",
+  "groupBy.workspace": "Project folder",
+  "groupBy.noProject": "Outside projects",
+  "sortBy.label": "Sort by",
+  "sortBy.size": "Size (largest first)",
+  "sortBy.name": "Name",
+  "search.placeholder": "Search by name or path",
+  "search.clear": "Clear search",
+  "search.noResults": "Nothing found for “{{query}}”"
 }
