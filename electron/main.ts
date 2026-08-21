@@ -142,6 +142,11 @@ function applyMonitorSettings() {
 
   syncMonitorWithSettings();
   refreshTray();
+
+  console.log(
+    `[monitor] enabled=${monitor.enabled} launchAtLogin=${monitor.launchAtLogin} ` +
+      `registeredWithOS=${isLaunchAtLoginEnabled()}`,
+  );
 }
 
 function registerIpcHandlers() {
