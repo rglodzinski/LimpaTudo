@@ -7,6 +7,25 @@ export interface ChangelogEntry {
 /** Kept by hand alongside package.json's version — see docs/sessions/. */
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.1.0",
+    date: "2026-08-20",
+    highlights: [
+      "Monitor em segundo plano com ícone na bandeja do sistema",
+      "Avisos quando há bastante espaço para liberar, com frequência configurável (nunca, diária, semanal, quinzenal ou mensal)",
+      "Opção de iniciar junto com o sistema, sem abrir janela",
+      "Convite na primeira execução para ativar o monitoramento",
+      "O monitor apenas mede: nenhuma remoção acontece sem você abrir o app e confirmar",
+    ],
+  },
+  {
+    version: "1.0.1",
+    date: "2026-08-20",
+    highlights: [
+      "Corrige a janela em branco ao abrir o app instalado (caminhos de assets absolutos no build empacotado)",
+      "Site público do projeto publicado no GitHub Pages",
+    ],
+  },
+  {
     version: "1.0.0",
     date: "2026-08-19",
     highlights: [
