@@ -41,6 +41,9 @@ safety rules, and architecture:
 - `docs/04-fluxo-scan-e-remocao.md` — the functional flow (scan → selection →
   confirmation → removal → report) and edge cases (symlinks, iCloud/network
   volumes, macOS TCC permissions).
+- `docs/07-monitor-e-tray.md` — the background monitor: tray icon, periodic
+  catalog-only check, notification frequency gating, launch-at-login per
+  platform, single-instance/quit lifecycle, and the first-run opt-in.
 - `docs/sessions/` — dated logs of planning sessions; check the most recent one
   for the latest decisions before continuing work.
 
@@ -60,7 +63,10 @@ implementation:
    before it can be selected for removal.
 6. Credentials, Keychain data, and personal user documents (Documents, Desktop,
    Photos) are out of scope and must never be surfaced as removable.
-7. Items are classified by risk (🟢 low / 🟡 medium / 🔴 high) per
+7. The background monitor only ever *measures* — it runs the catalog scan and
+   sums 🟢 low-risk items to decide whether to notify. It never removes
+   anything, and it never scans outside the catalog.
+8. Items are classified by risk (🟢 low / 🟡 medium / 🔴 high) per
    `docs/01-categorias.md`; only 🟢 items may be pre-selected by default, 🟡
    requires explicit extra confirmation, and 🔴 items must never appear outside
    an explicit "advanced mode".

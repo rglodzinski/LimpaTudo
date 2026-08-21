@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { AnimatePresence, motion } from "framer-motion";
-import { Plus, Trash2, X } from "lucide-react";
-import type { Settings } from "../../electron/types";
+import { Plus, RefreshCw, Trash2, X } from "lucide-react";
+import type { MonitorStatus, NotificationFrequency, Settings } from "../../electron/types";
+import { FREQUENCIES, GIB } from "../lib/monitor";
+import { formatBytes } from "../lib/format";
 
 interface SettingsPanelProps {
   open: boolean;
@@ -14,18 +16,43 @@ export function SettingsPanel({ open, onClose }: SettingsPanelProps) {
   const [settings, setSettings] = useState<Settings | null>(null);
   const [newRoot, setNewRoot] = useState("");
   const [saved, setSaved] = useState(false);
+  const [monitor, setMonitor] = useState<MonitorStatus | null>(null);
 
   useEffect(() => {
     if (open) {
       window.limpaTudo.getSettings().then(setSettings);
+      window.limpaTudo.getMonitorStatus().then(setMonitor);
     }
   }, [open]);
+
+  useEffect(() => {
+    window.limpaTudo.onMonitorStatus(setMonitor);
+  }, []);
 
   function persist(patch: Partial<Settings>) {
     setSettings((prev) => (prev ? { ...prev, ...patch } : prev));
     window.limpaTudo.updateSettings(patch).then(() => {
       setSaved(true);
       setTimeout(() => setSaved(false), 1500);
+    });
+  }
+
+  function persistMonitor(patch: Partial<Settings["monitor"]>) {
+    setSettings((prev) => (prev ? { ...prev, monitor: { ...prev.monitor, ...patch } } : prev));
+    window.limpaTudo.updateSettings({ monitor: patch }).then(() => {
+      setSaved(true);
+      setTimeout(() => setSaved(false), 1500);
+      window.limpaTudo.getMonitorStatus().then(setMonitor);
+    });
+  }
+
+  function monitorStatusText() {
+    if (!monitor) return "";
+    if (monitor.checking) return t("monitor.status.checking");
+    if (!monitor.lastCheckAt) return t("monitor.status.never");
+    return t("monitor.status.last", {
+      time: new Date(monitor.lastCheckAt).toLocaleString(),
+      size: formatBytes(monitor.lastPotentialBytes),
     });
   }
 
@@ -148,6 +175,118 @@ export function SettingsPanel({ open, onClose }: SettingsPanelProps) {
                 <span className="block text-xs text-text-muted">{t("settings.advancedMode.hint")}</span>
               </span>
             </label>
+
+            <section className="mt-6 rounded-lg border border-border p-3">
+              <h3 className="mb-3 text-xs font-semibold uppercase tracking-wide text-text-muted">
+                {t("monitor.title")}
+              </h3>
+
+              <label className="mb-3 flex items-start gap-3">
+                <input
+                  type="checkbox"
+                  checked={settings.monitor.enabled}
+                  onChange={(e) => persistMonitor({ enabled: e.target.checked })}
+                  className="mt-0.5 h-4 w-4 accent-accent"
+                />
+                <span>
+                  <span className="block text-sm font-medium">{t("monitor.enable.label")}</span>
+                  <span className="block text-xs text-text-muted">{t("monitor.enable.hint")}</span>
+                </span>
+              </label>
+
+              {settings.monitor.enabled && (
+                <div className="space-y-3 border-t border-border pt-3">
+                  <label className="flex items-start gap-3">
+                    <input
+                      type="checkbox"
+                      checked={settings.monitor.launchAtLogin}
+                      onChange={(e) => persistMonitor({ launchAtLogin: e.target.checked })}
+                      className="mt-0.5 h-4 w-4 accent-accent"
+                    />
+                    <span>
+                      <span className="block text-sm font-medium">
+                        {t("monitor.launchAtLogin.label")}
+                      </span>
+                      <span className="block text-xs text-text-muted">
+                        {t("monitor.launchAtLogin.hint")}
+                      </span>
+                    </span>
+                  </label>
+
+                  <label className="block">
+                    <span className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-text-muted">
+                      {t("monitor.frequency.label")}
+                    </span>
+                    <select
+                      value={settings.monitor.notificationFrequency}
+                      onChange={(e) =>
+                        persistMonitor({
+                          notificationFrequency: e.target.value as NotificationFrequency,
+                        })
+                      }
+                      className="w-full rounded-lg border border-border bg-surface-2 px-3 py-2 text-sm"
+                    >
+                      {FREQUENCIES.map((value) => (
+                        <option key={value} value={value}>
+                          {t(`frequency.${value}`)}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+
+                  <div className="flex gap-3">
+                    <label className="flex-1">
+                      <span className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-text-muted">
+                        {t("monitor.threshold.label")}
+                      </span>
+                      <input
+                        type="number"
+                        min={1}
+                        value={Math.round(settings.monitor.thresholdBytes / GIB)}
+                        onChange={(e) =>
+                          persistMonitor({
+                            thresholdBytes: Math.max(1, Number(e.target.value) || 1) * GIB,
+                          })
+                        }
+                        className="w-full rounded-lg border border-border bg-surface-2 px-3 py-2 text-sm"
+                      />
+                    </label>
+                    <label className="flex-1">
+                      <span className="mb-1.5 block text-xs font-semibold uppercase tracking-wide text-text-muted">
+                        {t("monitor.interval.label")}
+                      </span>
+                      <input
+                        type="number"
+                        min={1}
+                        value={Math.round(settings.monitor.checkIntervalMinutes / 60)}
+                        onChange={(e) =>
+                          persistMonitor({
+                            checkIntervalMinutes: Math.max(1, Number(e.target.value) || 1) * 60,
+                          })
+                        }
+                        className="w-full rounded-lg border border-border bg-surface-2 px-3 py-2 text-sm"
+                      />
+                    </label>
+                  </div>
+                  <p className="text-xs text-text-muted">{t("monitor.threshold.hint")}</p>
+
+                  <div className="flex items-center justify-between gap-3 border-t border-border pt-3">
+                    <span className="text-xs text-text-muted">{monitorStatusText()}</span>
+                    <button
+                      onClick={() => {
+                        setMonitor((prev) => (prev ? { ...prev, checking: true } : prev));
+                        window.limpaTudo.checkNow().then(setMonitor);
+                      }}
+                      disabled={monitor?.checking}
+                      className="flex shrink-0 items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs font-medium hover:border-accent disabled:opacity-50"
+                    >
+                      <RefreshCw size={13} className={monitor?.checking ? "animate-spin" : ""} />
+                      {t("monitor.checkNow")}
+                    </button>
+                  </div>
+                </div>
+              )}
+            </section>
 
             <AnimatePresence>
               {saved && (

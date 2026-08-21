@@ -11,7 +11,14 @@ import {
   Sparkles,
   Sun,
 } from "lucide-react";
-import type { HistoryEntry, ScanItem, ScanProgress, ScanSummary, Settings } from "../electron/types";
+import type {
+  HistoryEntry,
+  NotificationFrequency,
+  ScanItem,
+  ScanProgress,
+  ScanSummary,
+  Settings,
+} from "../electron/types";
 import { SUPPORTED_LANGUAGES, type SupportedLanguage } from "./i18n";
 import { useTheme } from "./hooks/useTheme";
 import { LogoMark } from "./components/LogoMark";
@@ -19,6 +26,7 @@ import { CircularProgress } from "./components/CircularProgress";
 import { HistoryPanel } from "./components/HistoryPanel";
 import { SettingsPanel } from "./components/SettingsPanel";
 import { AboutModal } from "./components/AboutModal";
+import { OnboardingModal } from "./components/OnboardingModal";
 import { Dashboard } from "./components/Dashboard";
 import { formatBytes } from "./lib/format";
 import { dirname } from "./lib/path";
@@ -56,14 +64,18 @@ function App() {
   const [history, setHistory] = useState<HistoryEntry[]>([]);
   const [settings, setSettings] = useState<Settings | null>(null);
   const [aboutOpen, setAboutOpen] = useState(false);
+  const [onboardingOpen, setOnboardingOpen] = useState(false);
 
   useEffect(() => {
     window.limpaTudo.getSettings().then((s) => {
       i18n.changeLanguage(s.language);
       setSettings(s);
+      if (!s.onboardingCompleted) setOnboardingOpen(true);
     });
     refreshHistory();
     window.limpaTudo.onShowAbout(() => setAboutOpen(true));
+    // The tray or a monitor notification asking to open straight on the scan.
+    window.limpaTudo.onOpenScan(() => goToScan());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -86,6 +98,23 @@ function App() {
   function goToScan() {
     setView("scan");
     runScan();
+  }
+
+  async function finishOnboarding(choice: {
+    enabled: boolean;
+    launchAtLogin: boolean;
+    notificationFrequency: NotificationFrequency;
+  }) {
+    setOnboardingOpen(false);
+    const updated = await window.limpaTudo.updateSettings({
+      onboardingCompleted: true,
+      monitor: {
+        enabled: choice.enabled,
+        launchAtLogin: choice.enabled && choice.launchAtLogin,
+        notificationFrequency: choice.notificationFrequency,
+      },
+    });
+    setSettings(updated);
   }
 
   function changeLanguage(lng: SupportedLanguage) {
@@ -563,6 +592,8 @@ function App() {
           window.limpaTudo.getSettings().then(setSettings);
         }}
       />
+
+      <OnboardingModal open={onboardingOpen} onDecide={finishOnboarding} />
 
       <AboutModal open={aboutOpen} onClose={() => setAboutOpen(false)} />
     </div>

@@ -1,6 +1,8 @@
 import { contextBridge, ipcRenderer } from "electron";
 import type {
   HistoryEntry,
+  MonitorStatus,
+  SettingsPatch,
   RemoveOptions,
   RemoveReport,
   ScanItem,
@@ -43,8 +45,16 @@ const limpaTudoAPI = {
   elevateAndMeasure: (targetPath: string): Promise<SizeResult> =>
     ipcRenderer.invoke("elevateAndMeasure", targetPath),
   getSettings: (): Promise<Settings> => ipcRenderer.invoke("settings:get"),
-  updateSettings: (patch: Partial<Settings>): Promise<Settings> =>
+  updateSettings: (patch: SettingsPatch): Promise<Settings> =>
     ipcRenderer.invoke("settings:update", patch),
+  getMonitorStatus: (): Promise<MonitorStatus> => ipcRenderer.invoke("monitor:getStatus"),
+  checkNow: (): Promise<MonitorStatus> => ipcRenderer.invoke("monitor:checkNow"),
+  onMonitorStatus: (cb: (status: MonitorStatus) => void) => {
+    ipcRenderer.on("monitor:status", (_event, status) => cb(status));
+  },
+  onOpenScan: (cb: () => void) => {
+    ipcRenderer.on("open-scan", () => cb());
+  },
   getHistory: (): Promise<HistoryEntry[]> => ipcRenderer.invoke("history:list"),
   deleteHistoryEntry: (id: string): Promise<HistoryEntry[]> =>
     ipcRenderer.invoke("history:delete", id),

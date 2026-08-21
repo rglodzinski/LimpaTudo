@@ -35,4 +35,5 @@ em geral a liberar espaço em disco no **macOS** e **Linux**, identificando com 
 - `01-categorias.md` — catálogo de categorias e paths por categoria
 - `02-apps-viloes.md` — lista de aplicativos com maior consumo de disco e seus caminhos de cache/dados
 - `03-arquitetura.md` — arquitetura técnica (processos, IPC, scanner, UI)
+- `07-monitor-e-tray.md` — monitor em segundo plano, bandeja do sistema e avisos
 - `04-fluxo-scan-e-remocao.md` — fluxo funcional de Scan → Seleção → Remoção

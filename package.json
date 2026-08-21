@@ -39,6 +39,10 @@
       {
         "from": "catalog",
         "to": "catalog"
+      },
+      {
+        "from": "build/tray",
+        "to": "tray"
       }
     ],
     "afterSign": "build/notarize.cjs",

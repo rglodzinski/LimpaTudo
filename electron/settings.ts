@@ -2,7 +2,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { app, nativeTheme } from "electron";
-import type { Settings } from "./types";
+import type { Settings, SettingsPatch } from "./types";
 
 const SETTINGS_DIR = path.join(os.homedir(), ".config", "limpatudo");
 const SETTINGS_PATH = path.join(SETTINGS_DIR, "settings.json");
@@ -23,6 +23,21 @@ function defaultSettings(): Settings {
     advancedModeEnabled: false,
     theme: nativeTheme.shouldUseDarkColors ? "dark" : "light",
     language: detectSystemLanguage(),
+    onboardingCompleted: false,
+    monitor: defaultMonitorSettings(),
+  };
+}
+
+export function defaultMonitorSettings(): Settings["monitor"] {
+  return {
+    enabled: false,
+    launchAtLogin: false,
+    notificationFrequency: "weekly",
+    thresholdBytes: 5 * 1024 * 1024 * 1024,
+    checkIntervalMinutes: 360,
+    lastCheckAt: null,
+    lastNotifiedAt: null,
+    lastPotentialBytes: 0,
   };
 }
 
@@ -34,7 +49,15 @@ export function loadSettings(): Settings {
 
   try {
     const raw = fs.readFileSync(SETTINGS_PATH, "utf-8");
-    cached = { ...defaultSettings(), ...(JSON.parse(raw) as Partial<Settings>) };
+    const stored = JSON.parse(raw) as Partial<Settings>;
+    // `monitor` is merged one level deeper so a settings file written by an
+    // older version (which has no `monitor` key, or only some of its fields)
+    // still comes back with every field populated.
+    cached = {
+      ...defaultSettings(),
+      ...stored,
+      monitor: { ...defaultMonitorSettings(), ...(stored.monitor ?? {}) },
+    };
   } catch {
     cached = defaultSettings();
     writeSettings(cached);
@@ -43,9 +66,13 @@ export function loadSettings(): Settings {
   return cached;
 }
 
-export function updateSettings(patch: Partial<Settings>): Settings {
+export function updateSettings(patch: SettingsPatch): Settings {
   const current = loadSettings();
-  cached = { ...current, ...patch };
+  cached = {
+    ...current,
+    ...patch,
+    monitor: patch.monitor ? { ...current.monitor, ...patch.monitor } : current.monitor,
+  };
   writeSettings(cached);
   return cached;
 }

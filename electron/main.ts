@@ -14,7 +14,23 @@ import {
   deleteHistoryEntry,
   loadHistory,
 } from "./history";
-import type { RemoveOptions, ScanItem, Settings } from "./types";
+import { createTray, destroyTray, hasTray, refreshTray } from "./tray";
+import {
+  configureMonitor,
+  monitorStatus,
+  runCheck,
+  startMonitor,
+  stopMonitor,
+  syncMonitorWithSettings,
+} from "./monitor";
+import { isLaunchAtLoginEnabled, setLaunchAtLogin, startedHidden } from "./autostart";
+import type {
+  MonitorStatus,
+  NotificationFrequency,
+  RemoveOptions,
+  ScanItem,
+  SettingsPatch,
+} from "./types";
 
 const isDev = !app.isPackaged;
 
@@ -25,6 +41,8 @@ app.setName("Limpa Tudo");
 
 let mainWindow: BrowserWindow | null = null;
 let removeCancelled = false;
+/** True only once the user really asked to quit — see docs/07-monitor-e-tray.md. */
+let isQuitting = false;
 
 // In a packaged app, build.icon (package.json) already produces the
 // .icns/.ico bundle icon. In dev, `electron .` shows Electron's own icon
@@ -56,6 +74,74 @@ function createWindow() {
   } else {
     win.loadFile(path.join(__dirname, "../dist/index.html"));
   }
+}
+
+/** Brings the existing window to the front, or creates one if there is none. */
+function showMainWindow() {
+  if (mainWindow) {
+    if (mainWindow.isMinimized()) mainWindow.restore();
+    mainWindow.show();
+    mainWindow.focus();
+    return mainWindow;
+  }
+  createWindow();
+  return mainWindow;
+}
+
+/** Opens the app straight on the scan screen (tray "open" / notification click). */
+function openScanView() {
+  const win = showMainWindow();
+  if (!win) return;
+  if (win.webContents.isLoading()) {
+    win.webContents.once("did-finish-load", () => win.webContents.send("open-scan"));
+  } else {
+    win.webContents.send("open-scan");
+  }
+}
+
+function broadcastMonitorStatus(status: MonitorStatus) {
+  mainWindow?.webContents.send("monitor:status", status);
+  refreshTray();
+}
+
+/** Applies the side effects of the monitor settings: tray, timer, login item. */
+function applyMonitorSettings() {
+  const { monitor } = loadSettings();
+
+  if (monitor.enabled) {
+    createTray({
+      onOpen: () => showMainWindow(),
+      onCheckNow: () => void runCheck(),
+      onToggleLaunchAtLogin: (enabled) => {
+        updateSettings({ monitor: { launchAtLogin: enabled } });
+        setLaunchAtLogin(enabled);
+        refreshTray();
+      },
+      onSetFrequency: (frequency: NotificationFrequency) => {
+        updateSettings({ monitor: { notificationFrequency: frequency } });
+        refreshTray();
+      },
+      onQuit: () => {
+        isQuitting = true;
+        app.quit();
+      },
+    });
+  } else if (hasTray()) {
+    destroyTray();
+  }
+
+  // The OS is the source of truth for the login item; if the user removed it
+  // outside the app, don't keep claiming it's on.
+  const actuallyEnabled = isLaunchAtLoginEnabled();
+  if (monitor.enabled && monitor.launchAtLogin !== actuallyEnabled) {
+    setLaunchAtLogin(monitor.launchAtLogin);
+  }
+  if (!monitor.enabled && actuallyEnabled) {
+    setLaunchAtLogin(false);
+  }
+
+  syncMonitorWithSettings();
+  refreshTray();
 }
 
 function registerIpcHandlers() {
@@ -139,12 +225,22 @@ function registerIpcHandlers() {
     return loadSettings();
   });
 
-  ipcMain.handle("settings:update", async (_event, patch: Partial<Settings>) => {
+  ipcMain.handle("settings:update", async (_event, patch: SettingsPatch) => {
     const settings = updateSettings(patch);
     if (patch.language) {
       buildMenu(settings.language, () => mainWindow);
     }
+    if (patch.monitor) {
+      applyMonitorSettings();
+    }
     return settings;
+  });
+
+  ipcMain.handle("monitor:getStatus", async () => monitorStatus());
+
+  ipcMain.handle("monitor:checkNow", async () => {
+    await runCheck();
+    return monitorStatus();
   });
 
   ipcMain.handle("app:getVersion", async () => {
@@ -170,20 +266,45 @@ function registerIpcHandlers() {
   });
 }
 
+// A background daemon plus a manually launched copy would be two processes
+// writing the same settings.json; keep exactly one and reuse its window.
+if (!app.requestSingleInstanceLock()) {
+  app.quit();
+} else {
+  app.on("second-instance", () => {
+    showMainWindow();
+  });
+}
+
 app.whenReady().then(() => {
   if (isDev && process.platform === "darwin" && app.dock) {
     app.dock.setIcon(nativeImage.createFromPath(devIconPath));
   }
 
   registerIpcHandlers();
+  configureMonitor({ onStatusChange: broadcastMonitorStatus, onOpenScan: openScanView });
   buildMenu(loadSettings().language, () => mainWindow);
-  createWindow();
+  applyMonitorSettings();
+  startMonitor();
+
+  // Launched by the OS at login: come up in the tray only, no window.
+  if (!startedHidden()) createWindow();
 
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
+    else showMainWindow();
   });
 });
 
+app.on("before-quit", () => {
+  isQuitting = true;
+  stopMonitor();
+});
+
 app.on("window-all-closed", () => {
+  // With the monitor on, closing the window leaves the app alive in the tray
+  // (on Linux too, where the default would be to exit).
+  if (isQuitting) return app.quit();
+  if (loadSettings().monitor.enabled) return;
   if (process.platform !== "darwin") app.quit();
 });

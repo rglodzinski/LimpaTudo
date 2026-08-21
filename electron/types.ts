@@ -71,6 +71,29 @@ export interface HistoryEntry {
   byCategory: Record<string, number>;
 }
 
+export type NotificationFrequency = "never" | "daily" | "weekly" | "biweekly" | "monthly";
+
+export interface MonitorSettings {
+  /** Master switch: runs the periodic check and shows the tray icon. */
+  enabled: boolean;
+  launchAtLogin: boolean;
+  notificationFrequency: NotificationFrequency;
+  /** Only notify when the reclaimable total is at least this many bytes. */
+  thresholdBytes: number;
+  checkIntervalMinutes: number;
+  lastCheckAt: string | null;
+  lastNotifiedAt: string | null;
+  lastPotentialBytes: number;
+}
+
+export interface MonitorStatus {
+  enabled: boolean;
+  checking: boolean;
+  lastCheckAt: string | null;
+  lastPotentialBytes: number;
+  nextCheckAt: string | null;
+}
+
 export interface Settings {
   projectRoots: string[];
   deadProjectThresholdDays: number;
@@ -78,4 +101,12 @@ export interface Settings {
   advancedModeEnabled: boolean;
   theme: "light" | "dark";
   language: "pt-BR" | "en-US" | "es";
+  /** False until the user answers the first-run invitation to enable the monitor. */
+  onboardingCompleted: boolean;
+  monitor: MonitorSettings;
 }
+
+/** A settings patch, where `monitor` may carry only the fields being changed. */
+export type SettingsPatch = Partial<Omit<Settings, "monitor">> & {
+  monitor?: Partial<MonitorSettings>;
+};
