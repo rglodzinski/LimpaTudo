@@ -14,6 +14,13 @@
   --risk-low: #16a34a;
   --risk-medium: #d97706;
   --risk-high: #dc2626;
+
+  /* Storage chart: one fixed hue per category (validated for CVD), neutrals for the rest. */
+  --chart-dev: #2a78d6;
+  --chart-system: #eb6834;
+  --chart-apps: #1baf7a;
+  --chart-other: #94a3b8;
+  --chart-free: #e2e8f0;
 }
 
 :root[data-theme="dark"] {
@@ -30,6 +37,12 @@
   --risk-low: #22c55e;
   --risk-medium: #f59e0b;
   --risk-high: #ef4444;
+
+  --chart-dev: #3987e5;
+  --chart-system: #d95926;
+  --chart-apps: #199e70;
+  --chart-other: #64748b;
+  --chart-free: #2b3850;
 }
 
 @theme inline {

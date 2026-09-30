@@ -50,6 +50,15 @@ disco passa pelo *main process* via `ipcMain.handle` / `ipcRenderer.invoke`, com
     (`sudo-prompt` ou AppleScript `do shell script with administrator privileges`
     no macOS; `pkexec` no Linux) — **sempre com lista explícita de paths visível
     ao usuário antes de elevar privilégios**, nunca comando arbitrário.
+- **`storage.ts`** — lista os dispositivos de armazenamento montados e a
+  capacidade de cada um (total, usado, livre) para o gráfico do Painel. Só lê
+  os totais do volume com `statfs` — nunca percorre o conteúdo, então não fere
+  a regra de scan apenas por whitelist. No macOS: `/` mais os volumes em
+  `/Volumes`, classificados por `diskutil info -plist` (interno/externo);
+  imagens de disco (`.dmg`) e compartilhamentos de rede ficam de fora. No
+  Linux: dispositivos de bloco de `/proc/self/mounts` (sem `loop`/`squashfs`,
+  `/boot`, snaps e Docker), um por dispositivo; montados em `/media`,
+  `/run/media` ou `/mnt` são tratados como externos.
 - **`reportGenerator.ts`** — gera resumo pós-limpeza (quanto foi liberado, por
   categoria) para exibir e opcionalmente salvar log local.
 

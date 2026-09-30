@@ -15,6 +15,7 @@ import type {
   ScanProgress,
   ScanSummary,
   Settings,
+  StorageVolume,
 } from "./types";
 import type { RemoveProgress } from "./remover";
 import type { SizeResult } from "./scanner/sizeCalculator";
@@ -67,6 +68,7 @@ const limpaTudoAPI = {
   findOrphans: (): Promise<AppFile[]> => ipcRenderer.invoke("apps:orphans"),
   removeOrphans: (ids: string[], options: RemoveOptions): Promise<RemoveReport> =>
     ipcRenderer.invoke("apps:removeOrphans", ids, options),
+  listVolumes: (): Promise<StorageVolume[]> => ipcRenderer.invoke("storage:volumes"),
   showInFolder: (targetPath: string): Promise<void> => ipcRenderer.invoke("showInFolder", targetPath),
   getSettings: (): Promise<Settings> => ipcRenderer.invoke("settings:get"),
   updateSettings: (patch: SettingsPatch): Promise<Settings> =>

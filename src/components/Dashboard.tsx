@@ -5,6 +5,7 @@ import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recha
 import { AppWindow, ArrowRight, Clock, HardDrive, History, Sparkles, Trash2, X } from "lucide-react";
 import type { HistoryEntry } from "../../electron/types";
 import { formatBytes } from "../lib/format";
+import { StorageCard } from "./StorageCard";
 
 interface DashboardProps {
   history: HistoryEntry[];
@@ -74,6 +75,8 @@ export function Dashboard({
         <h2 className="text-2xl font-bold">{t("dashboard.title")}</h2>
         <p className="text-sm text-text-muted">{t("dashboard.subtitle")}</p>
       </div>
+
+      <StorageCard history={history} />
 
       <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
         <StatCard

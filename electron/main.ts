@@ -29,6 +29,7 @@ import { listInstalledApps } from "./apps/inventory";
 import { findOrphans, measureApps, measurementOf } from "./apps/appFiles";
 import { isBundleIdInUse, openFiles, runningState, stopHelpers } from "./apps/processes";
 import { removeOrphans, uninstallApp } from "./apps/uninstaller";
+import { byVolumeFromItems, listVolumes } from "./storage";
 import type {
   InstalledApp,
   MonitorStatus,
@@ -233,6 +234,7 @@ function registerIpcHandlers() {
       totalBytes,
       itemCount: unlocked.length,
       byCategory: byCategoryFromItems(unlocked),
+      byVolume: await byVolumeFromItems(unlocked),
     });
     return items;
   });
@@ -256,6 +258,7 @@ function registerIpcHandlers() {
       totalBytes: report.freedBytes,
       itemCount: removedItems.length,
       byCategory: byCategoryFromItems(removedItems),
+      byVolume: await byVolumeFromItems(removedItems),
     });
     return report;
   });
@@ -314,6 +317,8 @@ function registerIpcHandlers() {
     recordUninstall(report);
     return report;
   });
+
+  ipcMain.handle("storage:volumes", async () => listVolumes());
 
   ipcMain.handle("showInFolder", async (_event, targetPath: string) => {
     if (path.isAbsolute(targetPath)) shell.showItemInFolder(targetPath);

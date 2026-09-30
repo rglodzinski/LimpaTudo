@@ -89,6 +89,12 @@ export interface HistoryEntry {
   totalBytes: number;
   itemCount: number;
   byCategory: Record<string, number>;
+  /**
+   * The same bytes split by the volume holding each item (mount point →
+   * category → bytes), for the dashboard storage chart. Absent in entries
+   * recorded before it existed.
+   */
+  byVolume?: Record<string, Record<string, number>>;
 }
 
 export type NotificationFrequency = "never" | "daily" | "weekly" | "biweekly" | "monthly";
@@ -195,3 +201,16 @@ export interface OpenAppFile {
 export type UninstallResult =
   | { ok: true; report: RemoveReport }
   | { ok: false; reason: "running" | "unknown-app" };
+
+/** A mounted storage device and its capacity (statfs), for the dashboard chart. */
+export interface StorageVolume {
+  mountPoint: string;
+  /** Volume label; null for the system disk when it has none (the UI names it). */
+  name: string | null;
+  kind: "internal" | "external";
+  /** The volume the OS runs from ("/"). */
+  isSystem: boolean;
+  totalBytes: number;
+  usedBytes: number;
+  freeBytes: number;
+}
