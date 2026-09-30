@@ -7,6 +7,17 @@ export interface ChangelogEntry {
 /** Kept by hand alongside package.json's version — see docs/sessions/. */
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.3.0",
+    date: "2026-09-29",
+    highlights: [
+      "Nova tela Aplicativos (macOS): cada app com o espaço dele e de tudo que gravou no disco, data do último uso e desinstalação completa para a Lixeira",
+      "Arquivos que cada app está usando agora, e restos de apps já desinstalados",
+      "Encontra muito mais espaço: símbolos de dispositivos do Xcode, emuladores/NDK do Android, caches de apps em ~/Library/Caches e ~/.cache, e outros",
+      "Mídia baixada do WhatsApp, medida pelo tamanho real (o du contava cada arquivo dezenas de vezes)",
+      "Itens de apps abertos não são removidos, e pastas build/ versionadas no git não são mais oferecidas",
+    ],
+  },
+  {
     version: "1.2.0",
     date: "2026-08-21",
     highlights: [
