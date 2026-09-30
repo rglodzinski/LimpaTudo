@@ -10,7 +10,19 @@ export interface CatalogEntry {
   paths: Partial<Record<Platform, string[]>>;
   requiresAppClosed?: boolean;
   bundleId?: string;
+  /**
+   * Every folder the pattern resolves to is its own item ("~/Library/Caches/*"),
+   * except those already covered by a specific entry.
+   */
+  catchAll?: boolean;
+  /**
+   * "uniqueFileSizes": measure by counting each distinct file size once, for
+   * folders full of APFS clones that `du` counts many times over.
+   */
+  sizeStrategy?: SizeStrategy;
 }
+
+export type SizeStrategy = "du" | "uniqueFileSizes";
 
 export interface ScanItem {
   id: string;
@@ -118,3 +130,68 @@ export interface Settings {
 export type SettingsPatch = Partial<Omit<Settings, "monitor">> & {
   monitor?: Partial<MonitorSettings>;
 };
+
+/** An application bundle found in /Applications or ~/Applications (macOS). */
+export interface InstalledApp {
+  path: string;
+  name: string;
+  /** CFBundleName — data folders are often named after it rather than `name`. */
+  bundleName: string | null;
+  bundleId: string | null;
+  version: string | null;
+  /** From Spotlight's kMDItemLastUsedDate — null when macOS never recorded it. */
+  lastUsedAt: string | null;
+  fromAppStore: boolean;
+  /** PNG data URL of the app icon, or null if it couldn't be read. */
+  icon: string | null;
+}
+
+export type AppFileKind =
+  | "bundle"
+  | "support"
+  | "caches"
+  | "preferences"
+  | "containers"
+  | "logs"
+  | "state"
+  | "web"
+  | "launch"
+  | "other";
+
+/** A file or folder on disk that belongs to an app (its bundle or data it wrote). */
+export interface AppFile {
+  id: string;
+  path: string;
+  kind: AppFileKind;
+  risk: Risk;
+  sizeBytes: number;
+  locked: boolean;
+  /** Bundle id this file was attributed to — set for leftovers of removed apps. */
+  bundleId?: string;
+}
+
+export interface AppMeasurement {
+  appPath: string;
+  /** Size of the .app bundle itself. */
+  sizeBytes: number;
+  /** The bundle plus every data folder found for the app. */
+  files: AppFile[];
+}
+
+/** What is running from inside an app bundle right now. */
+export interface AppRunningState {
+  /** The app itself (its Contents/MacOS executable) is open. */
+  main: boolean;
+  /** Background processes from the bundle (extensions, helpers, login items). */
+  helpers: Array<{ pid: number; name: string }>;
+}
+
+/** A regular file an app process currently has open (lsof). */
+export interface OpenAppFile {
+  path: string;
+  sizeBytes: number;
+}
+
+export type UninstallResult =
+  | { ok: true; report: RemoveReport }
+  | { ok: false; reason: "running" | "unknown-app" };

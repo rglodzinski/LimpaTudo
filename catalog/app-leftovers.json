@@ -1,0 +1,60 @@
+{
+  "com.apple.dt.Xcode": [
+    "~/Library/Developer/Xcode",
+    "~/Library/Developer/CoreSimulator",
+    "~/Library/Caches/com.apple.dt.Xcode"
+  ],
+  "com.google.android.studio": [
+    "~/Library/Android",
+    "~/.android",
+    "~/Library/Application Support/Google/AndroidStudio*",
+    "~/Library/Caches/Google/AndroidStudio*",
+    "~/Library/Logs/Google/AndroidStudio*"
+  ],
+  "com.docker.docker": [
+    "~/.docker",
+    "~/Library/Containers/com.docker.docker",
+    "~/Library/Group Containers/group.com.docker",
+    "~/Library/Application Support/Docker Desktop"
+  ],
+  "com.microsoft.VSCode": [
+    "~/.vscode",
+    "~/Library/Application Support/Code"
+  ],
+  "com.google.Chrome": [
+    "~/Library/Application Support/Google/Chrome",
+    "~/Library/Caches/Google/Chrome"
+  ],
+  "net.whatsapp.WhatsApp": [
+    "~/Library/Group Containers/group.net.whatsapp.WhatsApp.shared",
+    "~/Library/Group Containers/group.net.whatsapp.family"
+  ],
+  "com.microsoft.teams2": [
+    "~/Library/Group Containers/UBF8T346G9.com.microsoft.teams"
+  ],
+  "com.microsoft.OneDrive": [
+    "~/Library/Group Containers/UBF8T346G9.OneDriveStandaloneSuite"
+  ],
+  "com.postmanlabs.mac": [
+    "~/Library/Application Support/Postman"
+  ],
+  "com.figma.Desktop": [
+    "~/Library/Application Support/Figma"
+  ],
+  "md.obsidian": [
+    "~/Library/Application Support/obsidian"
+  ],
+  "com.anthropic.claudefordesktop": [
+    "~/Library/Application Support/Claude"
+  ],
+  "org.freecad.FreeCAD": [
+    "~/Library/Application Support/FreeCAD",
+    "~/Library/Preferences/FreeCAD"
+  ],
+  "com.mongodb.compass": [
+    "~/Library/Application Support/MongoDB Compass"
+  ],
+  "org.jkiss.dbeaver.core.product": [
+    "~/Library/DBeaverData"
+  ]
+}

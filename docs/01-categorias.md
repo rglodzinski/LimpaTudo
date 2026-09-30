@@ -42,7 +42,18 @@ Itens que podem ser 100% recriados rodando `npm install`, `pod install`, `./grad
 | Cache de binários do Electron / electron-builder | `~/Library/Caches/electron*` / `~/.cache/electron*` | 🟢 |
 | Cache do node-gyp | `~/Library/Caches/node-gyp` / `~/.cache/node-gyp` | 🟢 |
 | Cache do TypeScript (tsserver) | `~/Library/Caches/typescript` / `~/.cache/typescript` | 🟢 |
-| Build outputs genéricos (`dist/`, `build/`, `out/`, `target/`) | dentro dos projetos | 🟡 (confirmar se não é artefato de release) |
+| Build outputs genéricos (`dist/`, `build/`, `out/`, `target/`) | dentro dos projetos | 🟡 (confirmar se não é artefato de release; pastas com arquivos versionados no git são ignoradas — são fonte, não saída) |
+| Símbolos de dispositivos do Xcode (um item por versão de iOS) | `~/Library/Developer/Xcode/{iOS,watchOS,tvOS,visionOS} DeviceSupport/*` | 🟢 (o Xcode recria ao conectar o aparelho de novo) |
+| Emuladores Android (um item por AVD) | `~/.android/avd/*` | 🟡 (apaga o emulador e os dados dos apps nele) |
+| Imagens de sistema do Android SDK | `~/Library/Android/sdk/system-images` / `~/Android/Sdk/system-images` | 🟡 (rebaixáveis pelo SDK Manager) |
+| Android NDK (um item por versão) | `~/Library/Android/sdk/ndk/*` / `~/Android/Sdk/ndk/*` | 🟡 |
+| Cache do Android SDK | `~/.android/cache`, `~/.android/build-cache` | 🟢 |
+| Logs do daemon do Gradle | `~/.gradle/daemon` | 🟢 |
+| Cache do Cypress / Puppeteer / uv / nvm | `~/Library/Caches/Cypress`, `~/.cache/puppeteer`, `~/.cache/uv`, `~/.nvm/.cache` | 🟢 |
+| Cache do Expo | `~/.expo/android-apk-cache`, `~/.expo/ios-simulator-app-cache`, `~/.expo/expo-go` | 🟢 |
+| Specs do CocoaPods | `~/.cocoapods/repos` | 🟢 |
+| Modelos do Hugging Face | `~/.cache/huggingface` | 🟡 (rebaixáveis, mas podem ser grandes e lentos de baixar) |
+| Índice do Codeium/Windsurf | `~/.codeium/database` | 🟡 (reindexa os projetos) |
 
 ## 2. Dados/logs do sistema macOS
 
@@ -50,7 +61,7 @@ Itens que podem ser 100% recriados rodando `npm install`, `pod install`, `./grad
 |---|---|---|
 | Logs do sistema | `~/Library/Logs/*`, `/private/var/log/*` (requer sudo) | 🟢 |
 | Crash reports (DiagnosticReports) | `~/Library/Logs/DiagnosticReports` | 🟢 |
-| Cache de apps do usuário | `~/Library/Caches/*` (exceto whitelist crítica) | 🟢 |
+| Cache de apps do usuário | `~/Library/Caches/*` e `~/.cache/*` — entrada "catch-all": um item por pasta, só as que não são cobertas por uma entrada específica, com ≥ 1 MB e legíveis | 🟢 |
 | Cache do sistema (fontes, ícones) | `/Library/Caches/*` (requer sudo) | 🟡 |
 | Arquivos temporários | `/private/tmp`, `$TMPDIR` | 🟢 |
 | Lixeira | `~/.Trash` | 🟢 |

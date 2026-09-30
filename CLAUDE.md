@@ -4,10 +4,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project status
 
-This repository currently contains **only planning documentation** — no application
-code has been scaffolded yet. There is no `package.json`, no build system, and no
-tests to run. Before assuming any commands or file structure, check whether code has
-been added since this file was written.
+The app is implemented and released (Electron main process in `electron/`,
+React renderer in `src/`, data catalog in `catalog/`). Commands:
+`npm run dev`, `npm run build`, `npm run lint`. There is no automated test
+suite yet.
 
 ## What this project is
 
@@ -44,6 +44,9 @@ safety rules, and architecture:
 - `docs/07-monitor-e-tray.md` — the background monitor: tray icon, periodic
   catalog-only check, notification frequency gating, launch-at-login per
   platform, single-instance/quit lifecycle, and the first-run opt-in.
+- `docs/08-apps-instalados.md` — the installed-apps screen (macOS): how an
+  app's data folders are found in fixed `~/Library` locations, leftovers of
+  removed apps, `lsof` "files in use now", and the uninstall safety rules.
 - `docs/sessions/` — dated logs of planning sessions; check the most recent one
   for the latest decisions before continuing work.
 

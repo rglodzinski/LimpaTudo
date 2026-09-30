@@ -5,6 +5,7 @@ import { scanProjects } from "./scanner/projectScanner";
 import { calculateSizeElevated } from "./scanner/sizeCalculator";
 import { removeItems } from "./remover";
 import { isAppRunning } from "./processDetector";
+import { loadCatalog } from "./catalog";
 import { buildMenu } from "./menu";
 import { loadSettings, updateSettings } from "./settings";
 import {
@@ -24,10 +25,16 @@ import {
   syncMonitorWithSettings,
 } from "./monitor";
 import { isLaunchAtLoginEnabled, setLaunchAtLogin, startedHidden } from "./autostart";
+import { listInstalledApps } from "./apps/inventory";
+import { findOrphans, measureApps, measurementOf } from "./apps/appFiles";
+import { isBundleIdInUse, openFiles, runningState, stopHelpers } from "./apps/processes";
+import { removeOrphans, uninstallApp } from "./apps/uninstaller";
 import type {
+  InstalledApp,
   MonitorStatus,
   NotificationFrequency,
   RemoveOptions,
+  RemoveReport,
   ScanItem,
   SettingsPatch,
 } from "./types";
@@ -41,6 +48,8 @@ app.setName("Limpa Tudo");
 
 let mainWindow: BrowserWindow | null = null;
 let removeCancelled = false;
+/** Last result of apps:list — what apps:measure and apps:orphans work from. */
+let installedApps: InstalledApp[] = [];
 /** True only once the user really asked to quit — see docs/07-monitor-e-tray.md. */
 let isQuitting = false;
 
@@ -149,6 +158,39 @@ function applyMonitorSettings() {
   );
 }
 
+/** RemoveReportEntry.error for items skipped because their app is open. */
+const APP_RUNNING = "app-running";
+
+/**
+ * Ids of items whose catalog entry says the app must be closed
+ * (`requiresAppClosed`) while that app is running — principle 4 of
+ * docs/00-visao-geral.md. Bundle ids are macOS-only, so Linux skips the check.
+ */
+async function itemsOfRunningApps(items: ScanItem[]): Promise<Set<string>> {
+  const blocked = new Set<string>();
+  if (process.platform !== "darwin") return blocked;
+  const entries = new Map(loadCatalog().map((entry) => [entry.id, entry]));
+  const running = new Map<string, boolean>();
+  for (const item of items) {
+    const entry = entries.get(item.entryId);
+    if (!entry?.requiresAppClosed || !entry.bundleId) continue;
+    if (!running.has(entry.bundleId)) running.set(entry.bundleId, await isAppRunning(entry.bundleId));
+    if (running.get(entry.bundleId)) blocked.add(item.id);
+  }
+  return blocked;
+}
+
+function recordUninstall(report: RemoveReport) {
+  const removed = report.entries.filter((e) => e.ok).length;
+  if (removed === 0) return;
+  appendHistoryEntry({
+    type: "cleanup",
+    totalBytes: report.freedBytes,
+    itemCount: removed,
+    byCategory: { uninstall: report.freedBytes },
+  });
+}
+
 function registerIpcHandlers() {
   ipcMain.handle("scan", async (event) => {
     const items: ScanItem[] = [];
@@ -197,12 +239,16 @@ function registerIpcHandlers() {
 
   ipcMain.handle("remove", async (event, items: ScanItem[], options: RemoveOptions) => {
     removeCancelled = false;
+    const blocked = await itemsOfRunningApps(items);
     const report = await removeItems(
-      items,
+      items.filter((item) => !blocked.has(item.id)),
       options,
       (progress) => event.sender.send("remove:progress", progress),
       () => removeCancelled,
     );
+    for (const item of items.filter((i) => blocked.has(i.id))) {
+      report.entries.push({ itemId: item.id, path: item.path, ok: false, error: APP_RUNNING });
+    }
     const removedIds = new Set(report.entries.filter((e) => e.ok).map((e) => e.itemId));
     const removedItems = items.filter((item) => removedIds.has(item.id));
     appendHistoryEntry({
@@ -212,6 +258,65 @@ function registerIpcHandlers() {
       byCategory: byCategoryFromItems(removedItems),
     });
     return report;
+  });
+
+  // Installed apps (macOS only — see docs/08-apps-instalados.md).
+  ipcMain.handle("apps:list", async () => {
+    installedApps = process.platform === "darwin" ? await listInstalledApps() : [];
+    return installedApps;
+  });
+
+  ipcMain.handle("apps:measure", async (event) => {
+    await measureApps(installedApps, (m) => event.sender.send("apps:measured", m));
+  });
+
+  ipcMain.handle("apps:runningState", async (_event, appPath: string) => runningState(appPath));
+
+  ipcMain.handle("apps:stopHelpers", async (_event, appPath: string) => {
+    if (!measurementOf(appPath)) return runningState(appPath);
+    return stopHelpers(appPath);
+  });
+
+  ipcMain.handle("apps:openFiles", async (_event, appPath: string) => {
+    if (!measurementOf(appPath)) return [];
+    return openFiles(appPath);
+  });
+
+  ipcMain.handle(
+    "apps:uninstall",
+    async (event, appPath: string, fileIds: string[], options: RemoveOptions) => {
+      removeCancelled = false;
+      const result = await uninstallApp(
+        appPath,
+        fileIds,
+        options,
+        (progress) => event.sender.send("remove:progress", progress),
+        () => removeCancelled,
+      );
+      if (result.ok) recordUninstall(result.report);
+      return result;
+    },
+  );
+
+  ipcMain.handle("apps:orphans", async () => {
+    if (process.platform !== "darwin") return [];
+    return findOrphans(installedApps, isBundleIdInUse);
+  });
+
+  ipcMain.handle("apps:removeOrphans", async (event, ids: string[], options: RemoveOptions) => {
+    removeCancelled = false;
+    const report = await removeOrphans(
+      ids,
+      options,
+      (progress) => event.sender.send("remove:progress", progress),
+      () => removeCancelled,
+    );
+    recordUninstall(report);
+    return report;
+  });
+
+  ipcMain.handle("showInFolder", async (_event, targetPath: string) => {
+    if (path.isAbsolute(targetPath)) shell.showItemInFolder(targetPath);
   });
 
   ipcMain.on("remove:cancel", () => {

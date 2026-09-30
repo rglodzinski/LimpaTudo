@@ -87,9 +87,13 @@ export async function runCheck(): Promise<number> {
     const items: ScanItem[] = [];
     // Catalog only — the project scanner is far heavier on disk and this
     // check just answers "is it worth opening the app?" (docs/07-monitor-e-tray.md).
+    // Only 🟢 entries are measured at all: some 🟡 ones (WhatsApp media) walk
+    // hundreds of thousands of files, too heavy for a background check.
     await scanCatalog(
       (item) => items.push(item),
       () => {},
+      undefined,
+      ["low"],
     );
 
     // Only 🟢 low-risk, readable items: the figure we advertise has to match

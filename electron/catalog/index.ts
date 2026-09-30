@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { app } from "electron";
+import { currentPlatform, expandHome } from "../platform";
 import type { CatalogEntry } from "../types";
 
 let cached: CatalogEntry[] | null = null;
@@ -18,4 +19,14 @@ export function loadCatalog(): CatalogEntry[] {
   const raw = fs.readFileSync(catalogPath(), "utf-8");
   cached = JSON.parse(raw) as CatalogEntry[];
   return cached;
+}
+
+/** Catalog paths (this platform, wildcard-free) measured by unique file sizes. */
+export function uniqueSizePaths(): string[] {
+  const platform = currentPlatform();
+  return loadCatalog()
+    .filter((entry) => entry.sizeStrategy === "uniqueFileSizes")
+    .flatMap((entry) => entry.paths[platform] ?? [])
+    .filter((pattern) => !pattern.includes("*"))
+    .map(expandHome);
 }

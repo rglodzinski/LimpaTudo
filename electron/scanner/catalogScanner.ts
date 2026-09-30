@@ -3,7 +3,7 @@ import path from "node:path";
 import { loadCatalog } from "../catalog";
 import { expandHome, currentPlatform } from "../platform";
 import { calculateSize } from "./sizeCalculator";
-import type { ScanItem } from "../types";
+import type { Risk, ScanItem } from "../types";
 
 export interface ScanProgress {
   completed: number;
@@ -23,32 +23,45 @@ export async function scanCatalog(
   onChunk: (item: ScanItem) => void,
   onProgress: (progress: ScanProgress) => void,
   concurrency = 8,
+  risks?: Risk[],
 ): Promise<void> {
   const platform = currentPlatform();
-  const entries = loadCatalog();
+  const entries = loadCatalog().filter((entry) => !risks || risks.includes(entry.risk));
 
   const paths: Array<{ entry: (typeof entries)[number]; resolved: string }> = [];
-  for (const entry of entries) {
+  // Catch-all entries ("every folder in ~/Library/Caches") go last and skip
+  // anything a specific entry already claims — or contains — so no folder is
+  // listed, and counted, twice.
+  const ordered = [...entries.filter((e) => !e.catchAll), ...entries.filter((e) => e.catchAll)];
+  for (const entry of ordered) {
     const patterns = entry.paths[platform] ?? [];
     for (const pattern of patterns) {
       for (const resolved of resolveGlob(expandHome(pattern))) {
+        if (entry.catchAll && paths.some((p) => overlaps(p.resolved, resolved))) continue;
         paths.push({ entry, resolved });
       }
     }
   }
+  // A path inside another listed one (DiagnosticReports inside ~/Library/Logs)
+  // is already measured — and removed — with its parent.
+  const nested = (resolved: string) => paths.some((p) => resolved.startsWith(p.resolved + path.sep));
+  const measured = paths.filter((p) => !nested(p.resolved));
 
   let completed = 0;
-  const total = paths.length;
+  const total = measured.length;
   onProgress({ completed, total });
 
   async function processOne({ entry, resolved }: (typeof paths)[number]) {
     try {
-      const { sizeBytes, permissionDenied } = await calculateSize(resolved);
+      const { sizeBytes, permissionDenied } = await calculateSize(resolved, entry.sizeStrategy);
+      // A catch-all turns up dozens of tiny or OS-protected folders; listing
+      // them would bury the ones worth cleaning.
+      if (entry.catchAll && (sizeBytes === null || sizeBytes < CATCH_ALL_MIN_BYTES)) return;
       if (sizeBytes !== null && sizeBytes > 0) {
         onChunk({
           id: `${entry.id}:${resolved}`,
           entryId: entry.id,
-          displayName: entry.displayName,
+          displayName: entry.catchAll ? `${entry.displayName}: ${path.basename(resolved)}` : entry.displayName,
           category: entry.category,
           risk: entry.risk,
           path: resolved,
@@ -74,7 +87,7 @@ export async function scanCatalog(
   }
 
   await runWithConcurrency(
-    paths.map((p) => () => processOne(p)),
+    measured.map((p) => () => processOne(p)),
     concurrency,
   );
 }
@@ -101,6 +114,12 @@ function resolveGlob(pattern: string): string[] {
     .filter((entry) => entry.isDirectory())
     .map((entry) => path.join(baseDir, entry.name, ...rest))
     .filter((resolved) => fs.existsSync(resolved));
+}
+
+const CATCH_ALL_MIN_BYTES = 1024 * 1024;
+
+function overlaps(a: string, b: string): boolean {
+  return a === b || a.startsWith(b + path.sep) || b.startsWith(a + path.sep);
 }
 
 async function runWithConcurrency(jobs: Array<() => Promise<void>>, limit: number) {

@@ -2,13 +2,14 @@ import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
 import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import { ArrowRight, Clock, HardDrive, History, Sparkles, Trash2, X } from "lucide-react";
+import { AppWindow, ArrowRight, Clock, HardDrive, History, Sparkles, Trash2, X } from "lucide-react";
 import type { HistoryEntry } from "../../electron/types";
 import { formatBytes } from "../lib/format";
 
 interface DashboardProps {
   history: HistoryEntry[];
   onStartScan: () => void;
+  onOpenApps: () => void;
   onOpenHistory: () => void;
   onDeleteEntry: (id: string) => void;
   onClearHistory: () => void;
@@ -40,6 +41,7 @@ function StatCard({
 export function Dashboard({
   history,
   onStartScan,
+  onOpenApps,
   onOpenHistory,
   onDeleteEntry,
   onClearHistory,
@@ -96,7 +98,7 @@ export function Dashboard({
         />
       </div>
 
-      <div className="mb-6 grid grid-cols-1 gap-4 lg:grid-cols-2">
+      <div className="mb-6 grid grid-cols-1 gap-4 lg:grid-cols-3">
         <motion.button
           whileTap={{ scale: 0.98 }}
           onClick={onStartScan}
@@ -110,6 +112,21 @@ export function Dashboard({
             </div>
           </div>
           <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
+        </motion.button>
+
+        <motion.button
+          whileTap={{ scale: 0.98 }}
+          onClick={onOpenApps}
+          className="group flex items-center justify-between rounded-2xl border border-border bg-surface p-6 text-left hover:border-accent"
+        >
+          <div className="flex items-center gap-3">
+            <AppWindow size={22} className="text-accent" />
+            <div>
+              <p className="font-semibold">{t("dashboard.action.apps.title")}</p>
+              <p className="text-sm text-text-muted">{t("dashboard.action.apps.subtitle")}</p>
+            </div>
+          </div>
+          <ArrowRight size={18} className="text-text-muted transition-transform group-hover:translate-x-1" />
         </motion.button>
 
         <motion.button

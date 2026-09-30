@@ -1,6 +1,12 @@
 import { contextBridge, ipcRenderer } from "electron";
 import type {
+  AppFile,
+  AppMeasurement,
+  AppRunningState,
   HistoryEntry,
+  InstalledApp,
+  OpenAppFile,
+  UninstallResult,
   MonitorStatus,
   SettingsPatch,
   RemoveOptions,
@@ -44,6 +50,24 @@ const limpaTudoAPI = {
     ipcRenderer.invoke("isAppRunning", bundleIdOrProcessName),
   elevateAndMeasure: (targetPath: string): Promise<SizeResult> =>
     ipcRenderer.invoke("elevateAndMeasure", targetPath),
+  listApps: (): Promise<InstalledApp[]> => ipcRenderer.invoke("apps:list"),
+  measureApps: (): Promise<void> => ipcRenderer.invoke("apps:measure"),
+  onAppMeasured: (cb: (measurement: AppMeasurement) => void) => {
+    ipcRenderer.removeAllListeners("apps:measured");
+    ipcRenderer.on("apps:measured", (_event, measurement) => cb(measurement));
+  },
+  appRunningState: (appPath: string): Promise<AppRunningState> =>
+    ipcRenderer.invoke("apps:runningState", appPath),
+  stopAppHelpers: (appPath: string): Promise<AppRunningState> =>
+    ipcRenderer.invoke("apps:stopHelpers", appPath),
+  appOpenFiles: (appPath: string): Promise<OpenAppFile[]> =>
+    ipcRenderer.invoke("apps:openFiles", appPath),
+  uninstallApp: (appPath: string, fileIds: string[], options: RemoveOptions): Promise<UninstallResult> =>
+    ipcRenderer.invoke("apps:uninstall", appPath, fileIds, options),
+  findOrphans: (): Promise<AppFile[]> => ipcRenderer.invoke("apps:orphans"),
+  removeOrphans: (ids: string[], options: RemoveOptions): Promise<RemoveReport> =>
+    ipcRenderer.invoke("apps:removeOrphans", ids, options),
+  showInFolder: (targetPath: string): Promise<void> => ipcRenderer.invoke("showInFolder", targetPath),
   getSettings: (): Promise<Settings> => ipcRenderer.invoke("settings:get"),
   updateSettings: (patch: SettingsPatch): Promise<Settings> =>
     ipcRenderer.invoke("settings:update", patch),

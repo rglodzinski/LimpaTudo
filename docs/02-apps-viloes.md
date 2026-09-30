@@ -28,6 +28,7 @@ será limpo (cache vs. dados completos) → risco.
 | Slack | Cache de mensagens/mídia | `~/Library/Application Support/Slack/Cache`, `Service Worker/CacheStorage` | 🟢 |
 | Microsoft Teams | Cache | `~/Library/Application Support/Microsoft/Teams/Cache`, `Service Worker` | 🟢 |
 | WhatsApp (Desktop) | Cache de mídia (não conversas) | `~/Library/Application Support/WhatsApp/Cache` | 🟢 |
+| WhatsApp (app nativo, `net.whatsapp.WhatsApp`) | Mídia baixada das conversas (fotos, vídeos, áudios, documentos) — **não** o banco de mensagens, que fica em outras pastas do mesmo contêiner | `~/Library/Group Containers/group.net.whatsapp.WhatsApp.shared/Message/Media` | 🟡 (as mensagens continuam; a mídia vira "toque para baixar" e é baixada de novo do celular/servidor. Mídia antiga que já não existe no celular pode não voltar. Exige o WhatsApp fechado. Medida por tamanhos únicos — ver abaixo) |
 | Discord | Cache | `~/Library/Application Support/discord/Cache`, `Code Cache` | 🟢 |
 | Zoom | Cache/logs, gravações locais temporárias | `~/Library/Application Support/zoom.us/data/Cache`, `~/Documents/Zoom` (gravações — 🔴 confirmar) | 🟡 |
 | Outlook (novo, baseado em Electron) | Cache | `~/Library/Containers/com.microsoft.Outlook/Data/Library/Caches` | 🟢 |
@@ -82,3 +83,23 @@ mudar código do scanner, e comunidade pode contribuir novas entradas via PR.
 **Fora do escopo (nunca listados)**: dados de apps bancários, autenticadores 2FA,
 Keychain, certificados, dados de apps de saúde — qualquer coisa que não seja
 puramente cache/log recriável.
+
+## Pastas com clones APFS (`sizeStrategy: "uniqueFileSizes"`)
+
+O WhatsApp guarda um clone APFS de cada mídia em cada pasta de conversa que
+a recebeu. Clones compartilham os mesmos blocos no disco, mas o `du` conta
+cada um inteiro: num disco de 228 GB, o `du` mostrava 383 GB para
+`Message/Media`, enquanto o WhatsApp ("Gerenciar armazenamento") mostrava
+7,35 GB. Eram 822 mil arquivos com só 16 mil tamanhos distintos, somando
+7,12 GB.
+
+Entradas com `sizeStrategy: "uniqueFileSizes"` são medidas somando cada
+tamanho de arquivo **uma única vez**. É uma estimativa (dois arquivos
+diferentes com exatamente o mesmo tamanho contam uma vez só, o que deixa o
+número um pouco baixo), mas muito mais próxima do real que o `du`. A
+varredura é feita em Node, não com `find`: o `find` do macOS aborta no meio
+dessas pastas (`fts_read: Interrupted system call`) e devolveria só uma
+fração do total. É lenta (~45 s para 822 mil arquivos), por isso o monitor
+em segundo plano mede só entradas 🟢 e nunca passa por ela. A tela
+Aplicativos usa a mesma medição para qualquer pasta que contenha um desses
+caminhos (o contêiner inteiro do WhatsApp).

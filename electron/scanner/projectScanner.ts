@@ -1,3 +1,4 @@
+import { execFile } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 import { calculateSize } from "./sizeCalculator";
@@ -85,6 +86,9 @@ export async function scanProjects(
 
   async function processOne(job: ProjectJob) {
     try {
+      // A "build/" holding committed files (icons, entitlements…) is source,
+      // not output — removing it breaks the project.
+      if (await hasTrackedFiles(job.depPath)) return;
       const { sizeBytes, permissionDenied } = await calculateSize(job.depPath);
       if (sizeBytes !== null && sizeBytes > 0) {
         let stale = false;
@@ -134,6 +138,15 @@ export async function scanProjects(
     }
   });
   await Promise.all(workers);
+}
+
+/** True when git tracks any file under `dir`; false outside a repo or if git is missing. */
+function hasTrackedFiles(dir: string): Promise<boolean> {
+  return new Promise((resolve) => {
+    execFile("git", ["-C", dir, "ls-files", "--", "."], (error, stdout) => {
+      resolve(!error && stdout.trim().length > 0);
+    });
+  });
 }
 
 function collectJobs(

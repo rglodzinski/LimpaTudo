@@ -380,7 +380,8 @@
     "bundleId": "com.google.Chrome",
     "paths": {
       "darwin": [
-        "~/Library/Application Support/Google/Chrome/*/Cache"
+        "~/Library/Application Support/Google/Chrome/*/Cache",
+        "~/Library/Caches/Google/Chrome"
       ],
       "linux": [
         "~/.cache/google-chrome"
@@ -476,6 +477,20 @@
     }
   },
   {
+    "id": "app.whatsapp-media",
+    "displayName": "Mídia baixada do WhatsApp",
+    "category": "apps",
+    "risk": "medium",
+    "requiresAppClosed": true,
+    "bundleId": "net.whatsapp.WhatsApp",
+    "sizeStrategy": "uniqueFileSizes",
+    "paths": {
+      "darwin": [
+        "~/Library/Group Containers/group.net.whatsapp.WhatsApp.shared/Message/Media"
+      ]
+    }
+  },
+  {
     "id": "app.outlook",
     "displayName": "Outlook",
     "category": "apps",
@@ -503,5 +518,219 @@
         "~/.config/discord/Cache"
       ]
     }
+  },
+  {
+    "id": "dev.xcode-device-support",
+    "displayName": "Símbolos de dispositivos (Xcode)",
+    "category": "dev",
+    "risk": "low",
+    "paths": {
+      "darwin": [
+        "~/Library/Developer/Xcode/iOS DeviceSupport/*",
+        "~/Library/Developer/Xcode/watchOS DeviceSupport/*",
+        "~/Library/Developer/Xcode/tvOS DeviceSupport/*",
+        "~/Library/Developer/Xcode/visionOS DeviceSupport/*"
+      ]
+    }
+  },
+  {
+    "id": "dev.android-avd",
+    "displayName": "Emulador Android (AVD)",
+    "category": "dev",
+    "risk": "medium",
+    "paths": {
+      "darwin": [
+        "~/.android/avd/*"
+      ],
+      "linux": [
+        "~/.android/avd/*"
+      ]
+    }
+  },
+  {
+    "id": "dev.android-system-images",
+    "displayName": "Imagens de sistema do Android SDK",
+    "category": "dev",
+    "risk": "medium",
+    "paths": {
+      "darwin": [
+        "~/Library/Android/sdk/system-images"
+      ],
+      "linux": [
+        "~/Android/Sdk/system-images"
+      ]
+    }
+  },
+  {
+    "id": "dev.android-ndk",
+    "displayName": "Android NDK",
+    "category": "dev",
+    "risk": "medium",
+    "paths": {
+      "darwin": [
+        "~/Library/Android/sdk/ndk/*"
+      ],
+      "linux": [
+        "~/Android/Sdk/ndk/*"
+      ]
+    }
+  },
+  {
+    "id": "dev.android-cache",
+    "displayName": "Cache do Android SDK",
+    "category": "dev",
+    "risk": "low",
+    "paths": {
+      "darwin": [
+        "~/.android/cache",
+        "~/.android/build-cache"
+      ],
+      "linux": [
+        "~/.android/cache",
+        "~/.android/build-cache"
+      ]
+    }
+  },
+  {
+    "id": "dev.gradle-daemon",
+    "displayName": "Logs do daemon do Gradle",
+    "category": "dev",
+    "risk": "low",
+    "paths": {
+      "darwin": [
+        "~/.gradle/daemon"
+      ],
+      "linux": [
+        "~/.gradle/daemon"
+      ]
+    }
+  },
+  {
+    "id": "dev.cypress-cache",
+    "displayName": "Cache do Cypress",
+    "category": "dev",
+    "risk": "low",
+    "paths": {
+      "darwin": [
+        "~/Library/Caches/Cypress"
+      ],
+      "linux": [
+        "~/.cache/Cypress"
+      ]
+    }
+  },
+  {
+    "id": "dev.expo-cache",
+    "displayName": "Cache do Expo",
+    "category": "dev",
+    "risk": "low",
+    "paths": {
+      "darwin": [
+        "~/.expo/android-apk-cache",
+        "~/.expo/ios-simulator-app-cache",
+        "~/.expo/expo-go"
+      ],
+      "linux": [
+        "~/.expo/android-apk-cache",
+        "~/.expo/expo-go"
+      ]
+    }
+  },
+  {
+    "id": "dev.puppeteer-cache",
+    "displayName": "Navegadores baixados pelo Puppeteer",
+    "category": "dev",
+    "risk": "low",
+    "paths": {
+      "darwin": [
+        "~/.cache/puppeteer"
+      ],
+      "linux": [
+        "~/.cache/puppeteer"
+      ]
+    }
+  },
+  {
+    "id": "dev.uv-cache",
+    "displayName": "Cache do uv (Python)",
+    "category": "dev",
+    "risk": "low",
+    "paths": {
+      "darwin": [
+        "~/.cache/uv"
+      ],
+      "linux": [
+        "~/.cache/uv"
+      ]
+    }
+  },
+  {
+    "id": "dev.huggingface-cache",
+    "displayName": "Modelos baixados do Hugging Face",
+    "category": "dev",
+    "risk": "medium",
+    "paths": {
+      "darwin": [
+        "~/.cache/huggingface"
+      ],
+      "linux": [
+        "~/.cache/huggingface"
+      ]
+    }
+  },
+  {
+    "id": "dev.codeium-index",
+    "displayName": "Índice de código do Codeium/Windsurf",
+    "category": "dev",
+    "risk": "medium",
+    "paths": {
+      "darwin": [
+        "~/.codeium/database"
+      ],
+      "linux": [
+        "~/.codeium/database"
+      ]
+    }
+  },
+  {
+    "id": "dev.cocoapods-repos",
+    "displayName": "Specs do CocoaPods",
+    "category": "dev",
+    "risk": "low",
+    "paths": {
+      "darwin": [
+        "~/.cocoapods/repos"
+      ]
+    }
+  },
+  {
+    "id": "dev.nvm-cache",
+    "displayName": "Cache do nvm",
+    "category": "dev",
+    "risk": "low",
+    "paths": {
+      "darwin": [
+        "~/.nvm/.cache"
+      ],
+      "linux": [
+        "~/.nvm/.cache"
+      ]
+    }
+  },
+  {
+    "id": "system.app-caches",
+    "displayName": "Cache de aplicativo",
+    "category": "system",
+    "risk": "low",
+    "paths": {
+      "darwin": [
+        "~/Library/Caches/*",
+        "~/.cache/*"
+      ],
+      "linux": [
+        "~/.cache/*"
+      ]
+    },
+    "catchAll": true
   }
 ]

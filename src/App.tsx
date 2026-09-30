@@ -30,6 +30,8 @@ import { SettingsPanel } from "./components/SettingsPanel";
 import { AboutModal } from "./components/AboutModal";
 import { OnboardingModal } from "./components/OnboardingModal";
 import { Dashboard } from "./components/Dashboard";
+import { RemovingOverlay } from "./components/RemovingOverlay";
+import { AppsView } from "./components/AppsView";
 import { formatBytes } from "./lib/format";
 import { dirname, shortenHome } from "./lib/path";
 
@@ -40,7 +42,7 @@ type SortBy = "size" | "name";
 /** Bucket for items that belong to no project (catalog/system entries). */
 const NO_PROJECT_KEY = "__no_project__";
 
-type View = "dashboard" | "scan";
+type View = "dashboard" | "scan" | "apps";
 
 const RISK_DOT: Record<ScanItem["risk"], string> = {
   low: "bg-risk-low",
@@ -320,7 +322,15 @@ function App() {
     setCancelling(false);
     setSelected(new Set());
     refreshHistory();
-    alert(t("selection.freed", { size: formatBytes(report.freedBytes) }));
+    const blocked = [
+      ...new Set(
+        report.entries
+          .filter((e) => e.error === "app-running")
+          .map((e) => toRemove.find((i) => i.id === e.itemId)?.displayName ?? e.path),
+      ),
+    ];
+    const freed = t("selection.freed", { size: formatBytes(report.freedBytes) });
+    alert(blocked.length > 0 ? `${freed}\n\n${t("selection.skippedRunning", { names: blocked.join(", ") })}` : freed);
 
     // Re-scan instead of just filtering removed items locally, so sizes and
     // any newly-unlocked/changed items reflect the disk's real state.
@@ -333,14 +343,12 @@ function App() {
   }
 
   const progressPercent = progress.total > 0 ? (progress.completed / progress.total) * 100 : 0;
-  const removePercent =
-    removeProgress.total > 0 ? (removeProgress.completed / removeProgress.total) * 100 : 0;
 
   return (
     <div className="min-h-full bg-bg text-text pb-24">
       <header className="sticky top-0 z-10 flex items-center justify-between border-b border-border bg-surface/90 px-6 py-4 backdrop-blur">
         <div className="flex items-center gap-3">
-          {view === "scan" ? (
+          {view !== "dashboard" ? (
             <button
               onClick={() => setView("dashboard")}
               aria-label={t("dashboard.backToDashboard")}
@@ -408,11 +416,14 @@ function App() {
         <Dashboard
           history={history}
           onStartScan={goToScan}
+          onOpenApps={() => setView("apps")}
           onOpenHistory={() => setHistoryOpen(true)}
           onDeleteEntry={deleteHistoryEntry}
           onClearHistory={clearHistory}
         />
       )}
+
+      {view === "apps" && <AppsView settings={settings} onHistoryChanged={refreshHistory} />}
 
       {view === "scan" && (
       <main className="mx-auto max-w-4xl px-6 py-8">
@@ -634,35 +645,12 @@ function App() {
         )}
       </AnimatePresence>
 
-      <AnimatePresence>
-        {removing && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-4 bg-bg/95 backdrop-blur-sm"
-          >
-            <CircularProgress percent={removePercent} />
-            <div className="text-center">
-              <p className="text-base font-semibold">{t("selection.cleaning")}</p>
-              <p className="text-sm text-text-muted">
-                {t("selection.cleaningProgress", {
-                  completed: Math.min(removeProgress.completed + 1, removeProgress.total),
-                  total: removeProgress.total,
-                })}
-              </p>
-            </div>
-            <motion.button
-              whileTap={{ scale: 0.96 }}
-              onClick={cancelRemoving}
-              disabled={cancelling}
-              className="rounded-lg border border-border bg-surface px-4 py-2 text-sm font-semibold hover:border-risk-high disabled:opacity-60"
-            >
-              {cancelling ? t("selection.interrupting") : t("selection.interrupt")}
-            </motion.button>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <RemovingOverlay
+        open={removing}
+        progress={removeProgress}
+        cancelling={cancelling}
+        onCancel={cancelRemoving}
+      />
 
       <HistoryPanel
         open={historyOpen}

@@ -2,6 +2,7 @@ import { execFile } from "node:child_process";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { execElevated, isPermissionError, shellQuote } from "../elevate";
+import type { SizeStrategy } from "../types";
 
 export interface SizeResult {
   sizeBytes: number | null;
@@ -17,7 +18,10 @@ export interface SizeResult {
  * elevated privileges — see `calculateSizeElevated` for that, used on-demand
  * per item instead of automatically during a concurrent scan.
  */
-export async function calculateSize(targetPath: string): Promise<SizeResult> {
+export async function calculateSize(
+  targetPath: string,
+  strategy: SizeStrategy = "du",
+): Promise<SizeResult> {
   try {
     await fs.access(targetPath);
   } catch {
@@ -25,7 +29,11 @@ export async function calculateSize(targetPath: string): Promise<SizeResult> {
   }
 
   try {
-    return { sizeBytes: await sizeViaDu(targetPath), permissionDenied: false };
+    const sizeBytes =
+      strategy === "uniqueFileSizes"
+        ? await sizeByUniqueFileSizes(targetPath)
+        : await sizeViaDu(targetPath);
+    return { sizeBytes, permissionDenied: false };
   } catch (duError) {
     try {
       return { sizeBytes: await sizeViaReaddir(targetPath), permissionDenied: false };
@@ -66,6 +74,55 @@ function sizeViaDu(targetPath: string): Promise<number> {
       resolve(kb * 1024);
     });
   });
+}
+
+/**
+ * Sums each distinct file size once. WhatsApp keeps a clone of every media
+ * file in each chat folder that received it; APFS clones share their data,
+ * but `du` counts every one in full — 381 GB for what is really ~7 GB.
+ * Clones have the exact byte size of their original, so counting each size
+ * once is a close estimate (two different files with the same exact size are
+ * rare for media, and only make the figure slightly low).
+ *
+ * Walks with Node instead of `find`: macOS's find aborts partway through
+ * such folders with "fts_read: Interrupted system call", which would silently
+ * yield a fraction of the real size. Any error other than an unreadable
+ * subfolder rejects rather than returning a partial total.
+ */
+async function sizeByUniqueFileSizes(targetPath: string): Promise<number> {
+  const seen = new Set<number>();
+  let total = 0;
+  const dirs = [targetPath];
+
+  async function walkNext() {
+    while (dirs.length > 0) {
+      const dir = dirs.pop() as string;
+      let entries;
+      try {
+        entries = await fs.readdir(dir, { withFileTypes: true });
+      } catch (error) {
+        if (isPermissionError(error) && dir !== targetPath) continue;
+        throw error;
+      }
+      const files: string[] = [];
+      for (const entry of entries) {
+        const entryPath = path.join(dir, entry.name);
+        if (entry.isDirectory()) dirs.push(entryPath);
+        else if (entry.isFile()) files.push(entryPath);
+      }
+      const stats = await Promise.all(files.map((file) => fs.lstat(file)));
+      for (const { size } of stats) {
+        if (!seen.has(size)) {
+          seen.add(size);
+          total += size;
+        }
+      }
+    }
+  }
+
+  // A few walkers in parallel: one alone spends most of its time waiting on I/O.
+  await Promise.all(Array.from({ length: 8 }, walkNext));
+  return total;
 }
 
 /** Pure-JS fallback if `du` is unavailable. Does not follow symlinks. */
