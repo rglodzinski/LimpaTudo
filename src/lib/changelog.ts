@@ -7,6 +7,15 @@ export interface ChangelogEntry {
 /** Kept by hand alongside package.json's version — see docs/sessions/. */
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.4.0",
+    date: "2026-09-30",
+    highlights: [
+      "Novo gráfico de armazenamento no Painel: total, usado e livre do disco",
+      "Troque entre os discos conectados — SSDs internos, pendrives e HDs/SSDs externos por USB",
+      "O espaço usado aparece dividido por categoria (caches de desenvolvimento, sistema, aplicativos), com o percentual de cada uma",
+    ],
+  },
+  {
     version: "1.3.0",
     date: "2026-09-29",
     highlights: [
