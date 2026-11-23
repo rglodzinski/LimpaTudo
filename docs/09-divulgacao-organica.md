@@ -50,6 +50,9 @@ Atualizado em 2026-11-23. O resto do documento é o plano original.
   (chaves `catalog.<id>` em `src/i18n/locales/`).
 - **Kit de lançamento** com os textos de cada canal:
   [`11-kit-de-lancamento.md`](./11-kit-de-lancamento.md).
+- **TabNews:** post do caso WhatsApp/APFS publicado em 2026-11-23
+  (https://www.tabnews.com.br/Glodzinski/pitch-o-whatsapp-dizia-ocupar-383-gb-num-ssd-de-228-gb-como-medi-clones-apfs-no-limpa-tudo).
+  Próximos do lançamento BR: r/brdev e Dev.to (pt) em semanas diferentes.
 - **AlternativeTo:** app submetido em 2026-11-23 (fila grátis, pode demorar
   meses; não pagar a revisão prioritária). Depois de aprovado, sugerir as
   alternativas da seção 7 e acrescentar Homebrew/Flathub na página.
