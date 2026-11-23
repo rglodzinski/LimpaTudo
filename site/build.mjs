@@ -136,7 +136,7 @@ function layout({ lang, key, title, description, body, jsonLd = [], ogType = "we
       const target = alts[l] ?? langPath(l);
       return l === lang
         ? `<span aria-current="true">${l === "pt-BR" ? "PT" : l.toUpperCase()}</span>`
-        : `<a href="${href(target)}" hreflang="${STRINGS[l].htmlLang}" lang="${STRINGS[l].htmlLang}" title="${LANGS[l].label}">${l === "pt-BR" ? "PT" : l.toUpperCase()}</a>`;
+        : `<a href="${href(target)}" hreflang="${STRINGS[l].htmlLang}" lang="${STRINGS[l].htmlLang}" title="${LANGS[l].label}" data-lang="${l.slice(0, 2)}">${l === "pt-BR" ? "PT" : l.toUpperCase()}</a>`;
     })
     .join("");
   const ld = jsonLd.map((o) => `<script type="application/ld+json">${JSON.stringify(o).replace(/</g, "\\u003c")}</script>`).join("\n");
@@ -167,6 +167,7 @@ ${altLinks}
 <meta name="twitter:description" content="${esc(description)}" />
 <meta name="twitter:image" content="${abs("/og.png")}" />
 ${ld}
+${Object.keys(alts).length > 1 ? LANG_DETECT : ""}
 <style>${CSS}</style>
 </head>
 <body>
@@ -191,10 +192,17 @@ ${body}
     <span><a href="${GITHUB_URL}">GitHub</a> · <a href="${GITHUB_URL}/issues">${S.footer.issues}</a></span>
   </div>
 </footer>
+<script>document.querySelectorAll(".langs a[data-lang]").forEach(function(a){a.addEventListener("click",function(){try{localStorage.setItem("lang",a.dataset.lang)}catch(e){}})});</script>
 </body>
 </html>
 `;
 }
+
+// Primeira visita: leva ao idioma do navegador (pt, en ou es; outros → en),
+// usando os <link rel="alternate" hreflang> da página. Não age em robôs de
+// busca, nem mais de uma vez por sessão, nem depois de o visitante escolher
+// um idioma no seletor (localStorage "lang"). Mesmo script do glodzinski.dev.br.
+const LANG_DETECT = `<script>(function(){try{var n=navigator;if(n.webdriver||/bot|crawl|spider|slurp|preview|lighthouse|headless/i.test(n.userAgent))return;if(localStorage.getItem("lang")||sessionStorage.getItem("langAuto"))return;sessionStorage.setItem("langAuto","1");var cur=document.documentElement.lang.slice(0,2),want="en",ls=n.languages&&n.languages.length?n.languages:[n.language||""];for(var i=0;i<ls.length;i++){var l=String(ls[i]).slice(0,2).toLowerCase();if(l==="pt"||l==="en"||l==="es"){want=l;break}}if(want===cur)return;var alt=document.querySelector('link[rel="alternate"][hreflang^="'+want+'"]');if(alt){var u=new URL(alt.href);location.replace(u.pathname+location.search+location.hash)}}catch(e){}})();</script>`;
 
 function cards(list) {
   return `<div class="grid">${list.map(([h, p]) => `<div class="card"><h3>${h}</h3><p>${p}</p></div>`).join("")}</div>`;

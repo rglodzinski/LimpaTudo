@@ -6,6 +6,6 @@ Comment[pt_BR]=Libere espaço em disco com segurança
 Comment[es]=Libera espacio en disco con seguridad
 Exec=limpa-tudo %U
 Icon=com.rglodzinski.limpatudo
-Categories=Utility;System;
+Categories=Utility;
 Keywords=disk;cleaner;cache;storage;
 StartupWMClass=Limpa Tudo
