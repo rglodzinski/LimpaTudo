@@ -47,6 +47,10 @@ safety rules, and architecture:
 - `docs/08-apps-instalados.md` — the installed-apps screen (macOS): how an
   app's data folders are found in fixed `~/Library` locations, leftovers of
   removed apps, `lsof` "files in use now", and the uninstall safety rules.
+- `docs/09-divulgacao-organica.md` — plan for organic discovery: GitHub,
+  website/SEO, keywords, stores, communities, content calendar.
+- `docs/10-monetizacao.md` — monetization plan: voluntary donations (Pix,
+  GitHub Sponsors, Ko-fi), why no ads, App Store rules, where to ask in the app.
 - `docs/sessions/` — dated logs of planning sessions; check the most recent one
   for the latest decisions before continuing work.
 
