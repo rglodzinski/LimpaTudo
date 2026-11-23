@@ -238,7 +238,7 @@ function homeBody(lang) {
 </div>
 <div class="wrap shot">
   <picture>
-    ${lang === "pt-BR" ? `<source srcset="${href("/screenshots/scan-dark-pt.webp")}" media="(prefers-color-scheme: dark)" />` : ""}
+    <source srcset="${href(lang === "pt-BR" ? "/screenshots/scan-dark-pt.webp" : "/screenshots/list-dark-en.webp")}" media="(prefers-color-scheme: dark)" />
     <img src="${href(lang === "pt-BR" ? "/screenshots/scan-pt.webp" : "/screenshots/scan-en.webp")}" width="1600" height="1000" alt="${esc(S.screenshotAlt)}" loading="eager" decoding="async" />
   </picture>
 </div>
