@@ -1,12 +1,15 @@
 name: Build
 
-# Runs on every push/PR for fast feedback (build only, no signing/publishing),
-# and produces signed+notarized/published artifacts when a `v*` tag is pushed.
+# Runs on PRs and on demand (build only, no signing/publishing), and produces
+# signed+notarized/published artifacts when a `v*` tag is pushed. Pushes to
+# main no longer build: they published nothing and the macOS job kept being
+# cancelled waiting for a runner. If a release build fails here, build the
+# installers locally (`npm run dist:mac`, `npm run dist:linux`) and upload them
+# with `gh release upload`.
 # See docs/06-distribuicao.md for everything this pipeline does NOT yet do
 # (Mac App Store, Snap Store, Flathub submissions) and why.
 on:
   push:
-    branches: [main]
     tags: ["v*"]
   pull_request:
   workflow_dispatch:
