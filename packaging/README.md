@@ -56,6 +56,17 @@ ligar `CHANNELS.snapStore`.
 
 ## Flathub
 
+> **Importante — política de IA do Flathub**
+> ([Generative AI policy](https://docs.flathub.org/docs/for-app-authors/requirements#generative-ai-policy)):
+> manifestos submetidos ao Flathub não podem ter conteúdo gerado ou assistido
+> por IA, mesmo com declaração. O manifesto em `../flatpak/` foi escrito com
+> IA, então serve só para os testes de CI e como referência de build — o
+> manifesto da submissão precisa ser escrito à mão pelo autor. Agentes de IA
+> também não podem abrir o PR nem escrever a descrição, o commit ou as
+> respostas da revisão. O resto do material gerado com IA (código do app,
+> documentação, `.desktop`, metainfo) precisa ser declarado no PR, com as
+> partes afetadas e a extensão aproximada.
+
 `../flatpak/` tem o manifesto, o `.desktop` e o metainfo. O workflow
 `.github/workflows/flatpak.yml` compila, instala e roda o `flatpak-builder-lint`
 num Linux x86_64 a cada mudança em `flatpak/` (e gera o `.flatpak` como artefato).

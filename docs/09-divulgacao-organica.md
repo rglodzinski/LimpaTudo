@@ -70,8 +70,11 @@ Atualizado em 2026-11-23. O resto do documento é o plano original.
   tentar de novo quando reabrir, avisos em aur-general e nas notícias do
   Arch). Ao ativar o canal, ligar a chave em `CHANNELS`
   (`site/config.mjs`).
-- **Flathub:** abrir o PR em `flathub/flathub` e, depois de aceito, publicar o
-  token de verificação do domínio no `glodzinski-site`.
+- **Flathub:** submissão manual pelo autor. A política de IA do Flathub
+  proíbe manifesto gerado ou assistido por IA (o de `flatpak/` só serve para o
+  CI) e PR aberto ou redigido por agente; o restante do material gerado com IA
+  precisa ser declarado. Ver `packaging/README.md`. Depois de aceito, publicar
+  o token de verificação do domínio no `glodzinski-site`.
 - **OpenAlternative:** exige 250 estrelas para repositórios com menos de 6
   meses (ou 50 depois disso) — submeter quando atingir.
 - **Lançamentos e diretórios**, um por vez e nas semanas do cronograma
