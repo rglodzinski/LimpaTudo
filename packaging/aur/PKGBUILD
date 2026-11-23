@@ -1,7 +1,7 @@
 # Maintainer: Glodzinski Tecnologia <suporte at glodzinski dot dev dot br>
 # Pacote limpa-tudo-bin para o AUR, a partir do .deb da release.
 # pkgver e sha256sums são atualizados por `node packaging/update-packages.mjs`;
-# depois rodar `makepkg --printsrcinfo > .SRCINFO` numa máquina Arch.
+# depois regenerar o .SRCINFO com `makepkg --printsrcinfo > .SRCINFO` (Arch ou container archlinux).
 pkgname=limpa-tudo-bin
 pkgver=1.4.0
 pkgrel=1
