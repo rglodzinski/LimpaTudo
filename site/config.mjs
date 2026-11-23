@@ -26,3 +26,7 @@ export const LANGS = {
   es: { prefix: "/es", guides: "guias", og: "es_ES", label: "Español" },
 };
 export const DEFAULT_LANG = "en"; // x-default
+
+// Verificação do Bing Webmaster Tools (meta tag na home pt-BR). O Google usa a
+// propriedade de domínio glodzinski.dev.br, verificada por TXT no DNS.
+export const BING_VERIFICATION = "E935910B8983D5A6675F0447BDE5264F";

@@ -8,7 +8,7 @@
 import { cp, mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
-import { CHANNELS, DEFAULT_LANG, GITHUB_URL, LANGS, RELEASES_URL, REPO, SITE_URL } from "./config.mjs";
+import { BING_VERIFICATION, CHANNELS, DEFAULT_LANG, GITHUB_URL, LANGS, RELEASES_URL, REPO, SITE_URL } from "./config.mjs";
 import { STRINGS } from "./content/home.mjs";
 import { CSS } from "./style.mjs";
 
@@ -148,7 +148,7 @@ function layout({ lang, key, title, description, body, jsonLd = [], ogType = "we
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(description)}" />
-<link rel="canonical" href="${abs(self)}" />
+<link rel="canonical" href="${abs(self)}" />${self === "/" ? `\n<meta name="msvalidate.01" content="${BING_VERIFICATION}" />` : ""}
 ${altLinks}
 <link rel="alternate" hreflang="x-default" href="${abs(xDefault)}" />
 <link rel="icon" href="${href("/logo-mark.svg")}" type="image/svg+xml" />
