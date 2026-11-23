@@ -55,8 +55,9 @@ Atualizado em 2026-11-23. O resto do documento é o plano original.
 - **Dev.to (pt):** artigo do WhatsApp republicado em 2026-11-23 com canonical
   para o site e declaração "AI-assisted"
   (https://dev.to/rglodzinski/whatsapp-mostra-383-gb-no-mac-entenda-os-clones-apfs-e-o-tamanho-real-5bn2).
-  Falta o r/brdev (o Reddit é bloqueado para a automação; postar à mão com o
-  texto do kit).
+- **r/brdev:** post publicado à mão em 2026-11-23
+  (https://old.reddit.com/r/brdev/comments/1y3nflw/). O Reddit bloqueia a
+  extensão e a API sem login (403); comentários são acompanhados à mão.
 - **AlternativeTo:** app submetido em 2026-11-23 (fila grátis, pode demorar
   meses; não pagar a revisão prioritária). Depois de aprovado, sugerir as
   alternativas da seção 7 e acrescentar Homebrew/Flathub na página.
