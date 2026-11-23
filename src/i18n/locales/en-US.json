@@ -241,5 +241,12 @@
   "catalog.dev.mongodb-diagnostic": "MongoDB diagnostic telemetry (not your data)",
   "catalog.dev.codex-old-releases": "Old Codex CLI versions",
   "catalog.dev.claude-code-old-versions": "Old Claude Code versions",
-  "catalog.system.app-caches": "App cache"
+  "catalog.system.app-caches": "App cache",
+  "about.donate.page": "Ways to support the project",
+  "support.card.title": "Did Limpa Tudo help?",
+  "support.card.body": "It's free, with no ads and no data collection. If you like, a contribution of any amount helps keep the project going.",
+  "support.card.support": "Support the project",
+  "support.card.notNow": "Not now",
+  "support.card.dontAskAgain": "Don't show again",
+  "cleanupResult.ok": "OK"
 }

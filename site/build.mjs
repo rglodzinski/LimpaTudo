@@ -189,7 +189,7 @@ ${body}
 <footer>
   <div class="wrap bar">
     <span>${S.footer.by} · <a href="mailto:suporte@glodzinski.dev.br">suporte@glodzinski.dev.br</a></span>
-    <span><a href="${GITHUB_URL}">GitHub</a> · <a href="${GITHUB_URL}/issues">${S.footer.issues}</a></span>
+    <span><a href="${GITHUB_URL}">GitHub</a> · <a href="${GITHUB_URL}/issues">${S.footer.issues}</a> · <a href="${S.footer.supportUrl}">${S.footer.support}</a></span>
   </div>
 </footer>
 <script>document.querySelectorAll(".langs a[data-lang]").forEach(function(a){a.addEventListener("click",function(){try{localStorage.setItem("lang",a.dataset.lang)}catch(e){}})});</script>

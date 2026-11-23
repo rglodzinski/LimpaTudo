@@ -241,5 +241,12 @@
   "catalog.dev.mongodb-diagnostic": "Telemetría de diagnóstico de MongoDB (no son tus datos)",
   "catalog.dev.codex-old-releases": "Versiones antiguas de Codex CLI",
   "catalog.dev.claude-code-old-versions": "Versiones antiguas de Claude Code",
-  "catalog.system.app-caches": "Caché de aplicación"
+  "catalog.system.app-caches": "Caché de aplicación",
+  "about.donate.page": "Formas de apoyar el proyecto",
+  "support.card.title": "¿Te ayudó Limpa Tudo?",
+  "support.card.body": "Es gratis, sin anuncios y sin recopilar datos. Si quieres, una contribución de cualquier monto ayuda a mantener el proyecto.",
+  "support.card.support": "Apoyar el proyecto",
+  "support.card.notNow": "Ahora no",
+  "support.card.dontAskAgain": "No volver a mostrar",
+  "cleanupResult.ok": "OK"
 }

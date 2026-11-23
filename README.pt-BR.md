@@ -97,6 +97,11 @@ npm run lint
 
 O planejamento completo está em [`docs/`](docs), começando por [`docs/00-visao-geral.md`](docs/00-visao-geral.md). O site fica em [`site/`](site) (`node site/build.mjs`).
 
+## Apoie o projeto
+
+O Limpa Tudo é grátis, sem anúncios e sem telemetria. Se ele te ajudou, dá
+para [apoiar o projeto](https://glodzinski.dev.br/apoie.html) — por Pix, por exemplo.
+
 ## Licença
 
 [MIT](LICENSE) © Ricardo Glodzinski

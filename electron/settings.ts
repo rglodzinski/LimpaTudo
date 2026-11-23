@@ -25,7 +25,12 @@ function defaultSettings(): Settings {
     language: detectSystemLanguage(),
     onboardingCompleted: false,
     monitor: defaultMonitorSettings(),
+    support: defaultSupportSettings(),
   };
+}
+
+function defaultSupportSettings(): Settings["support"] {
+  return { successfulCleanups: 0, lastAskedAt: null, shownWithoutClick: 0, dismissedForever: false };
 }
 
 export function defaultMonitorSettings(): Settings["monitor"] {
@@ -57,6 +62,7 @@ export function loadSettings(): Settings {
       ...defaultSettings(),
       ...stored,
       monitor: { ...defaultMonitorSettings(), ...(stored.monitor ?? {}) },
+      support: { ...defaultSupportSettings(), ...(stored.support ?? {}) },
     };
   } catch {
     cached = defaultSettings();
@@ -72,6 +78,7 @@ export function updateSettings(patch: SettingsPatch): Settings {
     ...current,
     ...patch,
     monitor: patch.monitor ? { ...current.monitor, ...patch.monitor } : current.monitor,
+    support: patch.support ? { ...current.support, ...patch.support } : current.support,
   };
   writeSettings(cached);
   return cached;

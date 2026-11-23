@@ -12,7 +12,7 @@
     "url": "https://github.com/rglodzinski/LimpaTudo/issues"
   },
   "private": true,
-  "version": "1.4.0",
+  "version": "1.5.0",
   "type": "module",
   "main": "dist-electron/main.js",
   "scripts": {
@@ -26,7 +26,7 @@
     "dist": "npm run build && cross-env CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --publish=never",
     "dist:mac": "npm run build && cross-env CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --mac --x64 --publish=never && cross-env CSC_IDENTITY_AUTO_DISCOVERY=false electron-builder --mac --arm64 --publish=never",
     "dist:mac:signed": "npm run build && electron-builder --mac --x64 --publish=never && electron-builder --mac --arm64 --publish=never",
-    "dist:mas": "npm run build && electron-builder --mac mas --publish=never",
+    "dist:mas": "VITE_DISTRIBUTION=mas npm run build && electron-builder --mac mas --publish=never",
     "dist:linux": "npm run build && electron-builder --linux AppImage deb rpm snap tar.gz --publish=never",
     "lint": "oxlint",
     "preview": "vite preview"

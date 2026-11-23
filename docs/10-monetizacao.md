@@ -105,7 +105,21 @@ Program, comissão de 15%).
 
 **Anúncios: não recomendados** (seção 6).
 
-## 4. Desenho no app (a implementar)
+## 4. Desenho no app
+
+> **Implementado na v1.5.0 (2026-11-23):** cartão de apoio no resultado da
+> limpeza (`src/components/CleanupResultModal.tsx`, regras em
+> `src/lib/support.ts`; estado em `settings.support`), botão na tela Sobre
+> (QR do Pix só em pt-BR), item "Apoiar o projeto…" na bandeja e no menu
+> (`electron/support.ts`), `.github/FUNDING.yml`, link no rodapé do site e nos
+> READMEs. Tudo aponta para a página Apoie do glodzinski.dev.br
+> (`/apoie.html`, `/en/support.html`, `/es/apoyo.html`). Simplificações em
+> relação ao desenho abaixo: o gatilho é só "liberou ≥ 1 GB" (sem os marcos
+> acumulados de 5/20/50 GB) e não há txid por origem. As variáveis do Pix
+> são *variables* do repositório (públicas como o QR) passadas ao build no
+> CI; `npm run dist:mas` define `VITE_DISTRIBUTION=mas` e `process.mas`
+> esconde tudo no build da Mac App Store. Pendente: contas do GitHub
+> Sponsors e do Ko-fi (seção 5) para quem está fora do Brasil.
 
 ### Pontos de pedido
 

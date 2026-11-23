@@ -28,12 +28,14 @@ import { CircularProgress } from "./components/CircularProgress";
 import { HistoryPanel } from "./components/HistoryPanel";
 import { SettingsPanel } from "./components/SettingsPanel";
 import { AboutModal } from "./components/AboutModal";
+import { CleanupResultModal, type CleanupResult } from "./components/CleanupResultModal";
 import { OnboardingModal } from "./components/OnboardingModal";
 import { Dashboard } from "./components/Dashboard";
 import { RemovingOverlay } from "./components/RemovingOverlay";
 import { AppsView } from "./components/AppsView";
 import { formatBytes } from "./lib/format";
 import { dirname, shortenHome } from "./lib/path";
+import { shouldAskForSupport, supportUrl } from "./lib/support";
 
 type GroupBy = "category" | "app" | "directory" | "project" | "workspace";
 
@@ -90,6 +92,7 @@ function App() {
   const [history, setHistory] = useState<HistoryEntry[]>([]);
   const [settings, setSettings] = useState<Settings | null>(null);
   const [aboutOpen, setAboutOpen] = useState(false);
+  const [cleanupResult, setCleanupResult] = useState<CleanupResult | null>(null);
   const [onboardingOpen, setOnboardingOpen] = useState(false);
 
   useEffect(() => {
@@ -352,7 +355,21 @@ function App() {
     if (blocked.length > 0) lines.push(t("selection.skippedRunning", { names: blocked.join(", ") }));
     if (failed.some((e) => e.error === "ADMIN_DENIED")) lines.push(t("selection.adminDenied"));
     else if (failed.length > 0) lines.push(t("selection.someFailed", { count: failed.length }));
-    alert(lines.join("\n\n"));
+
+    // Count successful cleanups and decide on the support card before the
+    // re-scan; the card never shows on the first cleanup (lib/support.ts).
+    const askSupport = shouldAskForSupport(settings?.support, report.freedBytes);
+    if (settings && report.freedBytes > 0) {
+      window.limpaTudo
+        .updateSettings({
+          support: {
+            successfulCleanups: settings.support.successfulCleanups + 1,
+            ...(askSupport ? { lastAskedAt: new Date().toISOString() } : {}),
+          },
+        })
+        .then(setSettings);
+    }
+    setCleanupResult({ lines, askSupport });
 
     // Re-scan instead of just filtering removed items locally, so sizes and
     // any newly-unlocked/changed items reflect the disk's real state.
@@ -693,6 +710,26 @@ function App() {
       <OnboardingModal open={onboardingOpen} onDecide={finishOnboarding} />
 
       <AboutModal open={aboutOpen} onClose={() => setAboutOpen(false)} />
+
+      <CleanupResultModal
+        result={cleanupResult}
+        onSupport={() => window.limpaTudo.openExternal(supportUrl(settings?.language))}
+        onClose={({ supported, dontAskAgain }) => {
+          const shown = cleanupResult?.askSupport ?? false;
+          setCleanupResult(null);
+          if (!shown) return;
+          window.limpaTudo.getSettings().then((current) =>
+            window.limpaTudo
+              .updateSettings({
+                support: {
+                  shownWithoutClick: supported ? 0 : current.support.shownWithoutClick + 1,
+                  dismissedForever: current.support.dismissedForever || dontAskAgain,
+                },
+              })
+              .then(setSettings),
+          );
+        }}
+      />
     </div>
   );
 }

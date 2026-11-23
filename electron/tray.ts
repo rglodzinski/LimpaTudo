@@ -3,6 +3,7 @@ import { app, Menu, Tray, nativeImage } from "electron";
 import { loadSettings } from "./settings";
 import { monitorStatus } from "./monitor";
 import { formatBytes, trayLabels } from "./trayLabels";
+import { openSupportPage, SUPPORT_ENABLED } from "./support";
 import type { NotificationFrequency } from "./types";
 
 export interface TrayHandlers {
@@ -86,6 +87,9 @@ export function refreshTray(): void {
         })),
       },
       { type: "separator" },
+      ...(SUPPORT_ENABLED
+        ? [{ label: labels.support, click: () => openSupportPage(settings.language) }]
+        : []),
       { label: labels.quit, click: () => actions.onQuit() },
     ]),
   );

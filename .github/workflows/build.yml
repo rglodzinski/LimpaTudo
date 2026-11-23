@@ -18,6 +18,14 @@ jobs:
   build-mac:
     name: macOS (Intel + Apple Silicon)
     runs-on: macos-15
+    # Public values shown in the About screen and the Pix QR (the key is
+    # public in any QR anyway), so they are repository variables, not secrets.
+    env:
+      VITE_APP_WEBSITE: ${{ vars.VITE_APP_WEBSITE }}
+      VITE_CONTACT_EMAIL: ${{ vars.VITE_CONTACT_EMAIL }}
+      VITE_PIX_KEY: ${{ vars.VITE_PIX_KEY }}
+      VITE_PIX_MERCHANT_NAME: ${{ vars.VITE_PIX_MERCHANT_NAME }}
+      VITE_PIX_MERCHANT_CITY: ${{ vars.VITE_PIX_MERCHANT_CITY }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -48,6 +56,14 @@ jobs:
   build-linux:
     name: Linux (AppImage, deb, rpm, snap)
     runs-on: ubuntu-latest
+    # Public values shown in the About screen and the Pix QR (the key is
+    # public in any QR anyway), so they are repository variables, not secrets.
+    env:
+      VITE_APP_WEBSITE: ${{ vars.VITE_APP_WEBSITE }}
+      VITE_CONTACT_EMAIL: ${{ vars.VITE_CONTACT_EMAIL }}
+      VITE_PIX_KEY: ${{ vars.VITE_PIX_KEY }}
+      VITE_PIX_MERCHANT_NAME: ${{ vars.VITE_PIX_MERCHANT_NAME }}
+      VITE_PIX_MERCHANT_CITY: ${{ vars.VITE_PIX_MERCHANT_CITY }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

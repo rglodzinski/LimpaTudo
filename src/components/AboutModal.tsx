@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { AnimatePresence, motion } from "framer-motion";
 import QRCode from "qrcode";
-import { Globe, Mail, X } from "lucide-react";
+import { Globe, Heart, Mail, X } from "lucide-react";
 import { LogoMark } from "./LogoMark";
 import { CHANGELOG } from "../lib/changelog";
 import { buildPixPayload } from "../lib/pix";
+import { SUPPORT_ENABLED, supportUrl } from "../lib/support";
+import type { Settings } from "../../electron/types";
 
 // All sourced from .env (gitignored, see .env.example) — never hardcoded,
 // since this is a public repo. Any of these being unset just hides the
@@ -22,17 +24,21 @@ interface AboutModalProps {
 }
 
 export function AboutModal({ open, onClose }: AboutModalProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [version, setVersion] = useState("");
   const [qrDataUrl, setQrDataUrl] = useState<string | null>(null);
 
-  const donationEnabled = Boolean(PIX_KEY && PIX_MERCHANT_NAME && PIX_MERCHANT_CITY);
+  // Pix only works in Brazil, so the QR shows in Portuguese; everyone gets
+  // the link to the support page. Neither appears in the Mac App Store build.
+  const language = i18n.language as Settings["language"];
+  const pixEnabled =
+    SUPPORT_ENABLED && language === "pt-BR" && Boolean(PIX_KEY && PIX_MERCHANT_NAME && PIX_MERCHANT_CITY);
 
   useEffect(() => {
     if (!open) return;
     window.limpaTudo.getAppVersion().then(setVersion);
 
-    if (donationEnabled) {
+    if (pixEnabled) {
       const payload = buildPixPayload({
         key: PIX_KEY!,
         merchantName: PIX_MERCHANT_NAME!,
@@ -40,7 +46,7 @@ export function AboutModal({ open, onClose }: AboutModalProps) {
       });
       QRCode.toDataURL(payload, { width: 180, margin: 1 }).then(setQrDataUrl);
     }
-  }, [open, donationEnabled]);
+  }, [open, pixEnabled]);
 
   function openExternal(url: string) {
     window.limpaTudo.openExternal(url);
@@ -111,17 +117,28 @@ export function AboutModal({ open, onClose }: AboutModalProps) {
               </div>
             )}
 
-            {donationEnabled && (
+            {SUPPORT_ENABLED && (
               <div className="mt-5 rounded-xl border border-border bg-surface-2 p-4 text-center">
                 <p className="text-sm font-semibold">{t("about.donate.title")}</p>
-                <p className="mt-1 text-xs text-text-muted">{t("about.donate.subtitle")}</p>
-                {qrDataUrl && (
-                  <img
-                    src={qrDataUrl}
-                    alt={t("about.donate.title")}
-                    className="mx-auto mt-3 h-40 w-40 rounded-lg bg-white p-2"
-                  />
+                {pixEnabled && (
+                  <>
+                    <p className="mt-1 text-xs text-text-muted">{t("about.donate.subtitle")}</p>
+                    {qrDataUrl && (
+                      <img
+                        src={qrDataUrl}
+                        alt={t("about.donate.title")}
+                        className="mx-auto mt-3 h-40 w-40 rounded-lg bg-white p-2"
+                      />
+                    )}
+                  </>
                 )}
+                <button
+                  onClick={() => openExternal(supportUrl(language))}
+                  className="mx-auto mt-3 flex items-center gap-2 rounded-lg border border-border px-3 py-1.5 text-sm hover:border-accent"
+                >
+                  <Heart size={14} className="text-accent" />
+                  {t("about.donate.page")}
+                </button>
               </div>
             )}
 

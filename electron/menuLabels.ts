@@ -27,6 +27,7 @@ export interface MenuLabels {
   close: string;
   help: string;
   learnMore: string;
+  support: string;
 }
 
 const LABELS: Record<Settings["language"], MenuLabels> = {
@@ -57,6 +58,7 @@ const LABELS: Record<Settings["language"], MenuLabels> = {
     close: "Fechar",
     help: "Ajuda",
     learnMore: "Saiba mais sobre o Limpa Tudo",
+    support: "Apoiar o projeto…",
   },
   "en-US": {
     about: "About Limpa Tudo",
@@ -85,6 +87,7 @@ const LABELS: Record<Settings["language"], MenuLabels> = {
     close: "Close",
     help: "Help",
     learnMore: "Learn More about Limpa Tudo",
+    support: "Support the project…",
   },
   es: {
     about: "Acerca de Limpa Tudo",
@@ -113,6 +116,7 @@ const LABELS: Record<Settings["language"], MenuLabels> = {
     close: "Cerrar",
     help: "Ayuda",
     learnMore: "Más información sobre Limpa Tudo",
+    support: "Apoyar el proyecto…",
   },
 };
 

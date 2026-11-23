@@ -8,6 +8,7 @@ export interface TrayLabels {
   notifications: string;
   frequency: Record<NotificationFrequency, string>;
   quit: string;
+  support: string;
   neverChecked: string;
   /** Rendered as "1,2 GB liberáveis · verificado às 14:30". */
   potential: (size: string, time: string) => string;
@@ -29,6 +30,7 @@ const LABELS: Record<Settings["language"], TrayLabels> = {
       monthly: "No máximo 1× por mês",
     },
     quit: "Sair",
+    support: "Apoiar o projeto…",
     neverChecked: "Ainda não verificado",
     potential: (size, time) => `${size} liberáveis · verificado às ${time}`,
     nothingToClean: "Nada relevante para liberar",
@@ -47,6 +49,7 @@ const LABELS: Record<Settings["language"], TrayLabels> = {
       monthly: "At most once a month",
     },
     quit: "Quit",
+    support: "Support the project…",
     neverChecked: "Not checked yet",
     potential: (size, time) => `${size} reclaimable · checked at ${time}`,
     nothingToClean: "Nothing significant to reclaim",
@@ -65,6 +68,7 @@ const LABELS: Record<Settings["language"], TrayLabels> = {
       monthly: "Como máximo 1 vez al mes",
     },
     quit: "Salir",
+    support: "Apoyar el proyecto…",
     neverChecked: "Aún no verificado",
     potential: (size, time) => `${size} liberables · verificado a las ${time}`,
     nothingToClean: "Nada relevante para liberar",

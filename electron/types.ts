@@ -137,6 +137,19 @@ export interface MonitorStatus {
   nextCheckAt: string | null;
 }
 
+/**
+ * State of the in-app support request (docs/10-monetizacao.md, section 4).
+ * Never consulted by the monitor, which only measures.
+ */
+export interface SupportSettings {
+  /** Cleanups that freed something — the card never shows on the first one. */
+  successfulCleanups: number;
+  lastAskedAt: string | null;
+  /** Times the card was shown without the user clicking "Support". */
+  shownWithoutClick: number;
+  dismissedForever: boolean;
+}
+
 export interface Settings {
   projectRoots: string[];
   deadProjectThresholdDays: number;
@@ -147,11 +160,13 @@ export interface Settings {
   /** False until the user answers the first-run invitation to enable the monitor. */
   onboardingCompleted: boolean;
   monitor: MonitorSettings;
+  support: SupportSettings;
 }
 
-/** A settings patch, where `monitor` may carry only the fields being changed. */
-export type SettingsPatch = Partial<Omit<Settings, "monitor">> & {
+/** A settings patch, where `monitor`/`support` may carry only the fields being changed. */
+export type SettingsPatch = Partial<Omit<Settings, "monitor" | "support">> & {
   monitor?: Partial<MonitorSettings>;
+  support?: Partial<SupportSettings>;
 };
 
 /** An application bundle found in /Applications or ~/Applications (macOS). */

@@ -177,5 +177,12 @@
   "apps.stopHelpers": "Encerrar processos em segundo plano",
   "apps.helpersStillRunning": "O processo em segundo plano voltou a rodar ou não pôde ser encerrado. Tente de novo em alguns segundos.",
   "selection.adminDenied": "Alguns itens precisam da senha de administrador, que não foi informada. Eles continuam no lugar.",
-  "selection.someFailed": "{{count}} itens não puderam ser removidos."
+  "selection.someFailed": "{{count}} itens não puderam ser removidos.",
+  "about.donate.page": "Outras formas de apoiar",
+  "support.card.title": "O Limpa Tudo te ajudou?",
+  "support.card.body": "Ele é grátis, sem anúncios e sem coleta de dados. Se quiser, uma contribuição de qualquer valor ajuda a manter o projeto.",
+  "support.card.support": "Apoiar o projeto",
+  "support.card.notNow": "Agora não",
+  "support.card.dontAskAgain": "Não mostrar mais",
+  "cleanupResult.ok": "OK"
 }

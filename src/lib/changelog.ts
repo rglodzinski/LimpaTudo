@@ -7,6 +7,17 @@ export interface ChangelogEntry {
 /** Kept by hand alongside package.json's version — see docs/sessions/. */
 export const CHANGELOG: ChangelogEntry[] = [
   {
+    version: "1.5.0",
+    date: "2026-11-23",
+    highlights: [
+      "Itens que precisam de permissão de administrador agora pedem a senha do jeito nativo do sistema (antes falhavam em silêncio), mostrando antes a lista exata do que será movido para a Lixeira",
+      "Encontra mais espaço: arquivos temporários do usuário, caches do Simulador e relatórios de falha do sistema, novo Teams, caches de atualização do Google e do Edge, logs do Homebrew, versões antigas do Claude Code e do Codex CLI, e outros",
+      "Nomes dos itens traduzidos para inglês e espanhol",
+      "O resultado da limpeza agora aparece numa janela própria, em vez de um alerta do sistema",
+      "Novo: opção discreta de apoiar o projeto — na tela Sobre, no menu e na bandeja, e de vez em quando depois de uma limpeza grande (nunca na primeira, com \"Não mostrar mais\")",
+    ],
+  },
+  {
     version: "1.4.0",
     date: "2026-09-30",
     highlights: [

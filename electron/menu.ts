@@ -1,5 +1,6 @@
 import { Menu, type BrowserWindow, type MenuItemConstructorOptions } from "electron";
 import { menuLabels } from "./menuLabels";
+import { openSupportPage, SUPPORT_ENABLED } from "./support";
 import type { Settings } from "./types";
 
 const APP_NAME = "Limpa Tudo";
@@ -17,6 +18,10 @@ export function buildMenu(language: Settings["language"], getMainWindow: () => B
     getMainWindow()?.webContents.send("show-about");
   }
 
+  const supportItem: MenuItemConstructorOptions[] = SUPPORT_ENABLED
+    ? [{ label: t.support, click: () => openSupportPage(language) }]
+    : [];
+
   const template: MenuItemConstructorOptions[] = [
     ...(isMac
       ? [
@@ -24,6 +29,7 @@ export function buildMenu(language: Settings["language"], getMainWindow: () => B
             label: APP_NAME,
             submenu: [
               { label: t.about, click: showAbout },
+              ...supportItem,
               { type: "separator" as const },
               { role: "services" as const },
               { type: "separator" as const },
@@ -75,7 +81,7 @@ export function buildMenu(language: Settings["language"], getMainWindow: () => B
       ? [
           {
             label: t.help,
-            submenu: [{ label: t.about, click: showAbout }],
+            submenu: [{ label: t.about, click: showAbout }, ...supportItem],
           },
         ]
       : []),

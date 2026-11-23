@@ -107,6 +107,11 @@ npm run lint
 
 Design docs (in Portuguese) are in [`docs/`](docs), starting with [`docs/00-visao-geral.md`](docs/00-visao-geral.md). The website lives in [`site/`](site) (`node site/build.mjs`).
 
+## Support the project
+
+Limpa Tudo is free, with no ads and no telemetry. If it saved you some space,
+you can [support the project](https://glodzinski.dev.br/en/support.html).
+
 ## License
 
 [MIT](LICENSE) © Ricardo Glodzinski

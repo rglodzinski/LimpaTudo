@@ -6,6 +6,8 @@ interface ImportMetaEnv {
   readonly VITE_PIX_KEY?: string;
   readonly VITE_PIX_MERCHANT_NAME?: string;
   readonly VITE_PIX_MERCHANT_CITY?: string;
+  /** "mas" in the Mac App Store build: hides every donation surface. */
+  readonly VITE_DISTRIBUTION?: string;
 }
 
 interface ImportMeta {
