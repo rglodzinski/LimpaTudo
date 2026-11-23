@@ -1,14 +1,21 @@
 name: Pages
 
-# Publica o site institucional (site/) no GitHub Pages.
-# O site é HTML estático puro — a lista de downloads é montada no browser a
-# partir da API de releases, então o site não precisa ser republicado a cada
-# nova versão do app.
+# Gera o site (site/build.mjs → dist-site/) e publica no GitHub Pages.
+# Os links de download, as novidades e o sitemap são gerados no build, em HTML
+# estático, por isso o site é republicado a cada release: o job `release` do
+# build.yml dispara este workflow (eventos de release criados com o
+# GITHUB_TOKEN não disparam outros workflows sozinhos).
+#
+# Endereço público: variável de repositório SITE_URL (ex.:
+# https://limpatudo.glodzinski.dev.br). Sem ela, usa o github.io. Ver
+# docs/09-divulgacao-organica.md.
 on:
   push:
     branches: [main]
     paths:
       - "site/**"
+      - "src/lib/changelog.ts"
+      - "package.json"
       - ".github/workflows/pages.yml"
   workflow_dispatch:
 
@@ -31,9 +38,17 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Build site
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          SITE_URL: ${{ vars.SITE_URL }}
+        run: node site/build.mjs
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: site
+          path: dist-site
       - id: deployment
         uses: actions/deploy-pages@v4

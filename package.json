@@ -2,6 +2,15 @@
   "name": "limpa-tudo",
   "description": "Ajuda a liberar espaço em disco no macOS e Linux com segurança",
   "author": "Ricardo Glodzinski",
+  "license": "MIT",
+  "homepage": "https://rglodzinski.github.io/LimpaTudo/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rglodzinski/LimpaTudo.git"
+  },
+  "bugs": {
+    "url": "https://github.com/rglodzinski/LimpaTudo/issues"
+  },
   "private": true,
   "version": "1.4.0",
   "type": "module",
@@ -73,7 +82,11 @@
         "tar.gz"
       ],
       "category": "Utility",
-      "maintainer": "Ricardo Glodzinski <rglodzinski@gmail.com>"
+      "maintainer": "Ricardo Glodzinski <rglodzinski@gmail.com>",
+      "synopsis": "Safe disk cleaner for dev caches, system junk and app caches"
+    },
+    "snap": {
+      "summary": "Free up disk space safely: dev caches, logs and app caches, moved to Trash"
     }
   },
   "dependencies": {

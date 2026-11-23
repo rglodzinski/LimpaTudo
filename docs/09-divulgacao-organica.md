@@ -4,6 +4,72 @@ Plano para o app ser encontrado sem anúncios pagos. Levantado em 2026-11-23
 a partir do repositório e de pesquisa na web; nada foi publicado ainda.
 Revisar as comparações com concorrentes a cada trimestre.
 
+## Estado da implementação
+
+Atualizado em 2026-11-23. O resto do documento é o plano original.
+
+**Feito no repositório**
+
+- `LICENSE` (MIT); `package.json` com `license`, `homepage`, `repository`,
+  resumo do `.deb` e do snap.
+- README em inglês (`README.md`) com badges, downloads, princípios de
+  segurança, tabela do que encontra, comparação e FAQ; versão em pt-BR em
+  `README.pt-BR.md`.
+- Descrição, homepage e topics do repositório configurados no GitHub.
+- Social preview 1280×640 em `docs/assets/social-preview.png` (gerado de
+  `site/art/social-preview.svg`). **Upload manual**: Settings › General ›
+  Social preview — a API do GitHub não aceita esse upload.
+- Site gerado (`site/build.mjs` → `dist-site/`), publicado pelo `pages.yml`:
+  - pt-BR em `/`, inglês em `/en/`, espanhol em `/es/`, com hreflang
+    recíproco e `x-default` → `/en/`;
+  - canonical, `og:image` 1200×630 (`site/static/og.png`), Twitter card,
+    JSON-LD `SoftwareApplication` + `FAQPage` na home e `TechArticle` nos guias;
+  - `/download/` com os links da última release em HTML estático (sem
+    "Carregando…"), `/changelog/` gerado do `src/lib/changelog.ts`,
+    `sitemap.xml` com alternativas de idioma, `robots.txt` e `404.html`;
+  - o `build.yml` dispara o `pages.yml` depois de cada release, para os
+    links de download acompanharem a versão nova.
+- Artigos 1 (Xcode, pt-BR + EN), 2 (Docker, pt-BR + EN) e 3 (WhatsApp/APFS,
+  pt-BR) em `site/content/guides/`. Os guias em espanhol ficam para a fase 2.
+- Homebrew: cask em `packaging/homebrew/` (passa no `brew style`). AUR:
+  `packaging/aur/PKGBUILD`. `packaging/update-packages.mjs` atualiza versão e
+  sha256 dos dois a partir da release.
+- Snap Store: passo de upload no `build.yml`, pulado enquanto o secret
+  `SNAPCRAFT_STORE_CREDENTIALS` não existir.
+- Flathub: `.desktop` e metainfo em `flatpak/`, ligados ao manifesto, que
+  agora aponta para o `.tar.gz` real da v1.4.0. Ainda não testado.
+
+**Domínio:** decidido usar o subdomínio `limpatudo.glodzinski.dev.br` (o
+`glodzinski.dev.br` é o site que divulga os apps do autor, servido pelo
+repositório `glodzinski-site` no GitHub Pages). Para ativar:
+
+1. No Registro.br (DNS de `glodzinski.dev.br`), criar o registro
+   `CNAME limpatudo → rglodzinski.github.io.`
+2. Esperar o `dig +short limpatudo.glodzinski.dev.br` responder.
+3. Em Settings › Pages do repositório, preencher o custom domain
+   `limpatudo.glodzinski.dev.br` e marcar "Enforce HTTPS".
+4. Criar a variável de repositório `SITE_URL=https://limpatudo.glodzinski.dev.br`
+   (Settings › Secrets and variables › Actions › Variables) e rodar o
+   `pages.yml`. Canonical, hreflang, sitemap e links internos passam a usar
+   o subdomínio; o GitHub redireciona o endereço `github.io` antigo.
+5. Trocar os links do README e a homepage do repositório.
+
+Os passos 1 a 3 têm de vir antes do 4: se o site disser que está no
+subdomínio antes de o DNS existir, o canonical aponta para um endereço que
+não responde. Com o subdomínio o `robots.txt` passa a ficar na raiz e a valer.
+
+**Pendente (fora do repositório ou depende do autor)**
+
+- GIF de 10 s e screenshots do app para o README, o site e o metainfo do Flathub.
+- DNS e custom domain (acima); depois, Google Search Console e Bing Webmaster.
+- Criar o tap `rglodzinski/homebrew-tap`, publicar no AUR, conta e secret do
+  Snapcraft, testar o Flatpak. Ao ativar cada canal, ligar a chave
+  correspondente em `CHANNELS` (`site/config.mjs`) para o site mostrar o comando.
+- Analytics sem cookies (GoatCounter ou Cloudflare Web Analytics).
+- Diretórios, awesome-lists, lançamentos em comunidades e vídeos (seções 4.7
+  a 4.10, conforme o cronograma da seção 6).
+- Artigos 4 a 11.
+
 ## 1. Diagnóstico (2026-11-23)
 
 **O que já existe**

@@ -32,8 +32,15 @@ modules:
       - mkdir -p /app/bin
       - ln -s /app/limpa-tudo/limpa-tudo /app/bin/limpa-tudo
       - install -Dm644 build/icon.png /app/share/icons/hicolor/512x512/apps/com.rglodzinski.limpatudo.png
+      - install -Dm644 com.rglodzinski.limpatudo.desktop /app/share/applications/com.rglodzinski.limpatudo.desktop
+      - install -Dm644 com.rglodzinski.limpatudo.metainfo.xml /app/share/metainfo/com.rglodzinski.limpatudo.metainfo.xml
     sources:
-      # Replace with the real release artifact once published:
+      - type: file
+        path: com.rglodzinski.limpatudo.desktop
+      - type: file
+        path: com.rglodzinski.limpatudo.metainfo.xml
+      # tar.gz da release (atualizar url + sha256 a cada versão; o sha256 está
+      # no campo `digest` da API de releases — ver packaging/update-packages.mjs).
       - type: archive
-        url: https://github.com/rglodzinski/LimpaTudo/releases/download/vX.Y.Z/limpa-tudo-X.Y.Z-linux-x64.tar.gz
-        sha256: REPLACE_ME
+        url: https://github.com/rglodzinski/LimpaTudo/releases/download/v1.4.0/Limpa.Tudo-1.4.0-x64.tar.gz
+        sha256: cb056723c8bc114bc6fb05e2da743c53b309f69bcac24136068175ece9875a7b

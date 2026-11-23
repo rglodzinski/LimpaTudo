@@ -154,12 +154,14 @@ testado** (ver comentários no arquivo). Falta:
 
 ### 5. Outras lojas Linux (menores, opcionais)
 
-- **AUR (Arch)**: não empacotado ainda — precisaria de um `PKGBUILD` separado
-  (mantido pela comunidade Arch tipicamente, não pelo autor).
-- **Homebrew (macOS, fora da App Store)**: caminho recomendado para macOS
-  sem as limitações da App Store — precisaria de um "cask" no
-  `homebrew/homebrew-cask` ou um tap próprio (`rglodzinski/homebrew-limpatudo`),
-  apontando para o `.dmg`/`.zip` de cada release. Não iniciado.
+- **AUR (Arch)**: `PKGBUILD` do `limpa-tudo-bin` pronto em
+  `packaging/aur/` (extrai o `.deb` da release); falta testar numa máquina
+  Arch e publicar — ver `packaging/README.md`.
+- **Homebrew (macOS, fora da App Store)**: cask pronto em
+  `packaging/homebrew/Casks/limpa-tudo.rb` (passa no `brew style`), para um
+  tap próprio `rglodzinski/homebrew-tap`; falta criar o repositório do tap.
+  `node packaging/update-packages.mjs` atualiza versão e sha256 do cask e do
+  `PKGBUILD` a cada release.
 
 ### 6. Assinatura de código no Linux
 
@@ -178,11 +180,12 @@ não existem ainda). Sem ação necessária por enquanto.
    distribuição fica só fora dela. **Decisão até agora: não implementar
    ainda** — distribuição via site/GitHub Releases (já funciona 100%) é o
    caminho atual.
-3. 🟡 Criar conta no Snapcraft e adicionar o step de publish ao workflow
-   (o `.snap` já é gerado, só falta publicar na loja).
+3. 🟡 Criar conta no Snapcraft e o secret `SNAPCRAFT_STORE_CREDENTIALS`
+   (o step de publish já está no `build.yml` e é pulado enquanto o secret
+   não existir).
 4. 🟢 Testar e depois submeter o manifesto Flatpak ao Flathub.
-5. 🟢 (Opcional) Homebrew cask / tap para instalação fácil no macOS fora da
-   App Store.
+5. 🟢 Criar o tap `rglodzinski/homebrew-tap` com o cask de
+   `packaging/homebrew/` e publicar o `PKGBUILD` no AUR.
 
 ## Nota sobre a Mac App Store (contexto da decisão)
 

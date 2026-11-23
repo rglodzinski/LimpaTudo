@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0B1120"/><stop offset="1" stop-color="#132045"/></linearGradient>
+    <linearGradient id="lt" x1="4" y1="8" x2="60" y2="56" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#60A5FA"/><stop offset="1" stop-color="#2563EB"/></linearGradient>
+  </defs>
+  <rect width="1280" height="640" fill="url(#bg)"/>
+  <g transform="translate(96 120) scale(2.5)">
+    <rect x="2" y="2" width="60" height="60" rx="16" fill="url(#lt)"/>
+    <path d="M14 40C22 40 24 26 34 24C40.6667 22.6667 44.3333 24.3333 45 27" stroke="white" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+    <circle cx="47" cy="19" r="3" fill="white"/><circle cx="52" cy="27" r="1.8" fill="white" fill-opacity="0.8"/>
+  </g>
+  <g font-family="Helvetica Neue, Helvetica, Arial, sans-serif" fill="#F1F5F9">
+    <text x="96" y="360" font-size="84" font-weight="700" letter-spacing="-2">Limpa Tudo</text>
+    <text x="96" y="424" font-size="38" fill="#CBD5E1">Safe, open-source disk cleaner for Mac &amp; Linux</text>
+    <text x="96" y="478" font-size="28" fill="#94A3B8">node_modules · Xcode · Docker · app caches — moved to Trash, never auto-deleted</text>
+  </g>
+  <g font-family="Helvetica Neue, Helvetica, Arial, sans-serif" font-size="24" font-weight="600">
+    <circle cx="950" cy="208" r="9" fill="#22C55E"/><text x="970" y="216" fill="#CBD5E1">low risk</text>
+    <circle cx="950" cy="248" r="9" fill="#F59E0B"/><text x="970" y="256" fill="#CBD5E1">confirm first</text>
+    <circle cx="950" cy="288" r="9" fill="#EF4444"/><text x="970" y="296" fill="#CBD5E1">advanced only</text>
+  </g>
+</svg>

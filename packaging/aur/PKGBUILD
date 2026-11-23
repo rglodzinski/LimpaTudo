@@ -1,0 +1,30 @@
+# Maintainer: Ricardo Glodzinski
+# Pacote limpa-tudo-bin para o AUR, a partir do .deb da release.
+# pkgver e sha256sums são atualizados por `node packaging/update-packages.mjs`;
+# depois rodar `makepkg --printsrcinfo > .SRCINFO` numa máquina Arch.
+pkgname=limpa-tudo-bin
+pkgver=1.4.0
+pkgrel=1
+pkgdesc="Safe disk cleaner for dev caches, system junk and app caches (moves to Trash, never auto-deletes)"
+arch=('x86_64')
+url="https://github.com/rglodzinski/LimpaTudo"
+license=('MIT')
+depends=('gtk3' 'nss' 'libnotify' 'libxss' 'libxtst' 'xdg-utils' 'at-spi2-core' 'util-linux-libs' 'libsecret' 'alsa-lib')
+optdepends=('libappindicator-gtk3: ícone na bandeja em alguns ambientes')
+provides=('limpa-tudo')
+conflicts=('limpa-tudo')
+options=('!strip' '!debug')
+source=("limpa-tudo-${pkgver}.deb::https://github.com/rglodzinski/LimpaTudo/releases/download/v${pkgver}/Limpa.Tudo-${pkgver}-amd64.deb"
+        "LICENSE")
+noextract=("limpa-tudo-${pkgver}.deb")
+sha256sums=('7b47dbacd159179bfd185b95e246a14defb05889c906d33d4f7e149afe315fb7'
+            'SKIP')
+
+package() {
+  bsdtar -xOf "limpa-tudo-${pkgver}.deb" data.tar.xz | bsdtar -xf - -C "${pkgdir}"
+  rm -rf "${pkgdir}/usr/share/doc"
+  install -dm755 "${pkgdir}/usr/bin"
+  ln -s "/opt/Limpa Tudo/limpa-tudo" "${pkgdir}/usr/bin/limpa-tudo"
+  chmod 4755 "${pkgdir}/opt/Limpa Tudo/chrome-sandbox"
+  install -Dm644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
+}

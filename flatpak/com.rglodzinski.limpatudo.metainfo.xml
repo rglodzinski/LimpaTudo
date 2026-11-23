@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Metainfo para o Flathub — ver docs/09-divulgacao-organica.md (seção 4.5).
+     Antes de submeter: trocar as screenshots por capturas reais (claro e escuro)
+     e validar com o flatpak-builder-lint (modo appstream). -->
+<component type="desktop-application">
+  <id>com.rglodzinski.limpatudo</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>MIT</project_license>
+  <name>Limpa Tudo</name>
+  <summary>Free up disk space safely</summary>
+  <summary xml:lang="pt-BR">Libere espaço em disco com segurança</summary>
+  <summary xml:lang="es">Libera espacio en disco con seguridad</summary>
+  <developer id="io.github.rglodzinski">
+    <name>Ricardo Glodzinski</name>
+  </developer>
+  <description>
+    <p>
+      Limpa Tudo finds developer caches (node_modules, Python venvs, npm, pip, Gradle,
+      Maven, Cargo, Android emulators), system junk (logs, temp files, thumbnails) and
+      the caches of common apps (Chrome, Firefox, Slack, Discord, VS Code), shows the
+      full path and size of every item and only moves what you pick to the Trash.
+    </p>
+    <p>Safety rules built in:</p>
+    <ul>
+      <li>Never deletes anything on its own: scan and removal are separate steps</li>
+      <li>Moves to the Trash by default; permanent deletion is an advanced opt-in</li>
+      <li>Only looks at a curated list of known cache paths</li>
+      <li>Checks whether an app is running before touching its cache</li>
+      <li>Every item is labeled low, medium or high risk</li>
+    </ul>
+    <p xml:lang="pt-BR">
+      O Limpa Tudo encontra caches de desenvolvimento, dados de sistema e cache de apps,
+      mostra o caminho e o tamanho de cada item e só manda para a Lixeira o que você escolher.
+    </p>
+  </description>
+  <launchable type="desktop-id">com.rglodzinski.limpatudo.desktop</launchable>
+  <url type="homepage">https://github.com/rglodzinski/LimpaTudo</url>
+  <url type="bugtracker">https://github.com/rglodzinski/LimpaTudo/issues</url>
+  <url type="vcs-browser">https://github.com/rglodzinski/LimpaTudo</url>
+  <branding>
+    <color type="primary" scheme_preference="light">#DBEAFE</color>
+    <color type="primary" scheme_preference="dark">#1E3A8A</color>
+  </branding>
+  <!-- TODO: screenshots reais (PNG 16:9, claro e escuro) em uma URL estável, ex.:
+  <screenshots>
+    <screenshot type="default">
+      <caption>Scan results with risk levels</caption>
+      <image>https://raw.githubusercontent.com/rglodzinski/LimpaTudo/main/docs/assets/screenshot-scan-light.png</image>
+    </screenshot>
+  </screenshots>
+  -->
+  <content_rating type="oars-1.1" />
+  <categories>
+    <category>Utility</category>
+    <category>System</category>
+  </categories>
+  <keywords>
+    <keyword>disk</keyword>
+    <keyword>cleaner</keyword>
+    <keyword>cache</keyword>
+    <keyword>storage</keyword>
+    <keyword>node_modules</keyword>
+  </keywords>
+  <releases>
+    <release version="1.4.0" date="2026-09-30" />
+    <release version="1.3.0" date="2026-09-29" />
+  </releases>
+</component>
