@@ -60,7 +60,7 @@ Atualizado em 2026-11-23. O resto do documento é o plano original.
   extensão e a API sem login (403); comentários são acompanhados à mão.
 - **AlternativeTo:** app submetido em 2026-11-23 (fila grátis, pode demorar
   meses; não pagar a revisão prioritária). Depois de aprovado, sugerir as
-  alternativas da seção 7 e acrescentar Homebrew/Flathub na página.
+  alternativas da seção 7 e acrescentar o Homebrew na página.
 
 **Pendente**
 
@@ -70,11 +70,12 @@ Atualizado em 2026-11-23. O resto do documento é o plano original.
   tentar de novo quando reabrir, avisos em aur-general e nas notícias do
   Arch). Ao ativar o canal, ligar a chave em `CHANNELS`
   (`site/config.mjs`).
-- **Flathub:** submissão manual pelo autor. A política de IA do Flathub
-  proíbe manifesto gerado ou assistido por IA (o de `flatpak/` só serve para o
-  CI) e PR aberto ou redigido por agente; o restante do material gerado com IA
-  precisa ser declarado. Ver `packaging/README.md`. Depois de aceito, publicar
-  o token de verificação do domínio no `glodzinski-site`.
+- **Flathub: adiado** (decisão de 2026-11-23). A política de IA do Flathub
+  proíbe manifesto gerado ou assistido por IA e PR aberto ou redigido por
+  agente, e exige declarar o restante do material gerado com IA; como boa
+  parte do projeto foi feita com IA, a submissão fica fora do plano por
+  enquanto. No Linux o app segue pela Snap Store, AppImage, `.deb` e `.rpm`.
+  Detalhes em `packaging/README.md`.
 - **OpenAlternative:** exige 250 estrelas para repositórios com menos de 6
   meses (ou 50 depois disso) — submeter quando atingir.
 - **Lançamentos e diretórios**, um por vez e nas semanas do cronograma
@@ -213,7 +214,7 @@ tiver autoridade.
    - Título: "Limpa Tudo – Safe Disk Cleaner".
    - Resumo: "Free up disk space safely: dev caches, logs and app caches,
      moved to Trash". Descrição em EN e pt-BR, 5 screenshots.
-5. **Flathub (esforço médio)**
+5. **Flathub (adiado em 2026-11-23 — ver "Estado da implementação")**
    - Testar o manifesto; criar o metainfo com screenshots (claro e escuro) e
      brand colors ([requisitos](https://docs.flathub.org/docs/for-app-authors/requirements),
      [qualidade](https://docs.flathub.org/docs/for-app-authors/metainfo-guidelines/quality-guidelines)).
@@ -291,7 +292,6 @@ Tudo", com o caminho e o risco de cada item tirados do `catalog/catalog.json`.
   - Show HN e r/macapps em semanas diferentes; Product Hunt.
   - PRs para as awesome-lists.
   - Artigos 4 a 7; site em espanhol.
-  - Testar o Flatpak e submeter ao Flathub.
   - 2 ou 3 vídeos curtos.
 - **Mês 3**
   - Artigos 8 a 11.

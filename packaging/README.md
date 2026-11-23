@@ -54,7 +54,10 @@ Publicado (https://snapcraft.io/limpa-tudo). O `build.yml` publica o `.snap` num
 reservar o nome e gerar o secret: `docs/06-distribuicao.md`, seção 3. Depois
 ligar `CHANNELS.snapStore`.
 
-## Flathub
+## Flathub (adiado)
+
+Submissão adiada em 2026-11-23 por causa da política abaixo; o manifesto
+continua só como teste de build no CI.
 
 > **Importante — política de IA do Flathub**
 > ([Generative AI policy](https://docs.flathub.org/docs/for-app-authors/requirements#generative-ai-policy)):

@@ -183,7 +183,7 @@ não existem ainda). Sem ação necessária por enquanto.
 3. 🟡 Criar conta no Snapcraft e o secret `SNAPCRAFT_STORE_CREDENTIALS`
    (o step de publish já está no `build.yml` e é pulado enquanto o secret
    não existir).
-4. 🟢 Testar e depois submeter o manifesto Flatpak ao Flathub.
+4. ⏸️ Flathub adiado (política de IA do Flathub; ver `packaging/README.md`).
 5. 🟢 Criar o tap `rglodzinski/homebrew-tap` com o cask de
    `packaging/homebrew/` e publicar o `PKGBUILD` no AUR.
 
