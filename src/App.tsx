@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { AnimatePresence, motion } from "framer-motion";
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
@@ -56,6 +56,21 @@ const CHART_COLORS = ["#f59e0b", "#8b5cf6", "#ec4899", "#10b981", "#3b82f6", "#f
 
 function App() {
   const { t, i18n } = useTranslation();
+  /**
+   * Item name in the UI language: the catalog only stores pt-BR names, so
+   * en/es come from the "catalog.<entryId>" keys in the locale files. Catch-all
+   * entries keep their ": <folder>" suffix; project items have no key and keep
+   * their language-neutral name ("node_modules — app").
+   */
+  const itemName = useCallback(
+    (item: ScanItem): string => {
+      const key = `catalog.${item.entryId}`;
+      if (!i18n.exists(key)) return item.displayName;
+      const suffix = `: ${item.path.split("/").filter(Boolean).pop() ?? ""}`;
+      return t(key) + (item.displayName.endsWith(suffix) ? suffix : "");
+    },
+    [t, i18n],
+  );
   const { theme, toggleTheme } = useTheme();
   const [items, setItems] = useState<ScanItem[]>([]);
   const [summary, setSummary] = useState<ScanSummary | null>(null);
@@ -215,9 +230,9 @@ function App() {
     // Matching the path too is what makes searching for a project or client
     // name ("rhnumbers", "LuxB") work, since only the path carries it.
     return allowed.filter((item) =>
-      `${item.displayName} ${item.path}`.toLowerCase().includes(term),
+      `${itemName(item)} ${item.displayName} ${item.path}`.toLowerCase().includes(term),
     );
-  }, [items, settings?.advancedModeEnabled, query]);
+  }, [items, settings?.advancedModeEnabled, query, itemName]);
 
   const allSelected = useMemo(() => {
     const selectable = visibleItems.filter((i) => !i.locked);
@@ -244,7 +259,7 @@ function App() {
   }
 
   function groupLabel(key: string, sample: ScanItem): string {
-    if (groupBy === "app") return sample.displayName;
+    if (groupBy === "app") return itemName(sample);
     if (groupBy === "directory") return shortenHome(key);
     if (groupBy === "project" || groupBy === "workspace") {
       return key === NO_PROJECT_KEY ? t("groupBy.noProject") : shortenHome(key);
@@ -275,7 +290,7 @@ function App() {
     );
     return new Map(entries);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [visibleItems, groupBy, sortBy, t]);
+  }, [visibleItems, groupBy, sortBy, t, itemName]);
 
   function totalBytesOf(list: ScanItem[]): number {
     return list.reduce((sum, item) => sum + item.sizeBytes, 0);
@@ -285,7 +300,7 @@ function App() {
     return [...list].sort((a, b) =>
       sortBy === "size"
         ? b.sizeBytes - a.sizeBytes
-        : a.displayName.localeCompare(b.displayName),
+        : itemName(a).localeCompare(itemName(b)),
     );
   }
 
@@ -326,7 +341,10 @@ function App() {
       ...new Set(
         report.entries
           .filter((e) => e.error === "app-running")
-          .map((e) => toRemove.find((i) => i.id === e.itemId)?.displayName ?? e.path),
+          .map((e) => {
+            const it = toRemove.find((i) => i.id === e.itemId);
+            return it ? itemName(it) : e.path;
+          }),
       ),
     ];
     const failed = report.entries.filter((e) => !e.ok && e.error !== "app-running");
@@ -581,7 +599,7 @@ function App() {
                         className="flex items-center gap-3 border-b border-border px-4 py-3 last:border-b-0 opacity-70"
                       >
                         <Lock size={14} className="shrink-0 text-text-muted" />
-                        <span className="font-medium">{item.displayName}</span>
+                        <span className="font-medium">{itemName(item)}</span>
                         <span className="flex-1 truncate text-xs text-text-muted">{item.path}</span>
                         <button
                           onClick={() => retryElevated(item)}
@@ -607,7 +625,7 @@ function App() {
                           className="h-4 w-4 accent-accent"
                         />
                         <span className={`h-2 w-2 shrink-0 rounded-full ${RISK_DOT[item.risk]}`} />
-                        <span className="font-medium">{item.displayName}</span>
+                        <span className="font-medium">{itemName(item)}</span>
                         {item.stale && (
                           <span className="rounded-full bg-accent-soft px-2 py-0.5 text-[10px] font-medium text-accent">
                             {t("stale.label", { days: settings?.deadProjectThresholdDays ?? 90 })}

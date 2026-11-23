@@ -59,10 +59,11 @@ servido pelo repositório `glodzinski-site`). Como foi feito:
   (capturadas do app real, rodando com uma pasta pessoal de exemplo em
   `HOME=/Users/Shared/ana`, pela porta de depuração do Electron) e foram usadas
   no README, na home do site e no metainfo do Flathub.
-- **Bug encontrado nas capturas:** com a interface em inglês ou espanhol, os
-  nomes dos itens do catálogo continuam em português (`displayName` do
-  `catalog/catalog.json` só existe em pt-BR). Traduzir antes de divulgar em
-  inglês (Show HN, r/macapps, Product Hunt).
+- **Corrigido depois das capturas:** com a interface em inglês ou espanhol, os
+  nomes dos itens do catálogo saíam em português. Agora vêm das chaves
+  `catalog.<id>` em `src/i18n/locales/` (o `catalog.json` continua só em pt-BR,
+  que é o padrão). Refazer a captura `scan-en` depois da próxima release, para
+  mostrar os nomes em inglês.
 - Bing Webmaster (pode importar do Search Console).
 - Publicar no AUR (conta + chave SSH), conta e secret do Snapcraft, testar
   o Flatpak. Ao ativar cada canal, ligar a chave
