@@ -1,0 +1,31 @@
+name: Flatpak
+
+# Testa o manifesto do Flathub (flatpak/) num Linux x86_64 de verdade: build,
+# instalação e flatpak-builder-lint. Não publica nada. Rodar à mão ou quando
+# o manifesto mudar. Ver docs/06-distribuicao.md e packaging/README.md.
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ["flatpak/**", ".github/workflows/flatpak.yml"]
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    container:
+      image: ghcr.io/flathub-infra/flatpak-github-actions:freedesktop-25.08
+      options: --privileged
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        uses: flathub-infra/flatpak-github-actions/flatpak-builder@master
+        with:
+          bundle: limpa-tudo.flatpak
+          manifest-path: flatpak/com.rglodzinski.limpatudo.yml
+          cache-key: flatpak-builder-${{ github.sha }}
+      - name: Lint
+        run: |
+          flatpak install -y --noninteractive flathub org.flatpak.Builder
+          flatpak run --command=flatpak-builder-lint org.flatpak.Builder manifest flatpak/com.rglodzinski.limpatudo.yml || true
+          flatpak run --command=flatpak-builder-lint org.flatpak.Builder appstream flatpak/com.rglodzinski.limpatudo.metainfo.xml || true
+          flatpak run --command=flatpak-builder-lint org.flatpak.Builder repo repo || true
