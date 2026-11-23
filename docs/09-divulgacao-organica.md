@@ -8,68 +8,62 @@ Revisar as comparações com concorrentes a cada trimestre.
 
 Atualizado em 2026-11-23. O resto do documento é o plano original.
 
-**Feito no repositório**
+**Feito**
 
-- `LICENSE` (MIT); `package.json` com `license`, `homepage`, `repository`,
-  resumo do `.deb` e do snap.
-- README em inglês (`README.md`) com badges, downloads, princípios de
-  segurança, tabela do que encontra, comparação e FAQ; versão em pt-BR em
-  `README.pt-BR.md`.
-- Descrição, homepage e topics do repositório configurados no GitHub.
-- Social preview 1280×640 em `docs/assets/social-preview.png` (gerado de
-  `site/art/social-preview.svg`). **Upload manual**: Settings › General ›
-  Social preview — a API do GitHub não aceita esse upload.
-- Site gerado (`site/build.mjs` → `dist-site/`), publicado pelo `pages.yml`:
-  - pt-BR em `/`, inglês em `/en/`, espanhol em `/es/`, com hreflang
-    recíproco e `x-default` → `/en/`;
-  - canonical, `og:image` 1200×630 (`site/static/og.png`), Twitter card,
-    JSON-LD `SoftwareApplication` + `FAQPage` na home e `TechArticle` nos guias;
-  - `/download/` com os links da última release em HTML estático (sem
-    "Carregando…"), `/changelog/` gerado do `src/lib/changelog.ts`,
-    `sitemap.xml` com alternativas de idioma, `robots.txt` e `404.html`;
-  - o `build.yml` dispara o `pages.yml` depois de cada release, para os
-    links de download acompanharem a versão nova.
-- Artigos 1 (Xcode, pt-BR + EN), 2 (Docker, pt-BR + EN) e 3 (WhatsApp/APFS,
-  pt-BR) em `site/content/guides/`. Os guias em espanhol ficam para a fase 2.
-- Homebrew: tap [`rglodzinski/homebrew-tap`](https://github.com/rglodzinski/homebrew-tap)
-  no ar (audit online limpo); o site e o README mostram o comando, que inclui
-  o `brew trust` exigido pelo Homebrew 7. AUR: `packaging/aur/PKGBUILD`,
-  testado num container Arch (falta publicar). `packaging/update-packages.mjs` atualiza versão e
-  sha256 dos dois a partir da release.
-- Snap Store: passo de upload no `build.yml`, pulado enquanto o secret
-  `SNAPCRAFT_STORE_CREDENTIALS` não existir.
-- Flathub: `.desktop` e metainfo em `flatpak/`, ligados ao manifesto, que
-  agora aponta para o `.tar.gz` real da v1.4.0. Ainda não testado.
-
-**Domínio:** o site está em `https://limpatudo.glodzinski.dev.br` desde
-2026-11-23 (o `glodzinski.dev.br` é o site que divulga os apps do autor,
-servido pelo repositório `glodzinski-site`). Como foi feito:
-
-- Registro.br (DNS de `glodzinski.dev.br`): `CNAME limpatudo → rglodzinski.github.io.`
-- Custom domain do GitHub Pages: `limpatudo.glodzinski.dev.br`, com HTTPS
-  forçado; o endereço `github.io` antigo redireciona com 301.
-- Variável de repositório `SITE_URL=https://limpatudo.glodzinski.dev.br`, lida
-  pelo `pages.yml` (o padrão de `site/config.mjs` é o mesmo valor).
-- Search Console: a propriedade de domínio `glodzinski.dev.br` (já verificada
-  por TXT no DNS) cobre o subdomínio; o sitemap foi enviado nela.
-
-**Pendente (fora do repositório ou depende do autor)**
-
-- Screenshots e GIF (`docs/assets/screenshots/`, incluindo `demo-en.gif`, ~7 s):
+- **Base do GitHub:** `LICENSE` (MIT); `package.json` com `license`,
+  `homepage`, `repository`; descrição, homepage e topics do repositório;
+  social preview (`docs/assets/social-preview.png`, enviado pela interface do
+  GitHub). README em inglês com GIF, downloads, princípios de segurança,
+  comparação e FAQ; versão em `README.pt-BR.md`.
+- **Screenshots e GIF** em `docs/assets/screenshots/` (`demo-en.gif`, ~7 s):
   capturados do app real rodando com uma pasta pessoal de exemplo
-  (`HOME=/Users/Shared/ana`), pela porta de depuração do Electron. Usados no
-  README, na home do site e no metainfo do Flathub.
-- Corrigido nas capturas: os nomes dos itens do catálogo saíam em português com
-  a interface em inglês/espanhol; agora vêm das chaves `catalog.<id>` em
-  `src/i18n/locales/`.
-- Bing Webmaster (pode importar do Search Console).
-- Publicar no AUR (conta + chave SSH), conta e secret do Snapcraft, testar
-  o Flatpak. Ao ativar cada canal, ligar a chave
-  correspondente em `CHANNELS` (`site/config.mjs`) para o site mostrar o comando.
-- Analytics sem cookies (GoatCounter ou Cloudflare Web Analytics).
-- Diretórios, awesome-lists, lançamentos em comunidades e vídeos (seções 4.7
-  a 4.10, conforme o cronograma da seção 6).
-- Artigos 4 a 11.
+  (`HOME=/Users/Shared/ana`), pela porta de depuração do Electron.
+- **Site** em `https://limpatudo.glodzinski.dev.br`, gerado por
+  `site/build.mjs` e publicado pelo `pages.yml`:
+  - pt-BR em `/`, inglês em `/en/`, espanhol em `/es/`, com hreflang e
+    `x-default` → `/en/`; na primeira visita segue o idioma do navegador
+    (fora robôs de busca);
+  - canonical, `og:image`, Twitter card, JSON-LD (`SoftwareApplication`,
+    `FAQPage`, `TechArticle`), `sitemap.xml`, `robots.txt`, `404.html`;
+  - `/download/` em HTML estático, `/changelog/` gerado do `changelog.ts`; o
+    `build.yml` republica o site a cada release.
+  - Domínio: `CNAME limpatudo → rglodzinski.github.io.` no Registro.br, custom
+    domain com HTTPS forçado no Pages (o `github.io` antigo redireciona com
+    301) e variável de repositório `SITE_URL`.
+- **Busca:** Google Search Console (a propriedade de domínio
+  `glodzinski.dev.br` já cobre o subdomínio) e Bing Webmaster (verificado por
+  meta tag), com o sitemap enviado nos dois.
+- **Conteúdo:** os 11 artigos da seção 5 em `site/content/guides/` — pt-BR e
+  EN, exceto o 7 e o 10 (só EN, como planejado). Comparações com concorrentes
+  conferidas em 2026-11-23. Guias em espanhol ficam para a fase 2.
+- **Homebrew:** tap [`rglodzinski/homebrew-tap`](https://github.com/rglodzinski/homebrew-tap)
+  no ar (`brew audit --cask --online` limpo); o comando no site e no README
+  inclui o `brew trust` que o Homebrew 7 exige.
+- **AUR:** `packaging/aur/PKGBUILD` testado num container Arch.
+- **Snap Store:** upload no `build.yml`, pulado enquanto o secret
+  `SNAPCRAFT_STORE_CREDENTIALS` não existir.
+- **Flathub:** manifesto `flatpak/br.dev.glodzinski.LimpaTudo.yml` (runtime
+  26.08), `.desktop` e metainfo com screenshots; o workflow `flatpak.yml`
+  compila, instala e roda o `flatpak-builder-lint` num Linux x86_64.
+- **App:** nomes dos itens do catálogo traduzidos para inglês e espanhol
+  (chaves `catalog.<id>` em `src/i18n/locales/`).
+- **Kit de lançamento** com os textos de cada canal:
+  [`11-kit-de-lancamento.md`](./11-kit-de-lancamento.md).
+
+**Pendente**
+
+- **Contas do autor:** AUR (publicar `limpa-tudo-bin`, chave SSH em
+  `~/.ssh/aur.pub`) e Snapcraft (registrar `limpa-tudo` e criar o secret com
+  `snapcraft export-login`). Ao ativar cada canal, ligar a chave em `CHANNELS`
+  (`site/config.mjs`).
+- **Flathub:** abrir o PR em `flathub/flathub` e, depois de aceito, publicar o
+  token de verificação do domínio no `glodzinski-site`.
+- **Lançamentos e diretórios**, um por vez e nas semanas do cronograma
+  (seção 6), com os textos do kit. Awesome-lists só depois de algumas dezenas
+  de estrelas.
+- **Analytics** sem cookies (GoatCounter ou Cloudflare Web Analytics) — exige
+  conta.
+- **Vídeos curtos** (seção 4.10).
 
 ## 1. Diagnóstico (2026-11-23)
 
