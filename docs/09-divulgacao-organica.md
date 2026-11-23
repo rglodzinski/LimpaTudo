@@ -35,7 +35,7 @@ Atualizado em 2026-11-23. O resto do documento é o plano original.
   meta tag), com o sitemap enviado nos dois.
 - **Conteúdo:** os 11 artigos da seção 5 em `site/content/guides/` — pt-BR e
   EN, exceto o 7 e o 10 (só EN, como planejado). Comparações com concorrentes
-  conferidas em 2026-11-23. Guias em espanhol ficam para a fase 2.
+  conferidas em 2026-11-23. Guias em espanhol publicados em 2026-11-23 (os 11 artigos, em `/es/guias/`, espanhol neutro latino-americano).
 - **Homebrew:** tap [`rglodzinski/homebrew-tap`](https://github.com/rglodzinski/homebrew-tap)
   no ar (`brew audit --cask --online` limpo); o comando no site e no README
   inclui o `brew trust` que o Homebrew 7 exige.
