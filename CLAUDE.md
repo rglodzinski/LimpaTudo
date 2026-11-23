@@ -53,6 +53,8 @@ safety rules, and architecture:
   website/SEO, keywords, stores, communities, content calendar.
 - `docs/10-monetizacao.md` — monetization plan: voluntary donations (Pix,
   GitHub Sponsors, Ko-fi), why no ads, App Store rules, where to ask in the app.
+- `docs/11-kit-de-lancamento.md` — ready-to-post texts for each launch
+  channel (TabNews, Reddit, Show HN, Product Hunt, directories, awesome-lists).
 - `docs/sessions/` — dated logs of planning sessions; check the most recent one
   for the latest decisions before continuing work.
 
