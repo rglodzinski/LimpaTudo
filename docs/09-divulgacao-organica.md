@@ -50,6 +50,9 @@ Atualizado em 2026-11-23. O resto do documento é o plano original.
   (chaves `catalog.<id>` em `src/i18n/locales/`).
 - **Kit de lançamento** com os textos de cada canal:
   [`11-kit-de-lancamento.md`](./11-kit-de-lancamento.md).
+- **AlternativeTo:** app submetido em 2026-11-23 (fila grátis, pode demorar
+  meses; não pagar a revisão prioritária). Depois de aprovado, sugerir as
+  alternativas da seção 7 e acrescentar Homebrew/Flathub na página.
 
 **Pendente**
 
@@ -61,6 +64,8 @@ Atualizado em 2026-11-23. O resto do documento é o plano original.
   (`site/config.mjs`).
 - **Flathub:** abrir o PR em `flathub/flathub` e, depois de aceito, publicar o
   token de verificação do domínio no `glodzinski-site`.
+- **OpenAlternative:** exige 250 estrelas para repositórios com menos de 6
+  meses (ou 50 depois disso) — submeter quando atingir.
 - **Lançamentos e diretórios**, um por vez e nas semanas do cronograma
   (seção 6), com os textos do kit. Awesome-lists só depois de algumas dezenas
   de estrelas.
