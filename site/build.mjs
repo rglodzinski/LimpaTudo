@@ -290,7 +290,7 @@ function channelsBlock(lang) {
     rows.push(["Homebrew (macOS)", "brew tap rglodzinski/tap\nbrew trust --cask rglodzinski/tap/limpa-tudo\nbrew install --cask limpa-tudo"]);
   if (CHANNELS.snapStore) rows.push(["Snap Store", "sudo snap install limpa-tudo"]);
   if (CHANNELS.aur) rows.push(["AUR (Arch)", "yay -S limpa-tudo-bin"]);
-  if (CHANNELS.flathub) rows.push(["Flathub", "flatpak install flathub com.rglodzinski.limpatudo"]);
+  if (CHANNELS.flathub) rows.push(["Flathub", "flatpak install flathub br.dev.glodzinski.LimpaTudo"]);
   if (!rows.length) return "";
   return `<h2>${STRINGS[lang].download.channels}</h2><div class="cmds">${rows.map(([n, c]) => `<div><span>${n}</span><pre><code>${c}</code></pre></div>`).join("")}</div>`;
 }

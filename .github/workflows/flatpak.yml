@@ -22,16 +22,19 @@ jobs:
       - name: Build
         run: |
           flatpak-builder --user --install-deps-from=flathub --disable-rofiles-fuse \
-            --repo=repo --force-clean --default-branch=stable build-dir flatpak/com.rglodzinski.limpatudo.yml
-          flatpak build-bundle repo limpa-tudo.flatpak com.rglodzinski.limpatudo stable
+            --repo=repo --force-clean --default-branch=stable \
+            --mirror-screenshots-url=https://dl.flathub.org/media build-dir flatpak/br.dev.glodzinski.LimpaTudo.yml
+          flatpak build-bundle repo limpa-tudo.flatpak br.dev.glodzinski.LimpaTudo stable
           ls -la build-dir/files/bin build-dir/files/share/applications build-dir/files/share/metainfo
+          flatpak build-update-repo repo
       - name: Lint (flatpak-builder-lint)
         run: |
           flatpak install --user -y --noninteractive flathub org.flatpak.Builder
           lint() { flatpak run --command=flatpak-builder-lint org.flatpak.Builder "$@" || echo "::warning::lint $1 reported issues"; }
-          lint manifest flatpak/com.rglodzinski.limpatudo.yml
-          lint appstream flatpak/com.rglodzinski.limpatudo.metainfo.xml
+          lint manifest flatpak/br.dev.glodzinski.LimpaTudo.yml
+          lint appstream flatpak/br.dev.glodzinski.LimpaTudo.metainfo.xml
           lint builddir build-dir
+          lint repo repo
       - uses: actions/upload-artifact@v4
         with:
           name: limpa-tudo-flatpak

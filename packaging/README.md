@@ -56,9 +56,19 @@ ligar `CHANNELS.snapStore`.
 
 ## Flathub
 
-`../flatpak/` tem o manifesto, o `.desktop` e o metainfo. Ainda **não testado**:
+`../flatpak/` tem o manifesto, o `.desktop` e o metainfo. O workflow
+`.github/workflows/flatpak.yml` compila, instala e roda o `flatpak-builder-lint`
+num Linux x86_64 a cada mudança em `flatpak/` (e gera o `.flatpak` como artefato).
 
-- O manifesto instala `build/icon.png`, que não vem no `.tar.gz` da release —
-  trocar por uma fonte `type: file` com o ícone (ou extrair do `.deb`).
-- O metainfo precisa de screenshots reais (claro e escuro) antes de submeter.
-- Testar com `flatpak-builder --user --install --force-clean build-dir flatpak/com.rglodzinski.limpatudo.yml`.
+- **ID:** `br.dev.glodzinski.LimpaTudo`. O Flathub exige que o domínio do ID
+  seja do autor; `com.rglodzinski.*` não servia (`rglodzinski.com` não existe).
+  O bundle ID do macOS (`com.rglodzinski.limpatudo`, em `package.json`) não muda.
+- **Verificação do domínio:** depois que o app for aceito, o Flathub mostra um
+  token no portal do desenvolvedor; publicá-lo em
+  `https://glodzinski.dev.br/.well-known/org.flathub.VerifiedApps.txt`
+  (repositório `glodzinski-site`).
+- **Submissão:** fork de `flathub/flathub`, branch a partir de `new-pr`, com o
+  manifesto e os dois arquivos ao lado; abrir o PR contra `new-pr`. Ver
+  https://docs.flathub.org/docs/for-app-authors/submission
+- A cada versão: atualizar `url`/`sha256` do `.tar.gz` no manifesto e
+  acrescentar um `<release>` no metainfo.

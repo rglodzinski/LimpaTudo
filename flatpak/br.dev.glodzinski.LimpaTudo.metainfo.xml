@@ -3,15 +3,15 @@
      Screenshots: docs/assets/screenshots (app real com uma pasta pessoal de
      exemplo). Antes de submeter, validar com o flatpak-builder-lint (modo appstream). -->
 <component type="desktop-application">
-  <id>com.rglodzinski.limpatudo</id>
+  <id>br.dev.glodzinski.LimpaTudo</id>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>MIT</project_license>
   <name>Limpa Tudo</name>
   <summary>Free up disk space safely</summary>
   <summary xml:lang="pt-BR">Libere espaço em disco com segurança</summary>
   <summary xml:lang="es">Libera espacio en disco con seguridad</summary>
-  <developer id="io.github.rglodzinski">
-    <name>Ricardo Glodzinski</name>
+  <developer id="br.dev.glodzinski">
+    <name>Glodzinski Tecnologia</name>
   </developer>
   <description>
     <p>
@@ -33,10 +33,11 @@
       mostra o caminho e o tamanho de cada item e só manda para a Lixeira o que você escolher.
     </p>
   </description>
-  <launchable type="desktop-id">com.rglodzinski.limpatudo.desktop</launchable>
-  <url type="homepage">https://github.com/rglodzinski/LimpaTudo</url>
+  <launchable type="desktop-id">br.dev.glodzinski.LimpaTudo.desktop</launchable>
+  <url type="homepage">https://limpatudo.glodzinski.dev.br/en/</url>
   <url type="bugtracker">https://github.com/rglodzinski/LimpaTudo/issues</url>
   <url type="vcs-browser">https://github.com/rglodzinski/LimpaTudo</url>
+  <url type="donation">https://glodzinski.dev.br/en/support.html</url>
   <branding>
     <color type="primary" scheme_preference="light">#DBEAFE</color>
     <color type="primary" scheme_preference="dark">#1E3A8A</color>

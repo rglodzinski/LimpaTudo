@@ -139,10 +139,10 @@ O pipeline já gera o `.snap` (build), mas **publicar** na loja exige:
 
 ### 4. Flathub
 
-`flatpak/com.rglodzinski.limpatudo.yml` é um manifesto **inicial e não
+`flatpak/br.dev.glodzinski.LimpaTudo.yml` é um manifesto **inicial e não
 testado** (ver comentários no arquivo). Falta:
 
-1. Testar localmente: `flatpak-builder --user --install --force-clean build-dir flatpak/com.rglodzinski.limpatudo.yml`
+1. Testar localmente: `flatpak-builder --user --install --force-clean build-dir flatpak/br.dev.glodzinski.LimpaTudo.yml`
    — Electron dentro do sandbox do Flatpak tem particularidades conhecidas
    (uso do runtime `org.electronjs.Electron2.BaseApp`, que já resolve a
    maioria via `zypak`, mas precisa validação real).

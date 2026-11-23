@@ -5,13 +5,13 @@
 # Usa o .tar.gz da release (url + sha256 a atualizar a cada versão; o sha256
 # está no `digest` da API de releases). Testar localmente com:
 #   flatpak-builder --user --install --install-deps-from=flathub --force-clean \
-#     build-dir flatpak/com.rglodzinski.limpatudo.yml
-app-id: com.rglodzinski.limpatudo
+#     build-dir flatpak/br.dev.glodzinski.LimpaTudo.yml
+app-id: br.dev.glodzinski.LimpaTudo
 runtime: org.freedesktop.Platform
-runtime-version: "25.08"
+runtime-version: "26.08"
 sdk: org.freedesktop.Sdk
 base: org.electronjs.Electron2.BaseApp
-base-version: "25.08"
+base-version: "26.08"
 command: limpa-tudo
 separate-locales: false
 
@@ -31,9 +31,9 @@ modules:
       - mkdir -p /app/limpa-tudo
       - cp -a app/. /app/limpa-tudo/
       - install -Dm755 limpa-tudo.sh /app/bin/limpa-tudo
-      - install -Dm644 logo-mark.svg /app/share/icons/hicolor/scalable/apps/com.rglodzinski.limpatudo.svg
-      - install -Dm644 com.rglodzinski.limpatudo.desktop /app/share/applications/com.rglodzinski.limpatudo.desktop
-      - install -Dm644 com.rglodzinski.limpatudo.metainfo.xml /app/share/metainfo/com.rglodzinski.limpatudo.metainfo.xml
+      - install -Dm644 logo-mark.svg /app/share/icons/hicolor/scalable/apps/br.dev.glodzinski.LimpaTudo.svg
+      - install -Dm644 br.dev.glodzinski.LimpaTudo.desktop /app/share/applications/br.dev.glodzinski.LimpaTudo.desktop
+      - install -Dm644 br.dev.glodzinski.LimpaTudo.metainfo.xml /app/share/metainfo/br.dev.glodzinski.LimpaTudo.metainfo.xml
     sources:
       - type: archive
         url: https://github.com/rglodzinski/LimpaTudo/releases/download/v1.4.0/Limpa.Tudo-1.4.0-x64.tar.gz
@@ -43,9 +43,9 @@ modules:
         url: https://raw.githubusercontent.com/rglodzinski/LimpaTudo/v1.4.0/site/logo-mark.svg
         sha256: 9703e9f3c61f359943fefdc230ec1e9f17cb9043000cc197f614842a030c625a
       - type: file
-        path: com.rglodzinski.limpatudo.desktop
+        path: br.dev.glodzinski.LimpaTudo.desktop
       - type: file
-        path: com.rglodzinski.limpatudo.metainfo.xml
+        path: br.dev.glodzinski.LimpaTudo.metainfo.xml
       - type: script
         dest-filename: limpa-tudo.sh
         commands:
