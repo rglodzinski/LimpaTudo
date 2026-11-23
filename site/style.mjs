@@ -27,6 +27,8 @@ nav a:hover{color:var(--text)}
 .btn:hover{background:var(--accent-hover)}
 .btn.secondary{background:transparent;color:var(--text);border-color:var(--border)}
 .btn.secondary:hover{background:var(--surface-2)}
+.shot{margin-top:8px}
+.shot img{display:block;width:100%;height:auto;border:1px solid var(--border);border-radius:14px;box-shadow:0 12px 40px rgba(15,23,42,.12)}
 .cta-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
 section.wrap{padding:40px 20px}
 h1{font-size:clamp(28px,5vw,38px);line-height:1.2;letter-spacing:-.02em;margin:24px 0 12px}

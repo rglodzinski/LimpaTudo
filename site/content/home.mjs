@@ -5,6 +5,7 @@
 export const STRINGS = {
   "pt-BR": {
     htmlLang: "pt-BR",
+    screenshotAlt: "Resultado do scan do Limpa Tudo: cada item com caminho, tamanho e nível de risco",
     dateLocale: "pt-BR",
     title: "Limpa Tudo — limpador de disco seguro e gratuito para Mac e Linux",
     description:
@@ -101,6 +102,7 @@ export const STRINGS = {
 
   en: {
     htmlLang: "en",
+    screenshotAlt: "Limpa Tudo scan results: each item with its path, size and risk level",
     dateLocale: "en-US",
     title: "Limpa Tudo — safe, free, open-source disk cleaner for Mac & Linux",
     description:
@@ -197,6 +199,7 @@ export const STRINGS = {
 
   es: {
     htmlLang: "es",
+    screenshotAlt: "Resultado del escaneo de Limpa Tudo: cada elemento con su ruta, tamaño y nivel de riesgo",
     dateLocale: "es-ES",
     title: "Limpa Tudo — limpiador de disco seguro y gratuito para Mac y Linux",
     description:

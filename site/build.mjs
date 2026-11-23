@@ -236,6 +236,12 @@ function homeBody(lang) {
   </div>
   <p class="version">${release.tag}${release.date ? " · " + fmtDate(release.date, lang) : ""}</p>
 </div>
+<div class="wrap shot">
+  <picture>
+    ${lang === "pt-BR" ? `<source srcset="${href("/screenshots/scan-dark-pt.webp")}" media="(prefers-color-scheme: dark)" />` : ""}
+    <img src="${href(lang === "pt-BR" ? "/screenshots/scan-pt.webp" : "/screenshots/scan-en.webp")}" width="1600" height="1000" alt="${esc(S.screenshotAlt)}" loading="eager" decoding="async" />
+  </picture>
+</div>
 <section class="wrap">
   <h2>${S.safety.h2}</h2>
   <p class="section-sub">${S.safety.sub}</p>

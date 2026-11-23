@@ -55,7 +55,14 @@ servido pelo repositório `glodzinski-site`). Como foi feito:
 
 **Pendente (fora do repositório ou depende do autor)**
 
-- GIF de 10 s e screenshots do app para o README, o site e o metainfo do Flathub.
+- GIF de 10 s do app. As screenshots já estão em `docs/assets/screenshots/`
+  (capturadas do app real, rodando com uma pasta pessoal de exemplo em
+  `HOME=/Users/Shared/ana`, pela porta de depuração do Electron) e foram usadas
+  no README, na home do site e no metainfo do Flathub.
+- **Bug encontrado nas capturas:** com a interface em inglês ou espanhol, os
+  nomes dos itens do catálogo continuam em português (`displayName` do
+  `catalog/catalog.json` só existe em pt-BR). Traduzir antes de divulgar em
+  inglês (Show HN, r/macapps, Product Hunt).
 - Bing Webmaster (pode importar do Search Console).
 - Publicar no AUR (conta + chave SSH), conta e secret do Snapcraft, testar
   o Flatpak. Ao ativar cada canal, ligar a chave

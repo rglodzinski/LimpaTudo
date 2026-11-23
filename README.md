@@ -24,6 +24,10 @@
   <a href="README.pt-BR.md">Português</a>
 </p>
 
+<p align="center">
+  <img src="docs/assets/screenshots/scan-en.png" width="820" alt="Limpa Tudo scan results: developer caches with path, size and risk level" />
+</p>
+
 ---
 
 ## Download

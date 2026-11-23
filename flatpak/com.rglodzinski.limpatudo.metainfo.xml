@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Metainfo para o Flathub — ver docs/09-divulgacao-organica.md (seção 4.5).
-     Antes de submeter: trocar as screenshots por capturas reais (claro e escuro)
-     e validar com o flatpak-builder-lint (modo appstream). -->
+     Screenshots: docs/assets/screenshots (app real com uma pasta pessoal de
+     exemplo). Antes de submeter, validar com o flatpak-builder-lint (modo appstream). -->
 <component type="desktop-application">
   <id>com.rglodzinski.limpatudo</id>
   <metadata_license>CC0-1.0</metadata_license>
@@ -41,14 +41,20 @@
     <color type="primary" scheme_preference="light">#DBEAFE</color>
     <color type="primary" scheme_preference="dark">#1E3A8A</color>
   </branding>
-  <!-- TODO: screenshots reais (PNG 16:9, claro e escuro) em uma URL estável, ex.:
   <screenshots>
     <screenshot type="default">
-      <caption>Scan results with risk levels</caption>
-      <image>https://raw.githubusercontent.com/rglodzinski/LimpaTudo/main/docs/assets/screenshot-scan-light.png</image>
+      <caption>Scan results: each item with its path, size and risk level</caption>
+      <image>https://raw.githubusercontent.com/rglodzinski/LimpaTudo/main/docs/assets/screenshots/scan-en.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Dashboard with disk usage by category</caption>
+      <image>https://raw.githubusercontent.com/rglodzinski/LimpaTudo/main/docs/assets/screenshots/dashboard-pt.png</image>
+    </screenshot>
+    <screenshot>
+      <caption>Dark theme</caption>
+      <image>https://raw.githubusercontent.com/rglodzinski/LimpaTudo/main/docs/assets/screenshots/list-dark-pt.png</image>
     </screenshot>
   </screenshots>
-  -->
   <content_rating type="oars-1.1" />
   <categories>
     <category>Utility</category>

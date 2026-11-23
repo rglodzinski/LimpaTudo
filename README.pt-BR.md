@@ -23,6 +23,10 @@
   <a href="README.md">English</a>
 </p>
 
+<p align="center">
+  <img src="docs/assets/screenshots/scan-pt.png" width="820" alt="Resultado do scan do Limpa Tudo: cada item com caminho, tamanho e nível de risco" />
+</p>
+
 ---
 
 ## Baixar
