@@ -55,6 +55,9 @@ Atualizado em 2026-11-23. O resto do documento é o plano original.
 - **Dev.to (pt):** artigo do WhatsApp republicado em 2026-11-23 com canonical
   para o site e declaração "AI-assisted"
   (https://dev.to/rglodzinski/whatsapp-mostra-383-gb-no-mac-entenda-os-clones-apfs-e-o-tamanho-real-5bn2).
+- **Dev.to (EN):** "Why a disk cleaner should never delete on its own"
+  publicado em 2026-11-23 com canonical para o site
+  (https://dev.to/rglodzinski/why-a-disk-cleaner-should-never-delete-on-its-own-fam).
 - **r/brdev:** post publicado à mão em 2026-11-23
   (https://old.reddit.com/r/brdev/comments/1y3nflw/). O Reddit bloqueia a
   extensão e a API sem login (403); comentários são acompanhados à mão.
