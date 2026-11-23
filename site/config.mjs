@@ -13,7 +13,7 @@ export const RELEASES_URL = `${GITHUB_URL}/releases`;
 // o site nunca deve anunciar um comando que ainda não funciona.
 export const CHANNELS = {
   homebrewTap: true, // github.com/rglodzinski/homebrew-tap (no ar desde 2026-11-23)
-  snapStore: false, // sudo snap install limpa-tudo
+  snapStore: true, // sudo snap install limpa-tudo
   aur: false, // yay -S limpa-tudo-bin
   flathub: false,
 };

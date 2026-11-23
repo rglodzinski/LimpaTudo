@@ -39,7 +39,7 @@
 | Linux — any distro | [`.AppImage`](https://github.com/rglodzinski/LimpaTudo/releases/latest) |
 | Debian / Ubuntu | [`.deb`](https://github.com/rglodzinski/LimpaTudo/releases/latest) |
 | Fedora / RHEL | [`.rpm`](https://github.com/rglodzinski/LimpaTudo/releases/latest) |
-| Snap | [`.snap`](https://github.com/rglodzinski/LimpaTudo/releases/latest) |
+| Snap Store | `sudo snap install limpa-tudo` · [snapcraft.io/limpa-tudo](https://snapcraft.io/limpa-tudo) |
 
 Or with Homebrew (Homebrew 7+ asks you to trust third-party casks once):
 

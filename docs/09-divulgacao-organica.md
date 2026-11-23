@@ -40,8 +40,9 @@ Atualizado em 2026-11-23. O resto do documento é o plano original.
   no ar (`brew audit --cask --online` limpo); o comando no site e no README
   inclui o `brew trust` que o Homebrew 7 exige.
 - **AUR:** `packaging/aur/PKGBUILD` testado num container Arch.
-- **Snap Store:** upload no `build.yml`, pulado enquanto o secret
-  `SNAPCRAFT_STORE_CREDENTIALS` não existir.
+- **Snap Store:** `limpa-tudo` registrado e v1.4.0 publicada no canal
+  stable em 2026-11-23 (https://snapcraft.io/limpa-tudo); o `build.yml`
+  publica as próximas releases com o secret `SNAPCRAFT_STORE_CREDENTIALS`.
 - **Flathub:** manifesto `flatpak/br.dev.glodzinski.LimpaTudo.yml` (runtime
   26.08), `.desktop` e metainfo com screenshots; o workflow `flatpak.yml`
   compila, instala e roda o `flatpak-builder-lint` num Linux x86_64.
@@ -56,8 +57,7 @@ Atualizado em 2026-11-23. O resto do documento é o plano original.
   `~/.ssh/aur.pub`, `.SRCINFO` já gerado; em 2026-11-23 o AUR estava com
   novos cadastros suspensos por causa de criação automatizada de contas —
   tentar de novo quando reabrir, avisos em aur-general e nas notícias do
-  Arch) e Snapcraft (registrar `limpa-tudo` e criar o secret com
-  `snapcraft export-login`). Ao ativar cada canal, ligar a chave em `CHANNELS`
+  Arch). Ao ativar o canal, ligar a chave em `CHANNELS`
   (`site/config.mjs`).
 - **Flathub:** abrir o PR em `flathub/flathub` e, depois de aceito, publicar o
   token de verificação do domínio no `glodzinski-site`.

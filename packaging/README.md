@@ -49,7 +49,7 @@ Depois ligar `CHANNELS.aur` em `site/config.mjs`.
 
 ## Snap Store
 
-O `build.yml` já publica o `.snap` numa tag `v*` quando o secret
+Publicado (https://snapcraft.io/limpa-tudo). O `build.yml` publica o `.snap` numa tag `v*` quando o secret
 `SNAPCRAFT_STORE_CREDENTIALS` existe (sem ele, o passo é pulado). Criar a conta,
 reservar o nome e gerar o secret: `docs/06-distribuicao.md`, seção 3. Depois
 ligar `CHANNELS.snapStore`.
