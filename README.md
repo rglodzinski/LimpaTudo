@@ -37,6 +37,14 @@
 | Fedora / RHEL | [`.rpm`](https://github.com/rglodzinski/LimpaTudo/releases/latest) |
 | Snap | [`.snap`](https://github.com/rglodzinski/LimpaTudo/releases/latest) |
 
+Or with Homebrew (Homebrew 7+ asks you to trust third-party casks once):
+
+```bash
+brew tap rglodzinski/tap
+brew trust --cask rglodzinski/tap/limpa-tudo
+brew install --cask limpa-tudo
+```
+
 The macOS app is signed and notarized by Apple (macOS 12 or later). Free, no account, no telemetry.
 
 ## Safety principles

@@ -25,6 +25,9 @@ package() {
   rm -rf "${pkgdir}/usr/share/doc"
   install -dm755 "${pkgdir}/usr/bin"
   ln -s "/opt/Limpa Tudo/limpa-tudo" "${pkgdir}/usr/bin/limpa-tudo"
-  chmod 4755 "${pkgdir}/opt/Limpa Tudo/chrome-sandbox"
+  # Builds antigos do Electron traziam o chrome-sandbox (precisa de SUID sem user namespaces).
+  if [[ -f "${pkgdir}/opt/Limpa Tudo/chrome-sandbox" ]]; then
+    chmod 4755 "${pkgdir}/opt/Limpa Tudo/chrome-sandbox"
+  fi
   install -Dm644 LICENSE "${pkgdir}/usr/share/licenses/${pkgname}/LICENSE"
 }

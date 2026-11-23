@@ -13,7 +13,7 @@ export const RELEASES_URL = `${GITHUB_URL}/releases`;
 // Canais de instalação. Só ligar quando o canal estiver no ar de verdade —
 // o site nunca deve anunciar um comando que ainda não funciona.
 export const CHANNELS = {
-  homebrewTap: false, // brew install --cask rglodzinski/tap/limpa-tudo
+  homebrewTap: true, // github.com/rglodzinski/homebrew-tap (no ar desde 2026-11-23)
   snapStore: false, // sudo snap install limpa-tudo
   aur: false, // yay -S limpa-tudo-bin
   flathub: false,

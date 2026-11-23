@@ -13,26 +13,34 @@ node packaging/update-packages.mjs v1.5.0 # release específica
 
 ## Homebrew (tap próprio)
 
-`homebrew/Casks/limpa-tudo.rb` passa no `brew style`. Para publicar:
+No ar em [`rglodzinski/homebrew-tap`](https://github.com/rglodzinski/homebrew-tap)
+desde 2026-11-23 (`brew audit --cask --online` limpo). O Homebrew 7 só carrega
+casks de taps de terceiros depois de um `brew trust`, então a instrução é:
 
-1. Criar o repositório público `rglodzinski/homebrew-tap`.
-2. Copiar `homebrew/Casks/limpa-tudo.rb` para `Casks/limpa-tudo.rb` nesse repo.
-3. Testar: `brew install --cask rglodzinski/tap/limpa-tudo` e
-   `brew audit --cask --online rglodzinski/tap/limpa-tudo`.
-4. Ligar `CHANNELS.homebrewTap` em `site/config.mjs` (o site passa a mostrar o comando).
+```bash
+brew tap rglodzinski/tap
+brew trust --cask rglodzinski/tap/limpa-tudo
+brew install --cask limpa-tudo
+```
+
+A cada release: rodar `update-packages.mjs` e copiar
+`homebrew/Casks/limpa-tudo.rb` para `Casks/` do tap.
 
 Cask oficial (`homebrew/cask`) só depois de ganhar tração — o audit cobra
 notabilidade ([Acceptable Casks](https://docs.brew.sh/Acceptable-Casks)).
 
 ## AUR (`limpa-tudo-bin`)
 
-`aur/PKGBUILD` extrai o `.deb` da release. Numa máquina Arch:
+`aur/PKGBUILD` extrai o `.deb` da release. Testado em 2026-11-23 num container
+`archlinux` (x86_64): `makepkg -si` instala, `/usr/bin/limpa-tudo` aponta para
+`/opt/Limpa Tudo/limpa-tudo`; o `namcap` só dá os avisos comuns de pacotes
+Electron `-bin` (ELF em `/opt`). Para publicar é preciso uma conta no AUR com
+chave SSH cadastrada:
 
 ```bash
 git clone ssh://aur@aur.archlinux.org/limpa-tudo-bin.git
 cp packaging/aur/PKGBUILD packaging/aur/LICENSE limpa-tudo-bin/
 cd limpa-tudo-bin
-makepkg -si                          # testa a instalação
 makepkg --printsrcinfo > .SRCINFO
 git add PKGBUILD LICENSE .SRCINFO && git commit -m "limpa-tudo-bin 1.4.0" && git push
 ```

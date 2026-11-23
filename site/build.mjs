@@ -272,7 +272,8 @@ function faqJsonLd(lang) {
 
 function channelsBlock(lang) {
   const rows = [];
-  if (CHANNELS.homebrewTap) rows.push(["Homebrew (macOS)", "brew install --cask rglodzinski/tap/limpa-tudo"]);
+  if (CHANNELS.homebrewTap)
+    rows.push(["Homebrew (macOS)", "brew tap rglodzinski/tap\nbrew trust --cask rglodzinski/tap/limpa-tudo\nbrew install --cask limpa-tudo"]);
   if (CHANNELS.snapStore) rows.push(["Snap Store", "sudo snap install limpa-tudo"]);
   if (CHANNELS.aur) rows.push(["AUR (Arch)", "yay -S limpa-tudo-bin"]);
   if (CHANNELS.flathub) rows.push(["Flathub", "flatpak install flathub com.rglodzinski.limpatudo"]);

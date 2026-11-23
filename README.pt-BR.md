@@ -31,6 +31,14 @@ Todos os instaladores estão na [última release](https://github.com/rglodzinski
 `.dmg` para Mac com Apple Silicon ou Intel (assinado e notarizado pela Apple, macOS 12 ou mais novo),
 `.AppImage`, `.deb`, `.rpm`, `.snap` e `.tar.gz` para Linux. Grátis, sem conta e sem telemetria.
 
+No Mac, também pelo Homebrew (o Homebrew 7 pede para confiar no cask uma vez):
+
+```bash
+brew tap rglodzinski/tap
+brew trust --cask rglodzinski/tap/limpa-tudo
+brew install --cask limpa-tudo
+```
+
 ## Princípios de segurança
 
 São regras de projeto, não opções:

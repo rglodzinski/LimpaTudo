@@ -31,8 +31,10 @@ Atualizado em 2026-11-23. O resto do documento é o plano original.
     links de download acompanharem a versão nova.
 - Artigos 1 (Xcode, pt-BR + EN), 2 (Docker, pt-BR + EN) e 3 (WhatsApp/APFS,
   pt-BR) em `site/content/guides/`. Os guias em espanhol ficam para a fase 2.
-- Homebrew: cask em `packaging/homebrew/` (passa no `brew style`). AUR:
-  `packaging/aur/PKGBUILD`. `packaging/update-packages.mjs` atualiza versão e
+- Homebrew: tap [`rglodzinski/homebrew-tap`](https://github.com/rglodzinski/homebrew-tap)
+  no ar (audit online limpo); o site e o README mostram o comando, que inclui
+  o `brew trust` exigido pelo Homebrew 7. AUR: `packaging/aur/PKGBUILD`,
+  testado num container Arch (falta publicar). `packaging/update-packages.mjs` atualiza versão e
   sha256 dos dois a partir da release.
 - Snap Store: passo de upload no `build.yml`, pulado enquanto o secret
   `SNAPCRAFT_STORE_CREDENTIALS` não existir.
@@ -62,8 +64,8 @@ não responde. Com o subdomínio o `robots.txt` passa a ficar na raiz e a valer.
 
 - GIF de 10 s e screenshots do app para o README, o site e o metainfo do Flathub.
 - DNS e custom domain (acima); depois, Google Search Console e Bing Webmaster.
-- Criar o tap `rglodzinski/homebrew-tap`, publicar no AUR, conta e secret do
-  Snapcraft, testar o Flatpak. Ao ativar cada canal, ligar a chave
+- Publicar no AUR (conta + chave SSH), conta e secret do Snapcraft, testar
+  o Flatpak. Ao ativar cada canal, ligar a chave
   correspondente em `CHANNELS` (`site/config.mjs`) para o site mostrar o comando.
 - Analytics sem cookies (GoatCounter ou Cloudflare Web Analytics).
 - Diretórios, awesome-lists, lançamentos em comunidades e vídeos (seções 4.7
