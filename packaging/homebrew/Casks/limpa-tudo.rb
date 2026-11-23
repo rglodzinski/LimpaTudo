@@ -4,9 +4,9 @@
 cask "limpa-tudo" do
   arch arm: "arm64", intel: "x64"
 
-  version "1.4.0"
-  sha256 arm:   "051e3fea83e532b3b8b0035a9bc63f48cdd8bfa77bbb5c41555b90113881a6e5",
-         intel: "cf66169b02856f8199236898ec606a1d78029e13ba74d44c8d0492dcb3354836"
+  version "1.5.0"
+  sha256 arm:   "0a44d548bfa079acf7eb3ba78929a680a59bdd68116f7dd8e5b9b3f537a11a1b",
+         intel: "43a0f112d95dc827363aae34715e2068c9ff581ede80eb11e2b85b5c92ba17e6"
 
   url "https://github.com/rglodzinski/LimpaTudo/releases/download/v#{version}/Limpa.Tudo-#{version}-#{arch}.dmg",
       verified: "github.com/rglodzinski/LimpaTudo/"
