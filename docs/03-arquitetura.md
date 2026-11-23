@@ -45,11 +45,25 @@ disco passa pelo *main process* via `ipcMain.handle` / `ipcRenderer.invoke`, com
   - Modo padrão: move para Lixeira (`~/.Trash` no macOS via API nativa do
     Electron `shell.trashItem`; `gio trash` ou `~/.local/share/Trash` no Linux).
   - Modo avançado (opt-in explícito): exclusão permanente (`fs.rm` recursivo).
-  - Operações que requerem `sudo` (ex: logs em `/private/var/log`, cache de
-    sistema em `/Library/Caches`) usam um prompt de elevação nativo
-    (`sudo-prompt` ou AppleScript `do shell script with administrator privileges`
-    no macOS; `pkexec` no Linux) — **sempre com lista explícita de paths visível
-    ao usuário antes de elevar privilégios**, nunca comando arbitrário.
+  - Itens do root (ex.: `/Library/Developer/CoreSimulator/Caches`,
+    `/Library/Logs/DiagnosticReports`) usam o prompt de elevação nativo
+    (`elevate.ts`: AppleScript `do shell script … with administrator
+    privileges` no macOS; `pkexec` no Linux). O `sudo-prompt` foi abandonado:
+    ele abre um applet sem assinatura extraído numa pasta temporária, que
+    falha em silêncio no app assinado/notarizado, sem nunca mostrar o pedido
+    de senha.
+  - Só é elevado o que: (a) falhou ao mover como usuário porque pertence a
+    outro dono ou a pasta não é gravável; (b) veio do último scan; e (c) vem
+    de uma entrada do catálogo com `allowElevation: true` (ou da
+    desinstalação de apps, cujos caminhos vêm da medição feita no main).
+    Antes do prompt do sistema, um diálogo lista **exatamente os paths** que
+    serão tocados como root, com a opção "Pular estes itens".
+  - Todos os itens que precisam de senha vão num único prompt, depois dos
+    demais. Continuam indo para a Lixeira (`mv` para `~/.Trash`, ou para o
+    Trash do freedesktop com `.trashinfo` no Linux) e recebem `chown` de
+    volta para o usuário, para que esvaziar a Lixeira não peça senha de novo.
+  - Nunca entram em elevação: a pasta inteira `/private/tmp` e os logs vivos
+    em `/private/var/log` (movê-los quebraria serviços do sistema).
 - **`storage.ts`** — lista os dispositivos de armazenamento montados e a
   capacidade de cada um (total, usado, livre) para o gráfico do Painel. Só lê
   os totais do volume com `statfs` — nunca percorre o conteúdo, então não fere

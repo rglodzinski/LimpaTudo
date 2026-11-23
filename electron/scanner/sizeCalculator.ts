@@ -52,7 +52,7 @@ export async function calculateSize(
  */
 export async function calculateSizeElevated(targetPath: string): Promise<SizeResult> {
   try {
-    const stdout = await execElevated(`du -sk ${shellQuote(targetPath)}`);
+    const stdout = await execElevated(`/usr/bin/du -sk ${shellQuote(targetPath)}`);
     const kb = parseInt(stdout.trim().split(/\s+/)[0] ?? "", 10);
     if (Number.isNaN(kb)) return { sizeBytes: null, permissionDenied: true };
     return { sizeBytes: kb * 1024, permissionDenied: false };

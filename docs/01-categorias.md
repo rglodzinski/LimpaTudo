@@ -23,7 +23,7 @@ Itens que podem ser 100% recriados rodando `npm install`, `pod install`, `./grad
 | Next.js (`.next`) | dentro dos projetos | 🟢 |
 | Cache do Xcode (DerivedData) | `~/Library/Developer/Xcode/DerivedData` | 🟢 |
 | Xcode Archives antigos | `~/Library/Developer/Xcode/Archives` | 🟡 (perde histórico de builds arquivados) |
-| iOS builds antigas / CoreSimulator caches | `~/Library/Developer/CoreSimulator/Caches` | 🟢 |
+| iOS builds antigas / CoreSimulator caches | `~/Library/Developer/CoreSimulator/Caches`, `/Library/Developer/CoreSimulator/Caches` (dyld cache dos runtimes; do root, removido com a senha de administrador) | 🟢 (Simulator fechado) |
 | iOS Simulators não usados (devices) | `~/Library/Developer/CoreSimulator/Devices` | 🟡 (apaga simuladores, dados de apps neles) |
 | CocoaPods cache | `~/Library/Caches/CocoaPods` | 🟢 |
 | Dados da VM do Docker Desktop (imagens/containers/volumes) | `~/Library/Containers/com.docker.docker/Data/vms` | 🔴 (apaga TUDO do Docker de uma vez; preferir `docker system prune` quando possível — só no modo avançado) |
@@ -54,23 +54,46 @@ Itens que podem ser 100% recriados rodando `npm install`, `pod install`, `./grad
 | Specs do CocoaPods | `~/.cocoapods/repos` | 🟢 |
 | Modelos do Hugging Face | `~/.cache/huggingface` | 🟡 (rebaixáveis, mas podem ser grandes e lentos de baixar) |
 | Índice do Codeium/Windsurf | `~/.codeium/database` | 🟡 (reindexa os projetos) |
+| Navegador embutido do Codeium/Windsurf | `~/.codeium/ws-browser` | 🟡 (é baixado de novo quando o Codeium precisar) |
+| Arquivos de instalação de apps em iPhone (Xcode/CoreDevice) | `~/Library/Containers/com.apple.CoreDevice.CoreDeviceService/Data/Library/Caches/AppInstallationBinaryDeltas` | 🟢 (deltas recriados na próxima instalação pelo Xcode) |
+| Logs de serviços do Homebrew (postgres, mongod…) | `/opt/homebrew/var/log`, `/usr/local/var/log` (Intel) | 🟡 (parar os serviços antes com `brew services stop`) |
+| Telemetria de diagnóstico do MongoDB | `/opt/homebrew/var/mongodb/diagnostic.data` (e `/usr/local/...` no Intel) | 🟡 (arquivos FTDC, não são os dados do banco; parar o `mongod` antes. O resto de `var/mongodb` **nunca** entra) |
+| Runtimes do Simulator (iOS, watchOS…) | `/Library/Developer/CoreSimulator/Volumes/*` | 🟡 (vários GB cada; remover só pelo Xcode > Settings > Components ou `xcrun simctl runtime delete`, nunca apagando a pasta. Fora do catálogo; candidato a ação via ferramenta) |
+
+### Versões antigas de ferramentas
+
+Ferramentas que se atualizam sozinhas e guardam as versões anteriores. Só as
+versões **que não estão em uso** podem aparecer: a entrada do catálogo usa
+`keepCurrent` (um symlink que aponta para a versão atual) e é pulada inteira
+se o symlink não puder ser resolvido.
+
+| Item | Path | Risco |
+|---|---|---|
+| Versões antigas do Codex CLI | `~/.codex/packages/standalone/releases/*` (mantém o alvo de `~/.codex/packages/standalone/current`) | 🟢 |
+| Versões antigas do Claude Code | `~/.local/share/claude/versions/*` (arquivos; mantém o alvo de `~/.local/bin/claude`) | 🟢 |
+| Versões antigas do Node (nvm) | `~/.nvm/versions/node/*` | 🟡 — **fora do catálogo**: a versão "atual" depende do alias `default` e do `.nvmrc` de cada projeto; remover com `nvm uninstall <versão>` |
+| Versões antigas de pacotes do Homebrew | `$(brew --cellar)/<pacote>/<versão antiga>` | 🟢 — **fora do catálogo**: quem sabe o que está em uso é o próprio brew; usar `brew cleanup` (`brew cleanup -n` para prévia) |
+| Cópias de versões do Microsoft Edge | `~/Library/Application Support/Microsoft/EdgeUpdater/apps/msedge-stable/*` | 🟢 — fora do catálogo (o EdgeUpdater também atualiza o WebView usado por outros apps da Microsoft); o cache de instaladores `EdgeUpdater/crx_cache` está em [`02-apps-viloes.md`](./02-apps-viloes.md) |
 
 ## 2. Dados/logs do sistema macOS
 
 | Item | Path | Risco |
 |---|---|---|
 | Logs do sistema | `~/Library/Logs/*`, `/private/var/log/*` (requer sudo) | 🟢 |
-| Crash reports (DiagnosticReports) | `~/Library/Logs/DiagnosticReports` | 🟢 |
+| Crash reports (DiagnosticReports) | `~/Library/Logs/DiagnosticReports`, `/Library/Logs/DiagnosticReports` (do sistema; senha de administrador) | 🟢 |
 | Cache de apps do usuário | `~/Library/Caches/*` e `~/.cache/*` — entrada "catch-all": um item por pasta, só as que não são cobertas por uma entrada específica, com ≥ 1 MB e legíveis | 🟢 |
 | Cache do sistema (fontes, ícones) | `/Library/Caches/*` (requer sudo) | 🟡 |
-| Arquivos temporários | `/private/tmp`, `$TMPDIR` | 🟢 |
+| Arquivos temporários | `/private/tmp` | 🟢 |
+| Temporários do usuário | `$TMPDIR/*` (em `/var/folders/…/T`) — "catch-all": um item por pasta com ≥ 1 MB; pastas `com.apple.*` (serviços do sistema em uso) nunca entram | 🟢 |
+| Cache do usuário gerido pelo macOS | `/var/folders/…/C` (clang, Metal, helpers de apps) | 🟡 — fora do catálogo: o macOS limpa sozinho; no máximo `C/clang` com o Xcode fechado |
 | Lixeira | `~/.Trash` | 🟢 |
 | Cache do Spotlight (reindexação) | via `mdutil` | 🟡 (spotlight reindexará, pode deixar Mac lento temporariamente) |
-| Cache do Time Machine (snapshots locais) | via `tmutil listlocalsnapshots` / `thinLocalSnapshots` | 🟡 |
+| Cache do Time Machine (snapshots locais) | via `tmutil listlocalsnapshots` / `thinLocalSnapshots` | 🟡 (snapshots `com.apple.os.update-*` são de atualização do macOS, não do Time Machine: nunca listar, o sistema descarta sozinho) |
 | iOS device backups antigos (via Finder/iTunes) | `~/Library/Application Support/MobileSync/Backup` | 🟡 (backups reais de iPhone, confirmar antes) |
 | Mail attachments cache (Mail.app) | `~/Library/Containers/com.apple.mail/Data/Library/Mail Downloads` | 🟡 |
 | Language files não usados (apps multilíngues) | varia por app | 🔴 (fora do escopo v1, difícil validar com segurança) |
 | Arquivos `.DS_Store` órfãos | recursivo no disco/home | 🟢 |
+| Assets do sistema (modelos, fontes, Apple Intelligence) e swap | `/System/Library/AssetsV2`, `/private/var/vm` | 🔴 fora do escopo — geridos pelo macOS, nunca listar |
 
 ## 3. Dados/logs do sistema Linux
 

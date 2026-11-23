@@ -76,9 +76,13 @@
     "risk": "low",
     "paths": {
       "darwin": [
-        "~/Library/Developer/CoreSimulator/Caches"
+        "~/Library/Developer/CoreSimulator/Caches",
+        "/Library/Developer/CoreSimulator/Caches"
       ]
-    }
+    },
+    "allowElevation": true,
+    "requiresAppClosed": true,
+    "bundleId": "com.apple.iphonesimulator"
   },
   {
     "id": "dev.xcode-archives",
@@ -330,9 +334,11 @@
     "risk": "low",
     "paths": {
       "darwin": [
-        "~/Library/Logs/DiagnosticReports"
+        "~/Library/Logs/DiagnosticReports",
+        "/Library/Logs/DiagnosticReports"
       ]
-    }
+    },
+    "allowElevation": true
   },
   {
     "id": "system.user-logs",
@@ -381,6 +387,7 @@
     "paths": {
       "darwin": [
         "~/Library/Application Support/Google/Chrome/*/Cache",
+        "~/Library/Application Support/Google/Chrome/*/Service Worker/CacheStorage",
         "~/Library/Caches/Google/Chrome"
       ],
       "linux": [
@@ -459,7 +466,9 @@
     "bundleId": "com.microsoft.teams2",
     "paths": {
       "darwin": [
-        "~/Library/Application Support/Microsoft/Teams/Cache"
+        "~/Library/Application Support/Microsoft/Teams/Cache",
+        "~/Library/Containers/com.microsoft.teams2/Data/Library/Caches",
+        "~/Library/Containers/com.microsoft.teams2/Data/Library/Application Support/Microsoft/MSTeams/EBWebView/*/Service Worker/CacheStorage"
       ]
     }
   },
@@ -714,6 +723,154 @@
       ],
       "linux": [
         "~/.nvm/.cache"
+      ]
+    }
+  },
+  {
+    "id": "system.user-tmp",
+    "displayName": "Temporários do usuário",
+    "category": "system",
+    "risk": "low",
+    "catchAll": true,
+    "paths": {
+      "darwin": [
+        "$TMPDIR/*"
+      ]
+    },
+    "skipPrefixes": [
+      "com.apple."
+    ]
+  },
+  {
+    "id": "app.google-updater-cache",
+    "displayName": "Instaladores baixados pelo Google Updater",
+    "category": "apps",
+    "risk": "low",
+    "requiresAppClosed": true,
+    "bundleId": "com.google.Chrome",
+    "paths": {
+      "darwin": [
+        "~/Library/Application Support/Google/GoogleUpdater/crx_cache"
+      ]
+    }
+  },
+  {
+    "id": "app.edge-updater-cache",
+    "displayName": "Instaladores baixados pelo Microsoft Edge Updater",
+    "category": "apps",
+    "risk": "low",
+    "paths": {
+      "darwin": [
+        "~/Library/Application Support/Microsoft/EdgeUpdater/crx_cache"
+      ]
+    }
+  },
+  {
+    "id": "app.vscode-webstorage",
+    "displayName": "Dados de webviews e extensões do VS Code",
+    "category": "apps",
+    "risk": "medium",
+    "requiresAppClosed": true,
+    "bundleId": "com.microsoft.VSCode",
+    "paths": {
+      "darwin": [
+        "~/Library/Application Support/Code/WebStorage"
+      ],
+      "linux": [
+        "~/.config/Code/WebStorage"
+      ]
+    }
+  },
+  {
+    "id": "app.claude-desktop-vm",
+    "displayName": "Máquina virtual do Claude Desktop",
+    "category": "apps",
+    "risk": "medium",
+    "requiresAppClosed": true,
+    "bundleId": "com.anthropic.claudefordesktop",
+    "paths": {
+      "darwin": [
+        "~/Library/Application Support/Claude/vm_bundles"
+      ]
+    }
+  },
+  {
+    "id": "dev.coredevice-deltas",
+    "displayName": "Arquivos de instalação de apps em iPhone (Xcode)",
+    "category": "dev",
+    "risk": "low",
+    "paths": {
+      "darwin": [
+        "~/Library/Containers/com.apple.CoreDevice.CoreDeviceService/Data/Library/Caches/AppInstallationBinaryDeltas"
+      ]
+    }
+  },
+  {
+    "id": "dev.codeium-browser",
+    "displayName": "Navegador embutido do Codeium/Windsurf",
+    "category": "dev",
+    "risk": "medium",
+    "paths": {
+      "darwin": [
+        "~/.codeium/ws-browser"
+      ],
+      "linux": [
+        "~/.codeium/ws-browser"
+      ]
+    }
+  },
+  {
+    "id": "dev.homebrew-service-logs",
+    "displayName": "Logs de serviços do Homebrew",
+    "category": "dev",
+    "risk": "medium",
+    "paths": {
+      "darwin": [
+        "/opt/homebrew/var/log",
+        "/usr/local/var/log"
+      ]
+    }
+  },
+  {
+    "id": "dev.mongodb-diagnostic",
+    "displayName": "Telemetria de diagnóstico do MongoDB (não são os dados)",
+    "category": "dev",
+    "risk": "medium",
+    "paths": {
+      "darwin": [
+        "/opt/homebrew/var/mongodb/diagnostic.data",
+        "/usr/local/var/mongodb/diagnostic.data"
+      ]
+    }
+  },
+  {
+    "id": "dev.codex-old-releases",
+    "displayName": "Versões antigas do Codex CLI",
+    "category": "dev",
+    "risk": "low",
+    "keepCurrent": "~/.codex/packages/standalone/current",
+    "paths": {
+      "darwin": [
+        "~/.codex/packages/standalone/releases/*"
+      ],
+      "linux": [
+        "~/.codex/packages/standalone/releases/*"
+      ]
+    }
+  },
+  {
+    "id": "dev.claude-code-old-versions",
+    "displayName": "Versões antigas do Claude Code",
+    "category": "dev",
+    "risk": "low",
+    "keepCurrent": "~/.local/bin/claude",
+    "matchFiles": true,
+    "paths": {
+      "darwin": [
+        "~/.local/share/claude/versions/*"
+      ],
+      "linux": [
+        "~/.local/share/claude/versions/*"
       ]
     }
   },

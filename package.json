@@ -88,7 +88,6 @@
     "react-dom": "^19.2.8",
     "react-i18next": "^17.0.11",
     "recharts": "^3.10.1",
-    "sudo-prompt": "^9.2.1",
     "tailwind-merge": "^3.6.0"
   },
   "devDependencies": {
@@ -113,5 +112,8 @@
   "allowScripts": {
     "electron-winstaller@5.4.0": true,
     "fsevents@2.3.3": true
+  },
+  "overrides": {
+    "minimatch@>=7.0.0 <11.0.1": "^11.0.9"
   }
 }

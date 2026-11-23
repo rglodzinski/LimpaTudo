@@ -166,7 +166,7 @@
   "apps.uninstall": "Desinstalar",
   "apps.removeData": "Remover selecionados",
   "apps.confirmMediumWarning": "⚠️ Inclui itens 🟡: o próprio app e/ou configurações e dados salvos por ele. Depois disso, o app volta ao estado de recém-instalado (ou deixa de existir).",
-  "apps.someFailed": "{{count}} itens não puderam ser removidos (talvez exijam permissão de administrador — tente arrastar para a Lixeira pelo Finder).",
+  "apps.someFailed": "{{count}} itens não puderam ser removidos.",
   "apps.stillRunning": "{{name}} ou um processo em segundo plano dele está rodando. Feche o app (ou encerre os processos em segundo plano) e tente de novo.",
   "apps.unknownApp": "A lista de {{name}} está desatualizada. Recarregue a tela e tente de novo.",
   "apps.orphansHint": "Pastas em ~/Library com nome de um app (com.empresa.app) que não está mais instalado nem em execução. É uma estimativa: confira o caminho antes de remover.",
@@ -175,5 +175,7 @@
   "selection.skippedRunning": "Não removidos porque o app está aberto: {{names}}. Feche o app e limpe de novo.",
   "apps.helpersRunningWarning": "{{name}} está fechado, mas um processo em segundo plano dele ainda está rodando ({{helpers}}) e mantém os dados abertos.",
   "apps.stopHelpers": "Encerrar processos em segundo plano",
-  "apps.helpersStillRunning": "O processo em segundo plano voltou a rodar ou não pôde ser encerrado. Tente de novo em alguns segundos."
+  "apps.helpersStillRunning": "O processo em segundo plano voltou a rodar ou não pôde ser encerrado. Tente de novo em alguns segundos.",
+  "selection.adminDenied": "Alguns itens precisam da senha de administrador, que não foi informada. Eles continuam no lugar.",
+  "selection.someFailed": "{{count}} itens não puderam ser removidos."
 }

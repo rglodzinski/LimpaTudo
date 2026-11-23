@@ -20,7 +20,8 @@ function toScanItem(file: AppFile, entryId: string): ScanItem {
  * Removes the chosen files of one app. Only ids from the app's last
  * measurement are honored, so the renderer can't point this at arbitrary
  * paths. Refuses while the app is running (docs/00-visao-geral.md,
- * principle 4). The bundle goes first: if it can't be removed (e.g. owned by
+ * principle 4). Files owned by root (an app installed by a .pkg) are moved
+ * to the Trash with the admin password. The bundle goes first: if it can't be removed (e.g. owned by
  * root), the app's data is left alone rather than orphaning a working app.
  */
 export async function uninstallApp(
@@ -44,7 +45,7 @@ export async function uninstallApp(
 
   let report: RemoveReport = { freedBytes: 0, entries: [] };
   if (bundle) {
-    report = await removeItems([bundle], options);
+    report = await removeItems([bundle], options, undefined, undefined, () => true);
     onProgress({ completed: 1, total });
     if (!report.entries[0]?.ok) return { ok: true, report };
   }
@@ -55,6 +56,7 @@ export async function uninstallApp(
     options,
     (p) => onProgress({ completed: offset + p.completed, total }),
     shouldCancel,
+    () => true,
   );
   return {
     ok: true,
@@ -80,5 +82,5 @@ export async function removeOrphans(
     if (await isBundleIdInUse(file.bundleId!)) continue;
     items.push(toScanItem(file, file.bundleId!));
   }
-  return removeItems(items, options, onProgress, shouldCancel);
+  return removeItems(items, options, onProgress, shouldCancel, () => true);
 }

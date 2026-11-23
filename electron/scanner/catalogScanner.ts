@@ -35,8 +35,12 @@ export async function scanCatalog(
   const ordered = [...entries.filter((e) => !e.catchAll), ...entries.filter((e) => e.catchAll)];
   for (const entry of ordered) {
     const patterns = entry.paths[platform] ?? [];
+    const current = entry.keepCurrent ? realpathOrNull(expandHome(entry.keepCurrent)) : null;
+    if (entry.keepCurrent && !current) continue;
     for (const pattern of patterns) {
-      for (const resolved of resolveGlob(expandHome(pattern))) {
+      for (const resolved of resolveGlob(expandHome(pattern), entry.matchFiles)) {
+        if (current && overlaps(realpathOrNull(resolved) ?? resolved, current)) continue;
+        if (entry.skipPrefixes?.some((prefix) => path.basename(resolved).startsWith(prefix))) continue;
         if (entry.catchAll && paths.some((p) => overlaps(p.resolved, resolved))) continue;
         paths.push({ entry, resolved });
       }
@@ -96,9 +100,10 @@ export async function scanCatalog(
  * Resolves catalog path patterns with at most one "*" segment (e.g.
  * ".../Chrome/*\/Cache" for versioned profile directories). Only lists
  * direct children of the segment preceding the wildcard — never recurses
- * into arbitrary subtrees.
+ * into arbitrary subtrees. Matches folders only, unless `matchFiles` is set
+ * (versioned single-file binaries, like Claude Code's).
  */
-function resolveGlob(pattern: string): string[] {
+function resolveGlob(pattern: string, matchFiles = false): string[] {
   if (!pattern.includes("*")) {
     return fs.existsSync(pattern) ? [pattern] : [];
   }
@@ -111,12 +116,20 @@ function resolveGlob(pattern: string): string[] {
   if (!fs.existsSync(baseDir)) return [];
   return fs
     .readdirSync(baseDir, { withFileTypes: true })
-    .filter((entry) => entry.isDirectory())
+    .filter((entry) => entry.isDirectory() || (matchFiles && entry.isFile()))
     .map((entry) => path.join(baseDir, entry.name, ...rest))
     .filter((resolved) => fs.existsSync(resolved));
 }
 
 const CATCH_ALL_MIN_BYTES = 1024 * 1024;
+
+function realpathOrNull(p: string): string | null {
+  try {
+    return fs.realpathSync(p);
+  } catch {
+    return null;
+  }
+}
 
 function overlaps(a: string, b: string): boolean {
   return a === b || a.startsWith(b + path.sep) || b.startsWith(a + path.sep);

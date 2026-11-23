@@ -166,7 +166,7 @@
   "apps.uninstall": "Uninstall",
   "apps.removeData": "Remove selected",
   "apps.confirmMediumWarning": "⚠️ Includes 🟡 items: the app itself and/or settings and data it saved. Afterwards the app is back to a fresh install (or gone).",
-  "apps.someFailed": "{{count}} items couldn't be removed (they may need admin rights — try dragging them to the Trash in Finder).",
+  "apps.someFailed": "{{count}} items couldn't be removed.",
   "apps.stillRunning": "{{name}} or one of its background processes is running. Quit the app (or stop the background processes) and try again.",
   "apps.unknownApp": "The list for {{name}} is out of date. Reload the screen and try again.",
   "apps.orphansHint": "Folders in ~/Library named after an app (com.company.app) that is no longer installed or running. This is an estimate: check the path before removing.",
@@ -175,5 +175,7 @@
   "selection.skippedRunning": "Not removed because the app is open: {{names}}. Quit the app and clean again.",
   "apps.helpersRunningWarning": "{{name}} is closed, but a background process of it is still running ({{helpers}}) and keeps its data open.",
   "apps.stopHelpers": "Stop background processes",
-  "apps.helpersStillRunning": "The background process started again or couldn't be stopped. Try again in a few seconds."
+  "apps.helpersStillRunning": "The background process started again or couldn't be stopped. Try again in a few seconds.",
+  "selection.adminDenied": "Some items need the administrator password, which wasn't entered. They were left in place.",
+  "selection.someFailed": "{{count}} items couldn't be removed."
 }

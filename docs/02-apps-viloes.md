@@ -11,8 +11,10 @@ será limpo (cache vs. dados completos) → risco.
 
 | App | O que limpar | Path (macOS) | Risco |
 |---|---|---|---|
-| Google Chrome | Cache, Service Worker cache, Code Cache | `~/Library/Application Support/Google/Chrome/*/Cache`, `*/Code Cache` | 🟢 |
+| Google Chrome | Cache, Service Worker cache, Code Cache | `~/Library/Application Support/Google/Chrome/*/Cache`, `*/Service Worker/CacheStorage`, `*/Code Cache` | 🟢 (só o `CacheStorage`; o resto de `Service Worker` registra os scripts dos sites e fica) |
+| Google Updater (Chrome) | Instaladores e componentes já aplicados | `~/Library/Application Support/Google/GoogleUpdater/crx_cache` | 🟢 |
 | Microsoft Edge | Cache | `~/Library/Application Support/Microsoft Edge/*/Cache` | 🟢 |
+| Microsoft Edge Updater | Instaladores baixados | `~/Library/Application Support/Microsoft/EdgeUpdater/crx_cache` | 🟢 (fica mesmo sem o Edge instalado; as pastas do Edge em si entram como sobra de app removido em `catalog/app-leftovers.json`) |
 | Firefox | Cache | `~/Library/Caches/Firefox`, `~/Library/Application Support/Firefox/Profiles/*/cache2` | 🟢 |
 | Safari | Cache | `~/Library/Caches/com.apple.Safari` | 🟢 |
 | Brave | Cache | `~/Library/Application Support/BraveSoftware/*/Cache` | 🟢 |
@@ -26,7 +28,8 @@ será limpo (cache vs. dados completos) → risco.
 | App | O que limpar | Path (macOS) | Risco |
 |---|---|---|---|
 | Slack | Cache de mensagens/mídia | `~/Library/Application Support/Slack/Cache`, `Service Worker/CacheStorage` | 🟢 |
-| Microsoft Teams | Cache | `~/Library/Application Support/Microsoft/Teams/Cache`, `Service Worker` | 🟢 |
+| Microsoft Teams (clássico) | Cache | `~/Library/Application Support/Microsoft/Teams/Cache`, `Service Worker` | 🟢 |
+| Microsoft Teams (novo, `com.microsoft.teams2`) | Cache do app e cache dos perfis WebView | `~/Library/Containers/com.microsoft.teams2/Data/Library/Caches`, `…/Application Support/Microsoft/MSTeams/EBWebView/*/Service Worker/CacheStorage` | 🟢 (só caches; `IndexedDB` e cookies do WebView ficam — apagá-los desloga) |
 | WhatsApp (Desktop) | Cache de mídia (não conversas) | `~/Library/Application Support/WhatsApp/Cache` | 🟢 |
 | WhatsApp (app nativo, `net.whatsapp.WhatsApp`) | Mídia baixada das conversas (fotos, vídeos, áudios, documentos) — **não** o banco de mensagens, que fica em outras pastas do mesmo contêiner | `~/Library/Group Containers/group.net.whatsapp.WhatsApp.shared/Message/Media` | 🟡 (as mensagens continuam; a mídia vira "toque para baixar" e é baixada de novo do celular/servidor. Mídia antiga que já não existe no celular pode não voltar. Exige o WhatsApp fechado. Medida por tamanhos únicos — ver abaixo) |
 | Discord | Cache | `~/Library/Application Support/discord/Cache`, `Code Cache` | 🟢 |
@@ -40,6 +43,8 @@ será limpo (cache vs. dados completos) → risco.
 | App | O que limpar | Path (macOS) | Risco |
 |---|---|---|---|
 | Docker Desktop | Imagens/containers não usados, VM disk (`Docker.raw`) | via `docker system prune`, `~/Library/Containers/com.docker.docker` | 🟡 |
+| VS Code | Dados de webviews e extensões (IndexedDB, Cache Storage) | `~/Library/Application Support/Code/WebStorage` / `~/.config/Code/WebStorage` | 🟡 (extensões podem perder estado local; VS Code fechado) |
+| Claude Desktop | Máquina virtual usada pelo Cowork e pela execução de código | `~/Library/Application Support/Claude/vm_bundles` | 🟡 (~11 GB; é baixada de novo quando o recurso for usado; app fechado. O resto da pasta `Claude` só entra como sobra de app removido) |
 | Spotify | Cache de música offline temporária | `~/Library/Application Support/Spotify/PersistentCache` | 🟢 |
 | Adobe Creative Cloud | Cache | `~/Library/Application Support/Adobe/Common/Media Cache Files` | 🟢 |
 | Notion | Cache | `~/Library/Application Support/Notion/Cache` | 🟢 |
@@ -47,7 +52,7 @@ será limpo (cache vs. dados completos) → risco.
 | Postman | Cache | `~/Library/Application Support/Postman/Cache` | 🟢 |
 | 1Password (logs) | Logs de diagnóstico | `~/Library/Group Containers/*.1password/Logs` | 🟢 |
 | Steam | Shader cache, downloads temporários | `~/Library/Application Support/Steam/appcache` | 🟢 |
-| OneDrive/Dropbox/Google Drive | Cache local (não os arquivos sincronizados) | paths específicos por provedor | 🟡 |
+| OneDrive/Dropbox/Google Drive | Cache local (não os arquivos sincronizados) | paths específicos por provedor | 🟡 (`~/Library/Application Support/OneDrive/settings` é o banco de sync, não cache: 🔴, nunca listar) |
 
 ## Sistema operacional (apps da Apple)
 
@@ -79,6 +84,16 @@ varredura livre — cada entrada tem: `id`, `displayName`, `paths[]` (por plataf
 com suporte a glob para paths versionados como `.../Chrome/*/Cache`), `category`,
 `risk`, `requiresAppClosed: boolean`. Isso permite atualizar/expandir a lista sem
 mudar código do scanner, e comunidade pode contribuir novas entradas via PR.
+
+Campos opcionais do `catalog/catalog.json` além desses: `bundleId`
+(para checar se o app está aberto), `catchAll` (um item por pasta),
+`sizeStrategy`, `keepCurrent` (symlink da versão em uso, que nunca é listada —
+ver "Versões antigas de ferramentas" em `01-categorias.md`), `matchFiles`
+(o `*` também casa arquivos, não só pastas) e `skipPrefixes` (nomes de pasta
+que nunca entram, como `com.apple.` no `$TMPDIR`) e `allowElevation` (itens
+do root, como os de `/Library`, podem ser removidos com a senha de
+administrador — ver `remover.ts` em `03-arquitetura.md`). Caminhos aceitam `~` e
+`$TMPDIR` no início.
 
 **Fora do escopo (nunca listados)**: dados de apps bancários, autenticadores 2FA,
 Keychain, certificados, dados de apps de saúde — qualquer coisa que não seja

@@ -166,7 +166,7 @@
   "apps.uninstall": "Desinstalar",
   "apps.removeData": "Eliminar seleccionados",
   "apps.confirmMediumWarning": "⚠️ Incluye elementos 🟡: la propia app y/o configuraciones y datos guardados por ella. Después, la app vuelve a estar recién instalada (o deja de existir).",
-  "apps.someFailed": "{{count}} elementos no se pudieron eliminar (quizá requieran permisos de administrador — prueba arrastrarlos a la Papelera en Finder).",
+  "apps.someFailed": "No se pudieron eliminar {{count}} elementos.",
   "apps.stillRunning": "{{name}} o uno de sus procesos en segundo plano se está ejecutando. Cierra la app (o detén los procesos en segundo plano) e inténtalo de nuevo.",
   "apps.unknownApp": "La lista de {{name}} está desactualizada. Recarga la pantalla e inténtalo de nuevo.",
   "apps.orphansHint": "Carpetas en ~/Library con nombre de una app (com.empresa.app) que ya no está instalada ni en ejecución. Es una estimación: revisa la ruta antes de eliminar.",
@@ -175,5 +175,7 @@
   "selection.skippedRunning": "No se eliminaron porque la app está abierta: {{names}}. Cierra la app y limpia de nuevo.",
   "apps.helpersRunningWarning": "{{name}} está cerrada, pero un proceso en segundo plano suyo sigue ejecutándose ({{helpers}}) y mantiene los datos abiertos.",
   "apps.stopHelpers": "Detener procesos en segundo plano",
-  "apps.helpersStillRunning": "El proceso en segundo plano volvió a ejecutarse o no se pudo detener. Inténtalo de nuevo en unos segundos."
+  "apps.helpersStillRunning": "El proceso en segundo plano volvió a ejecutarse o no se pudo detener. Inténtalo de nuevo en unos segundos.",
+  "selection.adminDenied": "Algunos elementos necesitan la contraseña de administrador, que no se ingresó. Siguen en su lugar.",
+  "selection.someFailed": "No se pudieron eliminar {{count}} elementos."
 }

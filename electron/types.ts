@@ -20,6 +20,23 @@ export interface CatalogEntry {
    * folders full of APFS clones that `du` counts many times over.
    */
   sizeStrategy?: SizeStrategy;
+  /**
+   * A symlink pointing at the version in use ("~/.codex/packages/standalone/current").
+   * Whatever it resolves to is never listed, so only older versions show up.
+   * If the link can't be resolved, the whole entry is skipped — never guess
+   * which version is current.
+   */
+  keepCurrent?: string;
+  /** Also list files, not only folders, matched by a "*" segment. */
+  matchFiles?: boolean;
+  /** Folder names starting with these are never listed ("com.apple." in $TMPDIR). */
+  skipPrefixes?: string[];
+  /**
+   * Items owned by root (e.g. under /Library) may be removed with the admin
+   * password, asked once per cleanup through the OS dialog. Off by default:
+   * only entries whose every path is safe to move as root opt in.
+   */
+  allowElevation?: boolean;
 }
 
 export type SizeStrategy = "du" | "uniqueFileSizes";

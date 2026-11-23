@@ -329,8 +329,12 @@ function App() {
           .map((e) => toRemove.find((i) => i.id === e.itemId)?.displayName ?? e.path),
       ),
     ];
-    const freed = t("selection.freed", { size: formatBytes(report.freedBytes) });
-    alert(blocked.length > 0 ? `${freed}\n\n${t("selection.skippedRunning", { names: blocked.join(", ") })}` : freed);
+    const failed = report.entries.filter((e) => !e.ok && e.error !== "app-running");
+    const lines = [t("selection.freed", { size: formatBytes(report.freedBytes) })];
+    if (blocked.length > 0) lines.push(t("selection.skippedRunning", { names: blocked.join(", ") }));
+    if (failed.some((e) => e.error === "ADMIN_DENIED")) lines.push(t("selection.adminDenied"));
+    else if (failed.length > 0) lines.push(t("selection.someFailed", { count: failed.length }));
+    alert(lines.join("\n\n"));
 
     // Re-scan instead of just filtering removed items locally, so sizes and
     // any newly-unlocked/changed items reflect the disk's real state.

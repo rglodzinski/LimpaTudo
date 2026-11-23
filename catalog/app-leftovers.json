@@ -56,5 +56,10 @@
   ],
   "org.jkiss.dbeaver.core.product": [
     "~/Library/DBeaverData"
+  ],
+  "com.microsoft.edgemac": [
+    "~/Library/Application Support/Microsoft Edge",
+    "~/Library/Caches/com.microsoft.edgemac",
+    "~/Library/Caches/Microsoft Edge"
   ]
 }

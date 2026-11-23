@@ -162,6 +162,9 @@ function applyMonitorSettings() {
 /** RemoveReportEntry.error for items skipped because their app is open. */
 const APP_RUNNING = "app-running";
 
+/** Paths found by the last scan: only these may ever be removed with the admin password. */
+let lastScanPaths = new Set<string>();
+
 /**
  * Ids of items whose catalog entry says the app must be closed
  * (`requiresAppClosed`) while that app is running — principle 4 of
@@ -228,6 +231,7 @@ function registerIpcHandlers() {
 
     const unlocked = items.filter((item) => !item.locked);
     const totalBytes = unlocked.reduce((sum, item) => sum + item.sizeBytes, 0);
+    lastScanPaths = new Set(items.map((item) => item.path));
     event.sender.send("scan:complete", { totalBytes, itemCount: unlocked.length });
     appendHistoryEntry({
       type: "scan",
@@ -242,11 +246,13 @@ function registerIpcHandlers() {
   ipcMain.handle("remove", async (event, items: ScanItem[], options: RemoveOptions) => {
     removeCancelled = false;
     const blocked = await itemsOfRunningApps(items);
+    const entries = new Map(loadCatalog().map((entry) => [entry.id, entry]));
     const report = await removeItems(
       items.filter((item) => !blocked.has(item.id)),
       options,
       (progress) => event.sender.send("remove:progress", progress),
       () => removeCancelled,
+      (item) => lastScanPaths.has(item.path) && entries.get(item.entryId)?.allowElevation === true,
     );
     for (const item of items.filter((i) => blocked.has(i.id))) {
       report.entries.push({ itemId: item.id, path: item.path, ok: false, error: APP_RUNNING });
