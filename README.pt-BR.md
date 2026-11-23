@@ -69,8 +69,8 @@ São regras de projeto, não opções:
 | Em vez de | O Limpa Tudo |
 |---|---|
 | CleanMyMac | é grátis e tem o código aberto |
-| Mole (terminal) | tem interface gráfica, manda para a Lixeira por padrão e mostra o nível de risco |
-| npkill, DevCleaner | cobre todos os caches de desenvolvimento, não só um |
+| Mole | tem interface gráfica grátis, manda tudo para a Lixeira por padrão e mostra o risco de cada item (o `mo clean` do Mole apaga direto) |
+| npkill, DevCleaner | além das pastas de projeto e do Xcode, cobre caches de sistema e de apps |
 | BleachBit, Stacer | entende caches de desenvolvimento e só olha uma lista fixa de caminhos |
 
 ## Perguntas frequentes

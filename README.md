@@ -77,8 +77,8 @@ These are design rules, not settings:
 | Instead of | Limpa Tudo |
 |---|---|
 | CleanMyMac | is free and open source |
-| Mole (terminal) | has a GUI, moves to the Trash by default and shows a risk level |
-| npkill, DevCleaner | covers every developer cache, not just one |
+| Mole | has a free GUI, moves everything to the Trash by default and shows each item's risk (Mole's `mo clean` deletes outright) |
+| npkill, DevCleaner | goes beyond project folders and Xcode, covering system and app caches too |
 | BleachBit, Stacer | understands developer caches and only looks at a fixed list of paths |
 
 ## FAQ

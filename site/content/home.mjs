@@ -58,8 +58,8 @@ export const STRINGS = {
       head: ["Em vez de", "O Limpa Tudo"],
       rows: [
         ["CleanMyMac", "é grátis e tem o código aberto"],
-        ["Mole (terminal)", "tem interface gráfica, manda para a Lixeira por padrão e mostra o nível de risco"],
-        ["npkill, DevCleaner", "cobre todos os caches de desenvolvimento, não só um"],
+        ["Mole", "tem interface gráfica grátis, manda tudo para a Lixeira por padrão e mostra o risco de cada item (o <code>mo clean</code> do Mole apaga direto)"],
+        ["npkill, DevCleaner", "além das pastas de projeto e do Xcode, cobre caches de sistema e de apps"],
         ["BleachBit, Stacer", "entende caches de desenvolvimento e só olha uma lista fixa de caminhos"],
       ],
     },
@@ -155,8 +155,8 @@ export const STRINGS = {
       head: ["Instead of", "Limpa Tudo"],
       rows: [
         ["CleanMyMac", "is free and open source"],
-        ["Mole (terminal)", "has a GUI, moves to the Trash by default and shows a risk level"],
-        ["npkill, DevCleaner", "covers every developer cache, not just one"],
+        ["Mole", "has a free GUI, moves everything to the Trash by default and shows each item's risk (Mole's <code>mo clean</code> deletes outright)"],
+        ["npkill, DevCleaner", "goes beyond project folders and Xcode, covering system and app caches too"],
         ["BleachBit, Stacer", "understands developer caches and only looks at a fixed list of paths"],
       ],
     },
@@ -252,8 +252,8 @@ export const STRINGS = {
       head: ["En lugar de", "Limpa Tudo"],
       rows: [
         ["CleanMyMac", "es gratis y de código abierto"],
-        ["Mole (terminal)", "tiene interfaz gráfica, mueve a la Papelera por defecto y muestra el nivel de riesgo"],
-        ["npkill, DevCleaner", "cubre todas las cachés de desarrollo, no solo una"],
+        ["Mole", "tiene interfaz gráfica gratuita, mueve todo a la Papelera por defecto y muestra el riesgo de cada elemento (el <code>mo clean</code> de Mole borra directamente)"],
+        ["npkill, DevCleaner", "además de las carpetas de proyecto y de Xcode, cubre cachés del sistema y de apps"],
         ["BleachBit, Stacer", "entiende las cachés de desarrollo y solo mira una lista fija de rutas"],
       ],
     },
