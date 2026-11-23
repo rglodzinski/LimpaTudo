@@ -52,7 +52,11 @@ Atualizado em 2026-11-23. O resto do documento é o plano original.
   [`11-kit-de-lancamento.md`](./11-kit-de-lancamento.md).
 - **TabNews:** post do caso WhatsApp/APFS publicado em 2026-11-23
   (https://www.tabnews.com.br/Glodzinski/pitch-o-whatsapp-dizia-ocupar-383-gb-num-ssd-de-228-gb-como-medi-clones-apfs-no-limpa-tudo).
-  Próximos do lançamento BR: r/brdev e Dev.to (pt) em semanas diferentes.
+- **Dev.to (pt):** artigo do WhatsApp republicado em 2026-11-23 com canonical
+  para o site e declaração "AI-assisted"
+  (https://dev.to/rglodzinski/whatsapp-mostra-383-gb-no-mac-entenda-os-clones-apfs-e-o-tamanho-real-5bn2).
+  Falta o r/brdev (o Reddit é bloqueado para a automação; postar à mão com o
+  texto do kit).
 - **AlternativeTo:** app submetido em 2026-11-23 (fila grátis, pode demorar
   meses; não pagar a revisão prioritária). Depois de aprovado, sugerir as
   alternativas da seção 7 e acrescentar Homebrew/Flathub na página.
