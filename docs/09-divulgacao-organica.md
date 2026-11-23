@@ -53,7 +53,10 @@ Atualizado em 2026-11-23. O resto do documento é o plano original.
 **Pendente**
 
 - **Contas do autor:** AUR (publicar `limpa-tudo-bin`, chave SSH em
-  `~/.ssh/aur.pub`) e Snapcraft (registrar `limpa-tudo` e criar o secret com
+  `~/.ssh/aur.pub`, `.SRCINFO` já gerado; em 2026-11-23 o AUR estava com
+  novos cadastros suspensos por causa de criação automatizada de contas —
+  tentar de novo quando reabrir, avisos em aur-general e nas notícias do
+  Arch) e Snapcraft (registrar `limpa-tudo` e criar o secret com
   `snapcraft export-login`). Ao ativar cada canal, ligar a chave em `CHANNELS`
   (`site/config.mjs`).
 - **Flathub:** abrir o PR em `flathub/flathub` e, depois de aceito, publicar o
