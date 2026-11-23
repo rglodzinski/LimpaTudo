@@ -2,9 +2,8 @@
 //
 // SITE_URL é a única fonte do endereço público: canonical, hreflang, og:url,
 // sitemap e links internos saem daqui. No CI vem da variável de repositório
-// SITE_URL (pages.yml); destino planejado: https://limpatudo.glodzinski.dev.br
-// (ver docs/09-divulgacao-organica.md, "Domínio").
-export const SITE_URL = (process.env.SITE_URL || "https://rglodzinski.github.io/LimpaTudo").replace(/\/$/, "");
+// SITE_URL (pages.yml); o padrão é o mesmo valor, para o build local bater.
+export const SITE_URL = (process.env.SITE_URL || "https://limpatudo.glodzinski.dev.br").replace(/\/$/, "");
 
 export const REPO = "rglodzinski/LimpaTudo";
 export const GITHUB_URL = `https://github.com/${REPO}`;

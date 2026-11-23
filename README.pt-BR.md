@@ -17,9 +17,9 @@
 </p>
 
 <p align="center">
-  <a href="https://rglodzinski.github.io/LimpaTudo/">Site</a> ·
-  <a href="https://rglodzinski.github.io/LimpaTudo/download/">Baixar</a> ·
-  <a href="https://rglodzinski.github.io/LimpaTudo/guias/">Guias</a> ·
+  <a href="https://limpatudo.glodzinski.dev.br/">Site</a> ·
+  <a href="https://limpatudo.glodzinski.dev.br/download/">Baixar</a> ·
+  <a href="https://limpatudo.glodzinski.dev.br/guias/">Guias</a> ·
   <a href="README.md">English</a>
 </p>
 

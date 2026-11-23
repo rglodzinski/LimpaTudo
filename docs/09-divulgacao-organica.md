@@ -41,29 +41,22 @@ Atualizado em 2026-11-23. O resto do documento é o plano original.
 - Flathub: `.desktop` e metainfo em `flatpak/`, ligados ao manifesto, que
   agora aponta para o `.tar.gz` real da v1.4.0. Ainda não testado.
 
-**Domínio:** decidido usar o subdomínio `limpatudo.glodzinski.dev.br` (o
-`glodzinski.dev.br` é o site que divulga os apps do autor, servido pelo
-repositório `glodzinski-site` no GitHub Pages). Para ativar:
+**Domínio:** o site está em `https://limpatudo.glodzinski.dev.br` desde
+2026-11-23 (o `glodzinski.dev.br` é o site que divulga os apps do autor,
+servido pelo repositório `glodzinski-site`). Como foi feito:
 
-1. No Registro.br (DNS de `glodzinski.dev.br`), criar o registro
-   `CNAME limpatudo → rglodzinski.github.io.`
-2. Esperar o `dig +short limpatudo.glodzinski.dev.br` responder.
-3. Em Settings › Pages do repositório, preencher o custom domain
-   `limpatudo.glodzinski.dev.br` e marcar "Enforce HTTPS".
-4. Criar a variável de repositório `SITE_URL=https://limpatudo.glodzinski.dev.br`
-   (Settings › Secrets and variables › Actions › Variables) e rodar o
-   `pages.yml`. Canonical, hreflang, sitemap e links internos passam a usar
-   o subdomínio; o GitHub redireciona o endereço `github.io` antigo.
-5. Trocar os links do README e a homepage do repositório.
-
-Os passos 1 a 3 têm de vir antes do 4: se o site disser que está no
-subdomínio antes de o DNS existir, o canonical aponta para um endereço que
-não responde. Com o subdomínio o `robots.txt` passa a ficar na raiz e a valer.
+- Registro.br (DNS de `glodzinski.dev.br`): `CNAME limpatudo → rglodzinski.github.io.`
+- Custom domain do GitHub Pages: `limpatudo.glodzinski.dev.br`, com HTTPS
+  forçado; o endereço `github.io` antigo redireciona com 301.
+- Variável de repositório `SITE_URL=https://limpatudo.glodzinski.dev.br`, lida
+  pelo `pages.yml` (o padrão de `site/config.mjs` é o mesmo valor).
+- Search Console: a propriedade de domínio `glodzinski.dev.br` (já verificada
+  por TXT no DNS) cobre o subdomínio; o sitemap foi enviado nela.
 
 **Pendente (fora do repositório ou depende do autor)**
 
 - GIF de 10 s e screenshots do app para o README, o site e o metainfo do Flathub.
-- DNS e custom domain (acima); depois, Google Search Console e Bing Webmaster.
+- Bing Webmaster (pode importar do Search Console).
 - Publicar no AUR (conta + chave SSH), conta e secret do Snapcraft, testar
   o Flatpak. Ao ativar cada canal, ligar a chave
   correspondente em `CHANNELS` (`site/config.mjs`) para o site mostrar o comando.
