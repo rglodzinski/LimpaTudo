@@ -119,7 +119,7 @@ function softwareJsonLd(lang) {
     license: "https://opensource.org/licenses/MIT",
     isAccessibleForFree: true,
     offers: { "@type": "Offer", price: 0, priceCurrency: "USD" },
-    author: { "@type": "Person", name: "Ricardo Glodzinski" },
+    author: { "@type": "Organization", name: "Glodzinski Tecnologia", url: "https://glodzinski.dev.br/", email: "suporte@glodzinski.dev.br" },
     codeRepository: GITHUB_URL,
   };
 }
@@ -188,7 +188,7 @@ ${body}
 </main>
 <footer>
   <div class="wrap bar">
-    <span>${S.footer.by}</span>
+    <span>${S.footer.by} · <a href="mailto:suporte@glodzinski.dev.br">suporte@glodzinski.dev.br</a></span>
     <span><a href="${GITHUB_URL}">GitHub</a> · <a href="${GITHUB_URL}/issues">${S.footer.issues}</a></span>
   </div>
 </footer>
@@ -363,7 +363,7 @@ function articleJsonLd(g) {
     inLanguage: STRINGS[g.lang].htmlLang,
     datePublished: g.date,
     dateModified: g.updated ?? g.date,
-    author: { "@type": "Person", name: "Ricardo Glodzinski" },
+    author: { "@type": "Organization", name: "Glodzinski Tecnologia", url: "https://glodzinski.dev.br/", email: "suporte@glodzinski.dev.br" },
     image: abs("/og.png"),
     mainEntityOfPage: abs(guidePath(g)),
   };

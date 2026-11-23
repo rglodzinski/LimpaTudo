@@ -1,7 +1,7 @@
 {
   "name": "limpa-tudo",
   "description": "Ajuda a liberar espaço em disco no macOS e Linux com segurança",
-  "author": "Ricardo Glodzinski",
+  "author": "Glodzinski Tecnologia <suporte@glodzinski.dev.br> (https://glodzinski.dev.br)",
   "license": "MIT",
   "homepage": "https://limpatudo.glodzinski.dev.br/",
   "repository": {
@@ -82,7 +82,7 @@
         "tar.gz"
       ],
       "category": "Utility",
-      "maintainer": "Ricardo Glodzinski <rglodzinski@gmail.com>",
+      "maintainer": "Glodzinski Tecnologia <suporte@glodzinski.dev.br>",
       "synopsis": "Safe disk cleaner for dev caches, system junk and app caches"
     },
     "snap": {

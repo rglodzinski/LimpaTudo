@@ -96,7 +96,7 @@ export const STRINGS = {
     },
     changelog: { title: "Novidades do Limpa Tudo — histórico de versões", description: "O que mudou em cada versão do Limpa Tudo.", h1: "Novidades" },
     article: { published: "Publicado em", updated: "atualizado em", ctaH: "Ou use o Limpa Tudo", ctaP: "Ele encontra estas pastas, mostra o caminho, o tamanho e o risco de cada uma, avisa se o app está aberto e só manda para a Lixeira o que você marcar.", ctaBtn: "Baixar grátis" },
-    footer: { by: "Feito por Ricardo Glodzinski · licença MIT", issues: "Reportar problema" },
+    footer: { by: 'Um app da <a href="https://glodzinski.dev.br">Glodzinski Tecnologia</a> · licença MIT', issues: "Reportar problema" },
     notFound: { title: "Página não encontrada", p: "Esta página não existe.", back: "Voltar para o início" },
   },
 
@@ -193,7 +193,7 @@ export const STRINGS = {
     },
     changelog: { title: "Limpa Tudo changelog", description: "What changed in each Limpa Tudo version.", h1: "Changelog" },
     article: { published: "Published", updated: "updated", ctaH: "Or use Limpa Tudo", ctaP: "It finds these folders, shows the path, size and risk of each one, warns you if the app is open, and only moves what you check to the Trash.", ctaBtn: "Download free" },
-    footer: { by: "Made by Ricardo Glodzinski · MIT license", issues: "Report an issue" },
+    footer: { by: 'An app by <a href="https://glodzinski.dev.br">Glodzinski Tecnologia</a> · MIT license', issues: "Report an issue" },
     notFound: { title: "Page not found", p: "This page doesn't exist.", back: "Back to home" },
   },
 
@@ -290,7 +290,7 @@ export const STRINGS = {
     },
     changelog: { title: "Novedades de Limpa Tudo", description: "Qué cambió en cada versión de Limpa Tudo.", h1: "Novedades" },
     article: { published: "Publicado el", updated: "actualizado el", ctaH: "O usa Limpa Tudo", ctaP: "Encuentra estas carpetas, muestra la ruta, el tamaño y el riesgo de cada una, avisa si la app está abierta y solo mueve a la Papelera lo que marques.", ctaBtn: "Descargar gratis" },
-    footer: { by: "Hecho por Ricardo Glodzinski · licencia MIT", issues: "Reportar un problema" },
+    footer: { by: 'Una app de <a href="https://glodzinski.dev.br">Glodzinski Tecnologia</a> · licencia MIT', issues: "Reportar un problema" },
     notFound: { title: "Página no encontrada", p: "Esta página no existe.", back: "Volver al inicio" },
   },
 };

@@ -13,6 +13,7 @@
   <developer id="br.dev.glodzinski">
     <name>Glodzinski Tecnologia</name>
   </developer>
+  <update_contact>suporte@glodzinski.dev.br</update_contact>
   <description>
     <p>
       Limpa Tudo finds developer caches (node_modules, Python venvs, npm, pip, Gradle,
@@ -37,6 +38,7 @@
   <url type="homepage">https://limpatudo.glodzinski.dev.br/en/</url>
   <url type="bugtracker">https://github.com/rglodzinski/LimpaTudo/issues</url>
   <url type="vcs-browser">https://github.com/rglodzinski/LimpaTudo</url>
+  <url type="contact">mailto:suporte@glodzinski.dev.br</url>
   <url type="donation">https://glodzinski.dev.br/en/support.html</url>
   <branding>
     <color type="primary" scheme_preference="light">#DBEAFE</color>
