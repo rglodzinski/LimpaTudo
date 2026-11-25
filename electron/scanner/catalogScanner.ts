@@ -114,8 +114,16 @@ function resolveGlob(pattern: string, matchFiles = false): string[] {
   const rest = segments.slice(wildcardIndex + 1);
 
   if (!fs.existsSync(baseDir)) return [];
-  return fs
-    .readdirSync(baseDir, { withFileTypes: true })
+  let children: fs.Dirent[];
+  try {
+    children = fs.readdirSync(baseDir, { withFileTypes: true });
+  } catch {
+    // macOS TCC blocks listing some folders (browser profiles under
+    // Application Support) without Full Disk Access. One unreadable entry
+    // must not abort the whole scan.
+    return [];
+  }
+  return children
     .filter((entry) => entry.isDirectory() || (matchFiles && entry.isFile()))
     .map((entry) => path.join(baseDir, entry.name, ...rest))
     .filter((resolved) => fs.existsSync(resolved));

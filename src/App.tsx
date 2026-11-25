@@ -172,7 +172,14 @@ function App() {
       refreshHistory();
     });
 
-    await window.limpaTudo.scan();
+    try {
+      await window.limpaTudo.scan();
+    } catch (error) {
+      // scan:complete never arrives if the main process throws; without this
+      // the screen sits on "Escaneando… 0%" forever.
+      console.error("Scan failed", error);
+      setScanning(false);
+    }
   }
 
   async function retryElevated(item: ScanItem) {
