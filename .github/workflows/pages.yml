@@ -29,13 +29,13 @@ concurrency:
   group: pages
   cancel-in-progress: false
 
+# Build e deploy em jobs separados (como no workflow oficial do Pages): no
+# mesmo job, o deploy-pages consultava o artefato menos de 1 s depois do
+# upload e às vezes recebia "No artifacts named github-pages were found".
 jobs:
-  deploy:
-    name: Deploy
+  build:
+    name: Build
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -50,5 +50,14 @@ jobs:
       - uses: actions/upload-pages-artifact@v3
         with:
           path: dist-site
+
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
       - id: deployment
         uses: actions/deploy-pages@v4
